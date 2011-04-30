@@ -157,59 +157,6 @@
 			document.getElementById(id).style.display = 'none';
 		}
 
-    var URL = "/jput/";
-    var session = "test_abc";
-    var items = {
-      read: function(id, fn, err) {
-        var url = URL + id;
-        $.ajax({
-          type: 'GET',
-          url: url,
-          dataType: 'json',
-          beforeSend: function(xhr) {},
-          success: fn,
-          error: function(request, textStatus, errorThrown) {
-            // err
-            var exception = {datasetname: 'madswvideo', status: request.status, message: request.statusText, url: url, method: "read", kind: textStatus};
-            err(exception);
-          }
-        });
-      },
-      update: function(id, json, fn, err) {
-        var url = URL + id;
-        $.ajax({
-          type: 'PUT',
-          url: url,
-          dataType: 'json',
-          beforeSend: function(xhr) {},
-          success: fn,
-          error: function(request, textStatus, errorThrown) {
-            // err
-            var exception = {datasetname: 'madswvideo', status: request.status, message: request.statusText, url: url, method: "update", kind: textStatus};
-            err(exception);
-          }
-        });
-      }
-    }
-    function read() {
-       items.read(session, function(data) {
-          // fn
-          if (!data) {
-             items.update(session, {}, fn, err);
-          }
-          console.warn(JSON.stringify(data));
-       }, function(exception) {
-          console.warn(JSON.stringify(exception));
-       });
-    }
-    $(document).ready(function() {
-      read();
-      setTimeout(function() {
-         read();
-      },
-      10000);
-    });
-
 	</script>
 </head>
 <body>
@@ -232,30 +179,18 @@
 			<h2>Watch with your friends</h2>
 		</div>
         </div>
-	<div style="width:100%;height:349px; background: #000;text-align:center">
-<iframe width="425" height="349" src="http://www.youtube.com/embed/V7D9J8lTFGs" frameborder="0" allowfullscreen></iframe>
-	</div>
-	asdfsad	
 
-<!--
-	<div id="video" style="display:block;">
-	    <object width="512" height="288"><param name="movie" value="http://www.hulu.com/embed/edUW6BWWZ4wAvYJZRgRRVA"></param><param name="allowFullScreen" value="true"></param><embed src="http://www.hulu.com/embed/edUW6BWWZ4wAvYJZRgRRVA" type="application/x-shockwave-flash"  width="512" height="288" allowFullScreen="true"></embed></object>
-	</div>
-	
 	<div id="body">
-	
-	<div id="opentok_console"></div>
-	<div id="juitterContainer"></div>
-	<div id="myCamera" class="publisherContainer"></div>
-	<div id="subscribers"></div>
-	<div id="tweet">
-	 <p>Please wait while my tweets load <img src="/images/indicator.gif" /></p>
-	 <p><a href="http://twitter.com/partydowntv">If you can't wait - check out what I've been twittering</a></p>
-	</div>
-          <div align="center">
-           <img id="image"/>
-           <div id="name"></div>
-           </div> 
+		<div id="video" style="display:block;">
+			<div style="width:100%;height:349px; text-align:center">
+				<iframe width="425" height="349" src="http://www.youtube.com/embed/V7D9J8lTFGs" frameborder="0" allowfullscreen></iframe>
+			</div>
+		</div>
+		<div id="myCamera" class="publisherContainer"></div>
+		<div id="subscribers"></div>
+		<div id="opentok_console"></div>
+		<div id="juitterContainer"></div>	
+<!--
       <div id="fb-root"></div>
       <script src="http://connect.facebook.net/en_US/all.js"></script>
       <script>
