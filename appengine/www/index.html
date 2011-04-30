@@ -7,7 +7,7 @@
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.4.2/jquery.min.js"></script>
 	<script language="javascript" src="tweet/jquery.juitter.js" type="text/javascript"></script>
 	<script language="javascript" src="tweet/system.js" type="text/javascript"></script>
-	<script language="javascirpt" src="video/yt.js" type="text/javascript"></script>
+	<script language="javascript" src="video/yt.js" type="text/javascript"></script>
 	<script src="http://staging.tokbox.com/v0.91/js/TB.min.js" type="text/javascript" charset="utf-8"></script>
 	<script type="text/javascript" charset="utf-8">
 		var apiKey = 589411; // OpenTok sample API key. Replace with your own API key.
@@ -151,7 +151,7 @@
 		}
 
 		function show(id) {
-			document.getElementById(id).style.display = 'block';
+			document.getElementById(id).style.display = 'inline';
 		}
 
 		function hide(id) {
@@ -161,33 +161,37 @@
 	</script>
 </head>
 <body>
+<div id="page">
 	<div id="header">
-	<h1>Yo Couch!</h2>
-	<h2>Watch with your friends</h2>
-	</div>
-	<div id="instructions">
-		<ol>
-			<li>Click "Connect"!</li>
-			<li>Click "Start Publishing"!</li>
-			<li>Watch with your friends!</li>
-		</ol>
-	</div>
-	<div id="video"> </div>
-	<div id="opentok_console"></div>
-	<div id="links">
-       	<input type="button" value="Connect" id ="connectLink" onClick="javascript:connect()" />
-       	<input type="button" value="Leave" id ="disconnectLink" onClick="javascript:disconnect()" />
-       	<input type="button" value="Start Publishing" id ="publishLink" onClick="javascript:startPublishing()" />
-       	<input type="button" value="Stop Publishing" id ="unpublishLink" onClick="javascript:stopPublishing()" />
-	</div>
-	<div id="juitterContainer"></div>
-	<div id="myCamera" class="publisherContainer"></div>
-	<div id="video_selector">
-		<ol id="videolist">
-			<li>Loading Videos....</li>
-		</ol>
-	</div>
-	<div id="subscribers"></div>
+		<div id="instructions">
+			<ol>
+				<li>Enter to the room: 
+	       	<input type="button" value="Hi Everyone!" id ="connectLink" style="display: foo" onClick="javascript:connect()" />
+	       	<input type="button" value="I'm outta here!" id ="disconnectLink" onClick="javascript:disconnect()" />
+				</li>
+				<li>Activate your camera:
+	       	<input type="button" value="Lights, Camera, Action!" id ="publishLink" onClick="javascript:startPublishing()" />
+	       	<input type="button" value="That's a wrap!" id ="unpublishLink" onClick="javascript:stopPublishing()" />
+				</li>
+			</ol>
+		</div>
+		<div id="heading">
+			<h1>Yo Couch!</h2>
+			<h2>Watch with your friends</h2>
+		</div>
+        </div>
+
+	<div id="body">
+		<div id="video" style="display:block;">
+			<div style="width:100%;height:349px; text-align:center">
+				<iframe width="425" height="349" src="http://www.youtube.com/embed/V7D9J8lTFGs" frameborder="0" allowfullscreen></iframe>
+			</div>
+		</div>
+		<div id="myCamera" class="publisherContainer"></div>
+		<div id="subscribers"></div>
+		<div id="opentok_console"></div>
+		<div id="juitterContainer"></div>	
+<!--
       <div id="fb-root"></div>
       <script src="http://connect.facebook.net/en_US/all.js"></script>
       <script>
@@ -195,12 +199,26 @@
             appId:'8796512710', cookie:true, 
             status:true, xfbml:true 
          });
+        
+        FB.api('/me', function(user) {
+           if(user != null) {
+              var image = document.getElementById('image');
+              image.src = 'https://graph.facebook.com/' + user.id + '/picture';
+              var name = document.getElementById('name');
+              name.innerHTML = user.name
+           }
+         });
+         
+                  FB.ui({ method: 'feed', 
+            message: 'Watch this video with me:'});
+ 
       </script>
       <fb:login-button>Login with Facebook</fb:login-button>
-    
-</body>
+	</div>
+-->
 	<script>
 		show('connectLink');
 	</script>
-
+</div>  
+</body>
 </html>
