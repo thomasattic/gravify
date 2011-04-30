@@ -17,6 +17,7 @@
 		var session;
 		var publisher;
 		var subscribers = {};
+    var DOC_URL = "/jdata";
 
 		// Un-comment either of the following to set automatic logging and exception handling.
 		// See the exceptionHandler() method below.
@@ -174,7 +175,7 @@
 
     var items = {
       read: function(id, fn, err) {
-        var url = URL + id;
+        var url = DOC_URL + "/" + id;
         $.ajax({
           type: 'GET',
           url: url,
@@ -189,7 +190,7 @@
         });
       },
       update: function(id, json, fn, err) {
-        var url = URL + id;
+        var url = DOC_URL + "/" + id;
         $.ajax({
           type: 'PUT',
           url: url,
@@ -207,8 +208,12 @@
     function read() {
        items.read(sessionId, function(data) {
           // fn
-          if (!data) {
-             items.update(sessionId, {}, fn, err);
+          if (!data || !data.foo) {
+             items.update(sessionId, {"foo": "bar"}, function() {
+                console.warn("updated");
+             }, function(exception) {
+                console.warn(JSON.stringify(exception));
+             });
           }
           console.warn(JSON.stringify(data));
        }, function(exception) {
