@@ -1,0 +1,123 @@
+body {
+	font-family:'Lucida Grande', 'Trebuchet MS', sans-serif;
+	color: #4c4c4c;
+	text-align:left;
+
+	background-color: #f0f9fb;
+}
+h1 {
+	margin-bottom: 10px;
+}
+#videobar {
+	padding: 20 10 20 10;
+}
+#localview {
+	float: left;
+	width: 240px;
+	height: 265px;
+}
+div.section {
+	font-weight: bold;
+	font-size: 18px;
+	margin: 15 0 8 0;
+}
+div.description {
+	margin: 8 0 0 0;
+}
+#action, #status { 
+	font-size: 80%; 
+	margin-top: 10px;
+ }
+table {
+	border-style: none;
+	border-collapse: collapse;
+	font-size: 90%;
+}
+td {
+	border-width: 1px;
+	border-collapse: collapse;
+	border-color: gray;
+	border-style: solid;
+	padding: 0;
+}
+th {
+	font-weight: normal;
+	height: 30px;
+	vertical-align: bottom;
+	border-width: 1px;
+	padding: 0 0 5 0;
+	border-collapse: collapse;
+	border-color: gray;
+	border-style: solid;
+	border-top: none;
+}
+th.row-title, td.row-title {
+	width: 50px;
+	text-align: right;
+	padding-right: 8px;
+	border-left: none;
+}
+td.subscriber {
+	vertical-align: middle;
+	text-align: center;
+}
+td.column-spacer {
+	width: 12px;
+}
+tr.row-spacer {
+	height: 9px;
+}
+#displayPanelContainer {
+	position: absolute;
+	left: 250px;
+	top: 30px;
+}
+#displayPanelCloseButton {
+	position: relative;
+	z-index: 10;
+	margin-left: 285px;
+	margin-right: 12px;
+	padding: 3px;
+	text-align: center;
+	font-size: 11px;
+	background-color: lightgrey;
+}
+#displayPanelBackground {
+	background-color: lightgrey;
+	width: 361px;
+	height: 251px;
+}
+#displayPanelInset {
+	position: relative;
+	top: -74px;
+	left: -9px;
+}
+a.settingsClose:link,
+a.settingsClose:visited,
+a.settingsClose:hover {
+	text-decoration: none;
+	color: black;
+	cursor: auto;
+}
+#footer {
+	clear: both;
+	padding: 15px 10px;
+	font-size: 12px;
+}
+#footer p {
+	margin: 0;
+    }
+* html #footer {
+	height: 1px;
+}
+.publisherContainer {
+	padding-top: 10px;
+	// position: absolute;
+}
+a,a:visited {
+	color: #0099CC;
+	text-decoration: none;
+}
+a:hover {
+	text-decoration: underline;
+}

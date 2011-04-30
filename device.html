@@ -1,0 +1,186 @@
+<html lang="en">
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+	<title>OpenTok API Sample &#151; Device Demo</title>
+	<link href="samples.css" type="text/css" rel="stylesheet" >
+	<script src="http://staging.tokbox.com/v0.91/js/TB.min.js" type="text/javascript" charset="utf-8"></script>
+	<script type="text/javascript">
+		var apiKey = 1127; // OpenTok sample code key. Replace with your own API key.
+		var sessionId = "1a4497a2ac07cb8bee154eb63efef97a9256a785"; // Replace with your session ID.
+		var token = "devtoken"; // Should not be hard-coded.
+								// Add to the page using the OpenTok server-side libraries.
+		var session;
+		var publisher = null;
+		var deviceManager;
+		var devicePanel;
+		var panelShowing = false;
+
+		var PUBLISHER_WIDTH = 220;
+		var PUBLISHER_HEIGHT = 165;
+
+		// Un-comment either of the following to set automatic logging and exception handling.
+		// See the exceptionHandler() method below.
+		// TB.setLogLevel(TB.DEBUG);
+		TB.addEventListener("exception", exceptionHandler);
+
+		if (TB.checkSystemRequirements() != TB.HAS_REQUIREMENTS) {
+			alert("You don't have the minimum requirements to run this application."
+				  + "Please upgrade to the latest version of Flash.");
+		} else {
+			// Create the local session object
+			session = TB.initSession(sessionId);
+
+			// Add event listeners to the session
+			session.addEventListener("sessionConnected", sessionConnectedHandler);
+			session.addEventListener("sessionDisconnected", sessionDisconnectedHandler);
+
+			/*
+			If testing the app from the desktop, be sure to check the Flash Player Global Security setting
+			to allow the page from communicating with SWF content loaded from the web. For more information,
+			see http://www.tokbox.com/opentok/build/tutorials/helloworld.html#localTest
+			*/
+			session.connect(apiKey, token);
+		}
+
+		//--------------------------------------
+		//  OPENTOK EVENT HANDLERS
+		//--------------------------------------
+
+		function sessionConnectedHandler(event) {
+			deviceManager = TB.initDeviceManager(apiKey);
+			deviceManager.addEventListener("devicesDetected", devicesDetectedHandler);
+			deviceManager.detectDevices();
+		}
+
+		function sessionDisconnectedHandler (event) {
+			// We were disconnected from the session, do some cleanup
+			hide("videobar");
+			show("disconnected");
+		}
+
+		/*
+		Called when the DeviceManager (initiated in the sessionConnectedHandler()
+		function) detects cameras and microphones connected to the computer. If
+		there are none, the function hides the Join Session link.
+		*/
+		function devicesDetectedHandler(event) {
+			if (event.cameras.length == 0 || event.microphones.length == 0) {
+				hide("publishLink");
+				alert('Both a webcam and microphone are necessary to participate in the session.');
+			} else {
+				// Now possible to join a call
+				show("publishLink");
+			}
+		}
+
+		function settingsButtonClickHandler(event) {
+			event.preventDefault();
+			toggleDevicePanel();
+		}
+
+		/*
+		If you un-comment the call to TB.addEventListener("exception", exceptionHandler) above, OpenTok calls the
+		exceptionHandler() method when exception events occur. You can modify this method to further process exception events.
+		If you un-comment the call to TB.setLogLevel(), above, OpenTok automatically displays exception event messages.
+		*/
+		function exceptionHandler(event) {
+			alert("Exception: " + event.code + "::" + event.message);
+		}
+
+		//--------------------------------------
+		//  LINK CLICK HANDLERS
+		//--------------------------------------
+
+		// Called when user wants to start publishing to the session
+		function startPublishing() {
+			if (!publisher) {
+				var parentDiv = document.getElementById("myCamera");
+				var publisherDiv = document.createElement('div'); // Create a div for the publisher to replace
+				publisherDiv.setAttribute('id', 'opentok_publisher');
+				parentDiv.appendChild(publisherDiv);
+
+				var publisherProps =  {width: PUBLISHER_WIDTH, height: PUBLISHER_HEIGHT};
+				publisher = session.publish(publisherDiv.id, publisherProps); // Pass the replacement div id to the publish method
+				publisher.addEventListener("settingsButtonClick", settingsButtonClickHandler);
+				hide("publishLink");
+				show("unpublishLink");
+			}
+		}
+
+		// Called when user wants to toggle display of the OpenTok Device Panel
+		function toggleDevicePanel() {
+			if (panelShowing) {
+				if (devicePanel) {
+					deviceManager.removePanel(devicePanel);
+				}
+				document.getElementById("toggleDevicePanelLink").value = 'Select camera and microphone';
+				hide("devicePanelContainer");
+				panelShowing = false;
+			} else {
+				var newdiv = document.createElement("div");
+				newdiv.id = "devicePanel";
+				document.getElementById("devicePanelInset").appendChild(newdiv);
+				if (deviceManager == null) {
+					deviceManager = TB.initDeviceManager(apiKey);
+				}
+				// Here we are hiding the default close button, and implementing our own.
+				devicePanel = deviceManager.displayPanel("devicePanel", publisher, {"showCloseButton" : false});
+				document.getElementById("toggleDevicePanelLink").value = 'Hide Device Panel';
+				show("devicePanelContainer");
+				panelShowing = true;
+			}
+		}
+
+		// Called when user wants to stop participating in the session
+		function stopPublishing() {
+			if (publisher) {
+				// Stop the stream
+				session.unpublish(publisher);
+				publisher = null;
+			}
+
+			hide("unpublishLink");
+			show("publishLink");
+		}
+
+		//--------------------------------------
+		//  HELPER METHODS
+		//--------------------------------------
+
+		function show(id) {
+			document.getElementById(id).style.display = 'block';
+		}
+
+		function hide(id) {
+			document.getElementById(id).style.display = 'none';
+		}
+
+	</script>
+
+</head>
+<body>
+	<div id="videobar" class="videobar">
+		<div id="localview">
+
+			<div id="links">
+		       	<input type="button" value="Start Publishing" id ="publishLink" onClick="javascript:startPublishing()" />
+		       	<input type="button" value="Stop Publishing" id ="unpublishLink" onClick="javascript:stopPublishing()" />
+		       	<input type="button" value="Select camera and microphone" id ="toggleDevicePanelLink" onClick="javascript:toggleDevicePanel()" />
+			</div>
+			<div id="myCamera" class="publisherContainer"></div>
+			<div id="devicePanelContainer">
+				<div id="devicePanelCloseButton">
+					<a href="#" onClick="javascript:toggleDevicePanel()" class="settingsClose">close (x)</a>
+				</div>
+				<div id="devicePanelBackground">
+					<div id="devicePanelInset"></div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div id="disconnected" style="display:none">Disconnected</div>
+</body>
+<script>
+	show('toggleDevicePanelLink');
+</script>
+</html>
