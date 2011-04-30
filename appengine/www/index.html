@@ -190,22 +190,22 @@
 	<div id="myCamera" class="publisherContainer"></div>
 	<div id="subscribers"></div>
 	<div id="tweet">
-	 <p>Please wait while my tweets load <img src="/images/indicator.gif" /></p>
+	 <p>Please wait while my tweets load <img src="/images/indicator.gif" /> </p>
 	 <p><a href="http://twitter.com/partydowntv">If you can't wait - check out what I've been twittering</a></p>
 	</div>
-          <div align="center">
-           <img id="image"/>
-           <div id="name"></div>
-           </div> 
+ 	<script>
+		show('connectLink');
+	</script>
+ 
       <div id="fb-root"></div>
-      <script src="http://connect.facebook.net/en_US/all.js"></script>
+      <script src="http://connect.facebook.net/en_US/all.js">
+      </script>
       <script>
          FB.init({ 
-            appId:'8796512710', cookie:true, 
+            appId:'176941975674666', cookie:true, 
             status:true, xfbml:true 
          });
-        
-        FB.api('/me', function(user) {
+         FB.api('/me', function(user) {
            if(user != null) {
               var image = document.getElementById('image');
               image.src = 'https://graph.facebook.com/' + user.id + '/picture';
@@ -213,16 +213,10 @@
               name.innerHTML = user.name
            }
          });
-         
-                  FB.ui({ method: 'feed', 
-            message: 'Watch this video with me:'});
- 
-      </script>
-      <fb:login-button>Login with Facebook</fb:login-button>
-       
-	<script>
-		show('connectLink');
-	</script>
-    
+       </script>
+           <div align="center">
+           <img id="image"/>
+           <div id="name"></div>
+           </div>
 </body>
 </html>
