@@ -1,0 +1,74 @@
+{# Part of the Kiwi Framework - Copyright (c) 2011 by Puzzazz, Inc. See kiwilicense.py for license notice. #}
+{# You may create your own modified version of this file without restriction. #}
+{# If you do this, you MUST remove the copyright and notice above #}
+
+{# Full signin block #}
+{% if MEMBER_DISPLAY_NAME %}
+	<form action="{{ kiwioptions.AUTH_BASE_URL }}_signout" method="post">
+		<b>Welcome, {{ MEMBER_DISPLAY_NAME }} &nbsp; <input type=Submit name=signout value="Sign Out">
+		<input type=Hidden name=redirect_url value="{% if signout_redirect_url %}{{ signout_redirect_url }}{% else %}{{ request.build_absolute_uri }}{% endif %}">
+	</form>
+{% else %}
+	<form action="{{ kiwioptions.AUTH_BASE_URL }}_signin" method="post">
+		<table width=400><col width=100><col width=300>
+			{% if signin_error_message %}
+			<tr><td colspan=2 style="color:#F25">{{ signin_error_message }}</td></tr>
+			<tr><td colspan=2>&nbsp;</td></tr>
+			{% endif %}
+			<tr><td colspan=2 id="nocookies">
+				<div style="color:#F25; width: 300px; margin: 0 0 15px 0" id="nojavascript">
+					You appear to have your browser's JavaScript functionality turned off.
+					Some features of this site will not work properly if JavaScript is turned off.
+					Click <a href="http://www.google.com/support/bin/answer.py?hl=en&answer=23852">here</a>
+					for assistance in turning JavaScript back on.
+				</div>
+				<div style="color:#F25; width: 300px; margin: 0 0 15px 0" id="nojavascript">
+					You <span id="maybecookies">may also</span> have your browser's cookie functionality turned off.
+					It must be turned on to sign into this site.
+					Click <a href="http://www.google.com/support/accounts/bin/answer.py?answer=61416">here</a>
+					for assistance in turning cookies back on.
+				<div>
+			</td></tr>
+			<tr><td> {{ kiwioptions.MEMBER_REFERENCE }}:&nbsp; </td><td><input type=text name=name></td></tr>
+			<tr><td>Password:&nbsp; </td><td><input type=password name=password></td></tr>
+			<tr><td></td><td><input type=checkbox name=remember value=remember {% if REMEMBER_LOGIN %}checked=yes{% endif %}>Remember Me</td></tr>
+			<tr><td></td><td>
+				<script>
+				    (function() {
+						document.getElementById("nojavascript").innerHTML = "";
+						document.getElementById("maybecookies").innerHTML = "appear to";
+						var nameEq = "signin" + "=";
+						var parts = String(document.cookie).split(/\s*;\s*/);
+						var v = null;
+						for (var i = 0, part; part = parts[i]; i++) {
+						    if (part.indexOf(nameEq) == 0) {
+						        v = part.substr(nameEq.length);
+						        break;
+						    }
+						}
+						if (v.indexOf("cookies-supported") >= 0) {
+							document.getElementById("nocookies").innerHTML = "";
+						}
+				    })();
+				</script>
+				<input type=Submit name=signin value="Sign In">
+				<!--
+				<input type=Submit name=reset_password value="Reset Password">
+				-->
+				{% if redirect_url %}
+					<input type=Hidden name=redirect_url value="{{redirect_url}}">
+				{% else %}
+					{% if request.GET.redirect_url %}
+						<input type=Hidden name=redirect_url value="{{request.GET.redirect_url}}">
+					{% else %}
+						{% if request.POST.redirect_url %}
+							<input type=Hidden name=redirect_url value="{{request.POST.redirect_url}}">
+						{% else %}
+							<input type=Hidden name=redirect_url value="{{request.build_absolute_uri}}">
+						{% endif %}
+					{% endif %}
+				{% endif %}
+			</td></tr>
+		</table>
+	</form>
+{% endif %}

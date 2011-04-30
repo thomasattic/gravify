@@ -3,7 +3,6 @@
 	<meta http-equiv="Content-type" content="text/html; charset=utf-8">
 	<title>OpenTok API Sample &#151; Basic Tutorial</title>
 	<link href="samples.css" type="text/css" rel="stylesheet" >
-	<script src="http://twitterjs.googlecode.com/svn/trunk/src/twitter.min.js"></script>
 	<script src="http://staging.tokbox.com/v0.91/js/TB.min.js" type="text/javascript" charset="utf-8"></script>
 	<script type="text/javascript" charset="utf-8">
 		var apiKey = 589411; // OpenTok sample API key. Replace with your own API key.
@@ -155,16 +154,6 @@
 		}
 
 	</script>
-	<script type="text/javascript" charset="utf-8">
-	getTwitters('tweet', { 
-	  id: 'partydowntv', 
-	  count: 1, 
-	  enableLinks: true, 
-	  ignoreReplies: true, 
-	  clearContents: true,
-	  template: '"%text%" <a href="http://twitter.com/%user_screen_name%/statuses/%id_str%/">%time%</a>'
-	});
-	</script>
 </head>
 <body>
 	<div id="streaming_video"><object classid="clsid:d27cdb6e-ae6d-11cf-96b8-444553540000" width="480" height="296" id="utv839878"><param name="flashvars" value="autoplay=true&amp;brand=embed&amp;cid=522594&amp;locale=ja_JP&amp;v3=1"/><param name="allowfullscreen" value="true"/><param name="allowscriptaccess" value="always"/><param name="movie" value="http://www.ustream.tv/flash/viewer.swf"/><embed flashvars="autoplay=true&amp;brand=embed&amp;cid=522594&amp;locale=ja_JP&amp;v3=1" width="480" height="296" allowfullscreen="true" allowscriptaccess="always" id="utv839878" name="utv_n_523512" src="http://www.ustream.tv/flash/viewer.swf" type="application/x-shockwave-flash" /></object><br /><a href="http://www.ustream.tv/" style="padding: 2px 0px 4px; width: 400px; background: #ffffff; display: block; color: #000000; font-weight: normal; font-size: 10px; text-decoration: underline; text-align: center;" target="_blank">Live Video streaming by Ustream</a></div>
@@ -177,13 +166,8 @@
 	</div>
 	<div id="myCamera" class="publisherContainer"></div>
 	<div id="subscribers"></div>
-	<div id="tweet">
-	 <p>Please wait while my tweets load <img src="/images/indicator.gif" /></p>
-	 <p><a href="http://twitter.com/partydowntv">If you can't wait - check out what I've been twittering</a></p>
-	</div>
 </body>
 	<script>
 		show('connectLink');
 	</script>
-x
 </html>

@@ -1,0 +1,301 @@
+<html lang="en">
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+	<title>OpenTok Sample &#151; Audio Demo</title>
+	<link href="samples.css" type="text/css" rel="stylesheet" >
+	<script src="http://staging.tokbox.com/v0.91/js/TB.min.js" type="text/javascript" charset="utf-8"></script>
+	<script type="text/javascript">
+		var apiKey = 1127; // OpenTok sample code key. Replace with your own API key.
+		var sessionId = "153905ca48f595f63f1f56c679797e985fb53120"; // Replace with your session ID.
+		var token = "devtoken"; // Should not be hard-coded. Add to the page using the OpenTok server-side libraries.
+
+		var session;
+		var publisher;
+		var globalGroup;
+		var pushToTalk;
+
+		var PUBLISHER_WIDTH = 200;
+		var PUBLISHER_HEIGHT = 145;
+
+		var SUBSCRIBER_WIDTH = 220;
+		var SUBSCRIBER_HEIGHT = 165;
+
+		var CONFIRM_STATEMENT = 'Not wearing headphones could lead to echo.\n\nTo avoid this, click OK to enable push-to-talk functionality. Otherwise click Cancel';
+
+		// Un-comment either of the following to set automatic logging and exception handling.
+		// See the exceptionHandler() method below.
+		// TB.setLogLevel(TB.DEBUG);
+		TB.addEventListener("exception", exceptionHandler);
+
+		if (TB.checkSystemRequirements() != TB.HAS_REQUIREMENTS) {
+			alert("You don't have the minimum requirements to run this application."
+				  + "Please upgrade to the latest version of Flash.");
+		} else {
+			session = TB.initSession(sessionId);
+
+			// Add event listeners to the session
+			session.addEventListener("sessionConnected", sessionConnectedHandler);
+			session.addEventListener("streamCreated", streamCreatedHandler);
+			session.addEventListener("streamDestroyed", streamDestroyedHandler);
+			session.addEventListener("sessionDisconnected", sessionDisconnectedHandler);
+
+			/*
+			If testing the app from the desktop, be sure to check the Flash Player Global Security setting
+			to allow the page from communicating with SWF content loaded from the web. For more information,
+			see http://www.tokbox.com/opentok/build/tutorials/helloworld.html#localTest
+			*/
+			session.connect(apiKey, token);
+		}
+
+		//--------------------------------------
+		//  OPENTOK EVENT HANDLERS
+		//--------------------------------------
+		function sessionConnectedHandler(event) {
+			document.getElementById("call-status").innerHTML = "Watching";
+
+			// Display all streams on screen
+			for (var i = 0; i < event.streams.length; i++)
+			subscribeToStream(event.streams[i]);
+
+			if (event.groups.length > 0) {
+				globalGroup = event.groups[0];
+				globalGroup.addEventListener("groupPropertiesUpdated", groupPropertiesUpdatedHandler);
+				if (globalGroup.getGroupProperties().echoSuppression.isEnabled) {
+					setEchoSuppressionButton("disable");
+				} else {
+					setEchoSuppressionButton("enable");
+				}
+			}
+
+			// Now possible to join a session
+			show("publishLink");
+		}
+
+		function sessionDisconnectedHandler (event) {
+			// We lost connection to the server
+			document.getElementById("call-status").innerHTML = "Disconnected";
+			hide("unpublishLink");
+			hide("publishLink");
+			hide("push-to-talk");
+			hide("publisherControls");
+		}
+
+		// Display all streams on screen, except for the ones published by this connection
+		function streamCreatedHandler(event) {
+
+			for (var i = 0; i < event.streams.length; i++) {
+				if (event.streams[i].connection.connectionId != session.connection.connectionId) {
+					subscribeToStream(event.streams[i]);
+				} else {
+					// Our publisher just started streaming
+					document.getElementById("call-status").innerHTML = 'Participating';
+					show("unpublishLink");
+				}
+			}
+
+		}
+
+		// Remove streams from screen, except for the one published by this page
+		function streamDestroyedHandler(event) {
+			for (var i = 0; i < event.streams.length; i++) {
+				if (event.streams[i].connection.connectionId == session.connection.connectionId) {
+					// Our publisher just stopped streaming
+					document.getElementById("call-status").innerHTML = "Watching";
+					show("publishLink");
+					hide("unpublishLink");
+				}
+			}
+		}
+
+		function groupPropertiesUpdatedHandler(event) {
+			if (event.target.groupId == globalGroup.groupId) {
+				if (event.target.getGroupProperties().echoSuppression.isEnabled) {
+					// Echo suppression has been enabled
+					setEchoSuppressionButton("disable");
+
+					// Check to see if we need to clean up
+					// from being in push to talk mode
+					if (pushToTalk) {
+						hide("push-to-talk");
+						if (publisher) {
+							publisher.publishAudio(true);
+						}
+						pushToTalk = false;
+					}
+				} else {
+					setEchoSuppressionButton("enable");
+					if (publisher) {
+						// Mute audio to remove risk of feedback
+						publisher.publishAudio(false);
+
+						pushToTalk = confirm(CONFIRM_STATEMENT);
+						if (pushToTalk) {
+							show("push-to-talk");
+						} else {
+							publisher.publishAudio(true);
+						}
+					}
+				}
+
+				// Note that this overrides any prior end-user
+				// "muting" of selected subscriber streams
+				for (var i = 0; i < session.subscribers.length; i++) {
+					session.subscribers[i].subscribeToAudio(true);
+				}
+			}
+		}
+
+		/*
+		If you un-comment the call to TB.addEventListener("exception", exceptionHandler) above, OpenTok calls the
+		exceptionHandler() method when exception events occur. You can modify this method to further process exception events.
+		If you un-comment the call to TB.setLogLevel(), above, OpenTok automatically displays exception event messages.
+		*/
+		function exceptionHandler(event) {
+			alert("Exception: " + event.code + "::" + event.message);
+		}
+
+		//--------------------------------------
+		//  LINK CLICK HANDLERS
+		//--------------------------------------
+
+		// Called when user clicks the Join session link
+		function startPublishing() {
+			show("publisherControls");
+			if (globalGroup.getGroupProperties().echoSuppression.isEnabled) {
+				pushToTalk = false;
+				setEchoSuppressionButton("disable");
+			} else {
+				pushToTalk = confirm(CONFIRM_STATEMENT);
+
+				if (pushToTalk) {
+					show("push-to-talk");
+				}
+
+				setEchoSuppressionButton("enable");
+			}
+
+			var parentDiv = document.getElementById("myCamera");
+			var followingDiv = document.getElementById("push-to-talk");
+			var stubSpan = document.createElement("div"); // Create a div for the publisher to replace
+			stubSpan.id = "opentok_publisher";
+			parentDiv.insertBefore(stubSpan, followingDiv);
+
+			var publishProps = {
+				width: PUBLISHER_WIDTH,
+				height: PUBLISHER_HEIGHT,
+				publishAudio: !pushToTalk
+			};
+			publisher = session.publish(stubSpan.id, publishProps);
+
+			document.getElementById("call-status").innerHTML = "Joining...";
+			hide("publishLink");
+		}
+
+		// Called when user wants to stop participating in the session
+		function stopPublishing() {
+			// Hide publisher controls, including push-to-talk if it's there
+			hide("publisherControls");
+			if (pushToTalk) {
+				hide("push-to-talk");
+				pushToTalk = false;
+			}
+
+			if (publisher) {
+				// Stop the stream
+				session.unpublish(publisher);
+				publisher = null;
+			}
+
+			document.getElementById("call-status").innerHTML = "Leaving...";
+			hide("unpublishLink");
+		}
+
+		// Called when a user pushes-to-talk
+		function startTalking() {
+			document.getElementById("push-to-talk").onclick = stopTalking;
+			document.getElementById("push-to-talk").value = "Click to mute";
+			for (var i = 0; i < session.subscribers.length; i++) {
+				session.subscribers[i].subscribeToAudio(false);
+			}
+			publisher.publishAudio(true);
+		}
+
+		// Called when a user releases push-to-talk
+		function stopTalking() {
+			document.getElementById("push-to-talk").onclick = startTalking;
+			document.getElementById("push-to-talk").value = "Click to talk";
+
+			publisher.publishAudio(false);
+			for (var i = 0; i < session.subscribers.length; i++) {
+				session.subscribers[i].subscribeToAudio(true);
+			}
+		}
+
+		//--------------------------------------
+		//  HELPER METHODS
+		//--------------------------------------
+
+		// Called to subscribe to a new stream
+		function subscribeToStream(stream) {
+			// Create a div for the subscriber to replace
+			var parentDiv = document.getElementById("subscribers");
+			var stubSpan = document.createElement("span");
+			stubSpan.id = "opentok_subscriber_" + stream.streamId;
+			parentDiv.appendChild(stubSpan);
+
+		        var subscribeToAudio = true;
+            		if(pushToTalk) {
+                		subscribeToAudio = false;
+            		}
+
+			var subscriberProps = {
+				width: SUBSCRIBER_WIDTH,
+				height: SUBSCRIBER_HEIGHT,
+				subscribeToAudio: subscribeToAudio
+			};
+			session.subscribe(stream, stubSpan.id, subscriberProps);
+		}
+
+		// Update echo suppression button
+		function setEchoSuppressionButton(enable) {
+			if (enable == "enable") {
+				show("enable-echo-suppression");
+				hide("disable-echo-suppression");
+			} else {
+				show("disable-echo-suppression");
+				hide("enable-echo-suppression");
+			}
+		}
+
+		function show(id) {
+			document.getElementById(id).style.display = 'block';
+		}
+
+		function hide(id) {
+			document.getElementById(id).style.display = 'none';
+		}
+
+	</script>
+</head>
+<body>
+	<div id="videobar" class="videobar">
+		<div id="localview">
+			<div id="controls">
+				<div class="smalltype">Status:  <span id="call-status">Connecting</span></div>
+				<div id="action">
+			       	<input type="button" value="Start Publishing" id ="publishLink" onclick="javascript:startPublishing()" />
+			       	<input type="button" value="Stop Publishing" id ="unpublishLink" onclick="javascript:stopPublishing()" />
+				</div>
+				<div id="publisherControls">
+	              	<input type="button" id="enable-echo-suppression" value="Enable echo suppression" onclick="globalGroup.enableEchoSuppression()" />
+	               	<input type="button" id="disable-echo-suppression" value="Disable echo suppression" onclick="globalGroup.disableEchoSuppression()" />
+				</div>
+			</div>
+			<div id="myCamera" class="publisherContainer">
+				<input type="button" id="push-to-talk" value="Click to talk" onclick="startTalking()" />
+			</div>
+		</div>
+	</div>
+	<div id="subscribers"></div>
+</body>
+</html>
