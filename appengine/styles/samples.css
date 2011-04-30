@@ -5,6 +5,18 @@
  *
  */
 
+#header {
+	
+}
+#heading {
+	width: 50%;
+}
+#instructions {
+	width: 500px;
+	float: right;
+	clear: all;
+}
+
 /* all the css below is from the original sample */
 body, html {
 	font-family:'Lucida Grande', 'Trebuchet MS', sans-serif;

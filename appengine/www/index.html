@@ -160,20 +160,17 @@
 	</script>
 </head>
 <body>
+<div id="page">
 	<div id="header">
-	<h1>Yo Couch!</h2>
-	<h2>Watch with your friends</h2>
-	</div>
-	<div id="instructions">
-		<div id="links">
+		<div id="instructions">
 			<ol>
-				<li>Click Connect to join the room: 
-	       	<input type="button" value="Connect" id ="connectLink" style="display: foo" onClick="javascript:connect()" />
-	       	<input type="button" value="Leave" id ="disconnectLink" onClick="javascript:disconnect()" />
+				<li>Enter to the room: 
+	       	<input type="button" value="Hi Everyone!" id ="connectLink" style="display: foo" onClick="javascript:connect()" />
+	       	<input type="button" value="I'm outta here!" id ="disconnectLink" onClick="javascript:disconnect()" />
 				</li>
-				<li>Then, click Start to share your stream:
-	       	<input type="button" value="Start" id ="publishLink" onClick="javascript:startPublishing()" />
-	       	<input type="button" value="Stop" id ="unpublishLink" onClick="javascript:stopPublishing()" />
+				<li>Activate your camera:
+	       	<input type="button" value="Lights, Camera, Action!" id ="publishLink" onClick="javascript:startPublishing()" />
+	       	<input type="button" value="That's a wrap!" id ="unpublishLink" onClick="javascript:stopPublishing()" />
 				</li>
 			</ol>
 		</div>
@@ -197,26 +194,26 @@
 		show('connectLink');
 	</script>
  
-      <div id="fb-root"></div>
-      <script src="http://connect.facebook.net/en_US/all.js">
-      </script>
-      <script>
-         FB.init({ 
-            appId:'176941975674666', cookie:true, 
-            status:true, xfbml:true 
-         });
-         FB.api('/me', function(user) {
-           if(user != null) {
-              var image = document.getElementById('image');
-              image.src = 'https://graph.facebook.com/' + user.id + '/picture';
-              var name = document.getElementById('name');
-              name.innerHTML = user.name
-           }
-         });
-       </script>
-           <div align="center">
-           <img id="image"/>
-           <div id="name"></div>
-           </div>
+		<div id="heading">
+			<h1>Yo Couch!</h2>
+			<h2>Watch with your friends</h2>
+		</div>
+        </div>
+
+	<div id="body">
+		<div id="video" style="display:block;">
+			<div style="width:100%;height:349px; text-align:center">
+				<iframe width="425" height="349" src="http://www.youtube.com/embed/V7D9J8lTFGs" frameborder="0" allowfullscreen></iframe>
+			</div>
+		</div>
+		<div id="myCamera" class="publisherContainer"></div>
+		<div id="subscribers"></div>
+		<div id="opentok_console"></div>
+		<div id="juitterContainer"></div>	
+
+	<script>
+		show('connectLink');
+	</script>
+</div>  
 </body>
 </html>
