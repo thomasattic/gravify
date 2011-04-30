@@ -1,0 +1,116 @@
+{# Part of the Kiwi Framework - Copyright (c) 2011 by Puzzazz, Inc. See kiwilicense.py for license notice. #}
+{# You may create your own modified version of this file without restriction. #}
+{# If you do this, you MUST remove the copyright and notice above #}
+
+{% if AUTHENTICATION.IS_ADMIN %}
+	{# Member Admin - can be customized for your site #}
+	<h1>Member Administration</h1>
+	
+	{% if initial_setup %}
+		<h2>Initial Setup</h2>
+	{% else %}
+		{{ AUTHENTICATION.LINKS }}
+	{% endif %}
+
+<style>
+td { text-align: left; vertical-align: top }
+</style>
+
+{% if form_response %}
+	<div width=100% style="background: {% if is_inactive %}#FFBBFF{% else %}#FFFFBB{% endif %}">
+	{{ form_response }}
+	</div>
+	<br>
+{% endif %}
+
+	<hr>
+
+	<form action="{{ kiwioptions.AUTH_BASE_URL }}_member_admin" method="post">
+	<table cellpadding=0 cellspacing=0 border=0 width=100%><tr><td width=250>
+		<p><h3>View Member</h3><p>
+	</td><td>
+		<input type=hidden name=action value="view">
+		<p>{{ kiwioptions.MEMBER_REFERENCE }}: <input type=text id=name name=name> <input type=Submit name=submit value="View"></p>
+	</td></tr></table>
+	</form>
+	
+	<hr>
+	
+	<form action="{{ kiwioptions.AUTH_BASE_URL }}_member_admin" method="post">
+	<table cellpadding=0 cellspacing=0 border=0 width=100%><tr><td width=250>
+		<p><h3>Activate Member</h3><p>
+	</td><td>
+		<input type=hidden name=action value="activate">
+		<p>{{ kiwioptions.MEMBER_REFERENCE }}: <input type=text id=name name=name> <input type=Submit name=submit value="Activate"></p>
+	</td></tr></table>
+	</form>
+	
+	<hr>
+	
+	<form action="{{ kiwioptions.AUTH_BASE_URL }}_member_admin" method="post">
+	<table cellpadding=0 cellspacing=0 border=0 width=100%><tr><td width=250>
+		<p><h3>Deactivate Member</h3><p>
+	</td><td>
+		<input type=hidden name=action value="deactivate">
+		<p>{{ kiwioptions.MEMBER_REFERENCE }}: <input type=text id=name name=name> <input type=Submit name=submit value="Deactivate"></p>
+	</td></tr></table>
+	</form>
+	
+	<hr>
+	
+	<form action="{{ kiwioptions.AUTH_BASE_URL }}_member_admin" method="post">
+	<table cellpadding=0 cellspacing=0 border=0 width=100%><tr><td width=250>
+		<p><h3>Set Temporary Password</h3><p>
+	</td><td>
+		<input type=hidden name=action value="set_temp_password">
+		<p>{{ kiwioptions.MEMBER_REFERENCE }}: <input type=text id=name name=name>
+			Temporary Password: <input type=text id=temppassword name=temppassword>
+			<input type=Submit name=submit value="Set Password"><br>
+			<small>Note: The first time they sign in, the member will be asked to choose a permanent password.</small></p>
+	</td></tr></table>
+	</form>
+	
+	<hr>
+	
+	<form action="{{ kiwioptions.AUTH_BASE_URL }}_member_admin" method="post">
+	<table cellpadding=0 cellspacing=0 border=0 width=100%><tr><td width=250>
+		<p><h3>Change {{ kiwioptions.MEMBER_REFERENCE }}</h3><p>
+	</td><td>
+		<input type=hidden name=action value="change_name">
+		<p>{{ kiwioptions.MEMBER_REFERENCE }}: <input type=text id=name name=name>
+			New {{ kiwioptions.MEMBER_REFERENCE }}: <input type=text id=newname name=newname>
+			New {{ kiwioptions.FULLNAME_REFERENCE }}: <input type=text id=newfullname name=newfullname>
+			<input type=Submit name=submit value="Change {{ kiwioptions.MEMBER_REFERENCE }}"></p>
+	</td></tr></table>
+	</form>
+	
+	<hr>
+	
+	<form action="{{ kiwioptions.AUTH_BASE_URL }}_member_admin" method="post">
+	<table cellpadding=0 cellspacing=0 border=0 width=100%><tr><td width=250>
+		<p><h3>Change Email</h3><p>
+	</td><td>
+		<input type=hidden name=action value="change_email">
+		<p>{{ kiwioptions.MEMBER_REFERENCE }}: <input type=text id=name name=name>
+			New Email: <input type=text id=newemail name=newemail>
+			<input type=Submit name=submit value="Change Email"></p>
+	</td></tr></table>
+	</form>
+	
+	<hr>
+	
+	<form action="{{ kiwioptions.AUTH_BASE_URL }}_member_admin" method="post">
+	<p><h3>Add Members</h3><p>
+	<input type=hidden name=action value="add">
+	<p>Enter one or more rows in the following format:</p>
+	<p><b>{{ kiwioptions.MEMBER_REFERENCE }}, {{ kiwioptions.FULLNAME_REFERENCE }}, email address, unique-id</b><br>
+	<small>Note: Only the {{ kiwioptions.MEMBER_REFERENCE }} is required. Defaults are: {{ kiwioptions.FULLNAME_REFERENCE }}={{ kiwioptions.MEMBER_REFERENCE }},
+		email=none, unique-id=generated</small></p>
+	<p>Delimiter: <input type=text name=delimiter value="," size=1> <small>You can also place a single-character delimiter by itself on line 1.</small></p>
+	<textarea name=members_to_add rows=15 cols=80></textarea>
+	<p><input type=Submit name=submit value="Add Members"> <small>Note: New members are always active.</p>
+	</form>
+	
+{% else %}
+	{{ AUTHENTICATION.ADMIN_REQUIRED }}
+{% endif %}
