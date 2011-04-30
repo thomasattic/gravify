@@ -9,7 +9,7 @@ function switch_video()
 	var video_title=data.title;
 	var video_viewCount=data.viewCount;
 	// IFRAME Embed for YouTube
-	var video_frame="<iframe width='640' height='385' src='http://www.youtube.com/embed/"+video_id+"' frameborder='0' type='text/html'></iframe>";
+	var video_frame="<iframe width='640' height='385' src='http://www.youtube.com/v/"+video_id+"&autoplay=1' frameborder='0' type='text/html'></iframe>";
 
 	var final="<div id='title'>"+video_title+"</div><div>"+video_frame+"</div>";
 
