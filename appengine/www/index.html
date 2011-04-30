@@ -1,9 +1,12 @@
 <html lang="en">
 <head>
 	<meta http-equiv="Content-type" content="text/html; charset=utf-8">
-	<title>OpenTok API Sample &#151; Basic Tutorial</title>
-	<link href="/styles/samples.css" type="text/css" rel="stylesheet" >
-	<script src="http://twitterjs.googlecode.com/svn/trunk/src/twitter.min.js"></script>
+	<title>Yo Couch! - Watch with your friends!</title>
+	<link href="../styles/samples.css" type="text/css" rel="stylesheet">
+	<script type="text/javascript" src="https://www.google.com/jsapi"></script>
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.4.2/jquery.min.js"></script>
+	<script language="javascript" src="tweet/jquery.juitter.js" type="text/javascript"></script>
+	<script language="javascript" src="tweet/system.js" type="text/javascript"></script>
 	<script src="http://staging.tokbox.com/v0.91/js/TB.min.js" type="text/javascript" charset="utf-8"></script>
 	<script type="text/javascript" charset="utf-8">
 		var apiKey = 589411; // OpenTok sample API key. Replace with your own API key.
@@ -155,7 +158,6 @@
 		}
 
 	</script>
-	<script type="text/javascript" charset="utf-8">
 </head>
 <body>
 	<div id="header">
@@ -169,7 +171,7 @@
 			<li>Watch with your friends!</li>
 		</ol>
 	</div>
-	<div id="streaming_video"><object classid="clsid:d27cdb6e-ae6d-11cf-96b8-444553540000" width="480" height="296" id="utv839878"><param name="flashvars" value="autoplay=true&amp;brand=embed&amp;cid=522594&amp;locale=ja_JP&amp;v3=1"/><param name="allowfullscreen" value="true"/><param name="allowscriptaccess" value="always"/><param name="movie" value="http://www.ustream.tv/flash/viewer.swf"/><embed flashvars="autoplay=true&amp;brand=embed&amp;cid=522594&amp;locale=ja_JP&amp;v3=1" width="480" height="296" allowfullscreen="true" allowscriptaccess="always" id="utv839878" name="utv_n_523512" src="http://www.ustream.tv/flash/viewer.swf" type="application/x-shockwave-flash" /></object><br /><a href="http://www.ustream.tv/" style="padding: 2px 0px 4px; width: 400px; background: #ffffff; display: block; color: #000000; font-weight: normal; font-size: 10px; text-decoration: underline; text-align: center;" target="_blank">Live Video streaming by Ustream</a></div>
+	<object width="512" height="288"><param name="movie" value="http://www.hulu.com/embed/edUW6BWWZ4wAvYJZRgRRVA"></param><param name="allowFullScreen" value="true"></param><embed src="http://www.hulu.com/embed/edUW6BWWZ4wAvYJZRgRRVA" type="application/x-shockwave-flash"  width="512" height="288" allowFullScreen="true"></embed></object>
 	<div id="opentok_console"></div>
 	<div id="links">
        	<input type="button" value="Connect" id ="connectLink" onClick="javascript:connect()" />
@@ -177,6 +179,7 @@
        	<input type="button" value="Start Publishing" id ="publishLink" onClick="javascript:startPublishing()" />
        	<input type="button" value="Stop Publishing" id ="unpublishLink" onClick="javascript:stopPublishing()" />
 	</div>
+	<div id="juitterContainer"></div>
 	<div id="myCamera" class="publisherContainer"></div>
 	<div id="subscribers"></div>
 	<div id="tweet">
