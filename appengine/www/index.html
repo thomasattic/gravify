@@ -158,60 +158,76 @@
 			document.getElementById(id).style.display = 'none';
 		}
 
-	    var URL = "/jput/";
-	    var session = "test_abc";
-	    var items = {
-	      read: function(id, fn, err) {
-	        var url = URL + id;
-	        $.ajax({
-	          type: 'GET',
-	          url: url,
-	          dataType: 'json',
-	          beforeSend: function(xhr) {},
-	          success: fn,
-	          error: function(request, textStatus, errorThrown) {
-	            // err
-	            var exception = {datasetname: 'madswvideo', status: request.status, message: request.statusText, url: url, method: "read", kind: textStatus};
-	            err(exception);
-	          }
-	        });
-	      },
-	      update: function(id, json, fn, err) {
-	        var url = URL + id;
-	        $.ajax({
-	          type: 'PUT',
-	          url: url,
-	          dataType: 'json',
-	          beforeSend: function(xhr) {},
-	          success: fn,
-	          error: function(request, textStatus, errorThrown) {
-	            // err
-	            var exception = {datasetname: 'madswvideo', status: request.status, message: request.statusText, url: url, method: "update", kind: textStatus};
-	            err(exception);
-	          }
-	        });
-	      }
-	    }
-	    function read() {
-	       items.read(session, function(data) {
-	          // fn
-	          if (!data) {
-	             items.update(session, {}, fn, err);
-	          }
-	          console.warn(JSON.stringify(data));
-	       }, function(exception) {
-	          console.warn(JSON.stringify(exception));
-	       });
-	    }
-	    $(document).ready(function() {
-	      read();
-	      setTimeout(function() {
-	         read();
-	      },
-	      10000);
-	    });
+    function parseSearch(q) {
+      // Andy E and community @ http://stackoverflow.com/posts/2880929/revisions
+      var results = {};
+      var e,
+          a = /\+/g,  // Regex for replacing addition symbol with a space
+          r = /([^&=]+)=?([^&]*)/g,
+          d = function (s) { return decodeURIComponent(s.replace(a, " ")); };
 
+      while (e = r.exec(q)) {
+         results[d(e[1])] = d(e[2]);
+      }
+      return results;
+    };
 
+    var items = {
+      read: function(id, fn, err) {
+        var url = URL + id;
+        $.ajax({
+          type: 'GET',
+          url: url,
+          dataType: 'json',
+          beforeSend: function(xhr) {},
+          success: fn,
+          error: function(request, textStatus, errorThrown) {
+            // err
+            var exception = {datasetname: 'madswvideo', status: request.status, message: request.statusText, url: url, method: "read", kind: textStatus};
+            err(exception);
+          }
+        });
+      },
+      update: function(id, json, fn, err) {
+        var url = URL + id;
+        $.ajax({
+          type: 'PUT',
+          url: url,
+          dataType: 'json',
+          beforeSend: function(xhr) {},
+          success: fn,
+          error: function(request, textStatus, errorThrown) {
+            // err
+            var exception = {datasetname: 'madswvideo', status: request.status, message: request.statusText, url: url, method: "update", kind: textStatus};
+            err(exception);
+          }
+        });
+      }
+    }
+    function read() {
+       items.read(sessionId, function(data) {
+          // fn
+          if (!data) {
+             items.update(sessionId, {}, fn, err);
+          }
+          console.warn(JSON.stringify(data));
+       }, function(exception) {
+          console.warn(JSON.stringify(exception));
+       });
+    }
+    $(document).ready(function() {
+      var loc = window.location;
+      var search = parseSearch(loc.hash.substring(1));
+      if (search.session) {
+        sessionId = search.session;
+      }
+
+      read();
+      setTimeout(function() {
+         read();
+      },
+      10000);
+    });
 	</script>
 </head>
 <body>
