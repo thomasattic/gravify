@@ -1,504 +1,173 @@
 <html lang="en">
 <head>
-	<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-	<title>TokBox OpenTok API Extended Demo</title>
-	<style type="text/css">
-	html {
-		font-family: Helvetica;
-		margin: 0;
-		padding: 0;
-		color: #000;
-	}
-	body {
-		width: 900px;
-		padding: 0;
-		font-family: Helvetica;
-		color: #000;
-	}
-	h1 {
-		padding: 5px 0px 5px 180px;
-		margin: 0;
-	}
-	#localview {
-		float: left;
-		width: 150px;
-		padding: 10px;
-	}
-	#main {
-		float: left;
-		width: 480px;
-		padding: 10px;
-	}
-	div.section {
-		font-weight: bold;
-		font-size: 18px;
-		padding: 15 0 8 0;
-	}
-	div.left-pic {
-		float: left;
-		padding-right: 10;
-	}
-	div.right-pic {
-		float: right;
-		padding-left: 10;
-	}
-	div.controls {
-		float: right;
-		width: 220px;
-		padding: 10 0 10 0;
-		font-size: 14px;
-	}
-	div.learnmore {
-		float: right;
-		width: 200px;
-		padding: 10 10 10 10;
-		font-size: 12px;
-		background: #dddddd;
-	}
-	a.settingsClose:link,
-	a.settingsClose:visited,
-	a.settingsClose:hover {
-		text-decoration: none;
-		color: black;
-		cursor: auto;
-	}
-	#footer {
-		clear: both;
-		padding: 15px 10px;
-		font-size: 12px;
-	}
-	#footer p {
-		margin: 0;
-        }
-	* html #footer {
-		height: 1px;
-	}
-	.publisherContainer {
-		position: absolute;
-	}
-	</style>
+	<meta http-equiv="Content-type" content="text/html; charset=utf-8">
+	<title>OpenTok API Sample &#151; Basic Tutorial</title>
+	<link href="samples.css" type="text/css" rel="stylesheet" >
+	<script src="http://staging.tokbox.com/v0.91/js/TB.min.js" type="text/javascript" charset="utf-8"></script>
+	<script type="text/javascript" charset="utf-8">
+		var apiKey = 1127; // OpenTok sample API key. Replace with your own API key.
+		var sessionId = '153975e9d3ecce1d11baddd2c9d8d3c9d147df18'; // Replace with your session ID.
+		var token = 'devtoken'; // Should not be hard-coded.
+								// Add to the page using the OpenTok server-side libraries.
+		var session;
+		var publisher;
+		var subscribers = {};
 
-	<script type="text/javascript" src="http://staging.tokbox.com/v0.91/js/TB.min.js"></script>
+		// Un-comment either of the following to set automatic logging and exception handling.
+		// See the exceptionHandler() method below.
+		// TB.setLogLevel(TB.DEBUG);
+		TB.addEventListener("exception", exceptionHandler);
 
-	<script type="text/javascript">
+		if (TB.checkSystemRequirements() != TB.HAS_REQUIREMENTS) {
+			alert("You don't have the minimum requirements to run this application."
+				  + "Please upgrade to the latest version of Flash.");
+		} else {
+			session = TB.initSession(sessionId);	// Initialize session
 
-		// API compatibility:  0.90
-		//
-		// Updated November 7, 2010
-		// - Updated for 0.90 compatibility
-		// - Cleaned out unneeded CSS
-		// - Added device panel support
-		//
-		// Updated October 25, 2010
-		// - Restructured loops
-		//
-		// Updated October 20, 2010
-		// - Upgraded to 0.83 event model, using addEventListener()
-		//   and updated event handler function signatures
-		//
-		// Updated October 19, 2010
-		// - Removed "join call" and "leave call" buttons
-		//   immediately after use to avoid "double-click" problems
-		//
-		// Updated October 18, 2010
-		// - Added position:absolute to styling of publisher
-		//   container to fix Adobe camera allow dialog problems
-		//
-		// Updated October 17, 2010
-		// - Made UI controls more session- and publisher-aware
-		// - Join call only shows up once session is active
-		// - When you join/leave call, interface displays pending
-		//   status
-		// - Controls and counts only change once joining/leaving
-		//   is successful (ie. is confirmed via a StreamCreated
-		//   or StreamDestroyed event)
-
-		var apiKey = 1127;  // OpenTok sample code key
-		var sessionId = "1e6e7a51e55e1983c997cd32504147d5b763446e"; // should not be hardcoded
-		var token = "devtoken"; // should not be hardcoded
-		var session = null;
-		var publisher = null;
-
-		var PUBLISHER_WIDTH = 120;
-		var PUBLISHER_HEIGHT = 90;
-		var SUBSCRIBER_WIDTH = 160;
-		var SUBSCRIBER_HEIGHT = 120;
-
-		var participants = 0;
-		var watchers = 0;
-
-		var learn = false; // Set to true if you want detailed event listener alerting
-
-		// Generic function to dump streamEvents to the alert box
-		function dumpStreams(streams, reason) {
-			for (var i=0; i<streams.length; i++) {
-				alert("streamID: "+streams[i].streamId + "\n" +
-					"connectionId: "+streams[i].connection.connectionId +" \n" +
-					"type: "+streams[i].type +"\n" +
-					"name: "+streams[i].name +"\n" +
-					"reason: "+reason);
-			}
+			// Add event listeners to the session
+			session.addEventListener('sessionConnected', sessionConnectedHandler);
+			session.addEventListener('sessionDisconnected', sessionDisconnectedHandler);
+			session.addEventListener('connectionCreated', connectionCreatedHandler);
+			session.addEventListener('connectionDestroyed', connectionDestroyedHandler);
+			session.addEventListener('streamCreated', streamCreatedHandler);
+			session.addEventListener('streamDestroyed', streamDestroyedHandler);
 		}
 
-		// Generic function to dump connectionEvents to the alert box
-		function dumpConnections(connections, reason) {
-			for (var i=0; i<connections.length; i++) {
-				alert("connectionId: "+connections[i].connectionId +" \n" +
-					"reason: "+reason);
-			}
+		//--------------------------------------
+		//  LINK CLICK HANDLERS
+		//--------------------------------------
+
+		/*
+		If testing the app from the desktop, be sure to check the Flash Player Global Security setting
+		to allow the page from communicating with SWF content loaded from the web. For more information,
+		see http://www.tokbox.com/opentok/build/tutorials/helloworld.html#localTest
+		*/
+		function connect() {
+			session.connect(apiKey, token);
 		}
 
+		function disconnect() {
+			session.disconnect();
+			hide('disconnectLink');
+			hide('publishLink');
+			hide('unpublishLink');
+		}
 
-		// Action functions
-
-		// Called when user wants to start participating in the call
+		// Called when user wants to start publishing to the session
 		function startPublishing() {
-			// Starts publishing user local camera and mic
-			// as a stream into the session
-
-			// Create a div for the publisher to replace
-			var parentDiv = document.getElementById("myCamera");
-			var stubDiv = document.createElement("div");
-			stubDiv.id = "opentok_publisher";
-			parentDiv.appendChild(stubDiv);
-
-			publisher = session.publish(stubDiv.id, {width: PUBLISHER_WIDTH, height: PUBLISHER_HEIGHT});
-
-			document.getElementById("status").innerHTML = "Trying to join the call...";
-			document.getElementById("action").innerHTML = "&nbsp;";
+			if (!publisher) {
+				var parentDiv = document.getElementById("myCamera");
+				var publisherDiv = document.createElement('div'); // Create a div for the publisher to replace
+				publisherDiv.setAttribute('id', 'opentok_publisher');
+				parentDiv.appendChild(publisherDiv);
+				publisher = session.publish(publisherDiv.id); // Pass the replacement div id to the publish method
+				show('unpublishLink');
+				hide('publishLink');
+			}
 		}
 
-		// Called when user wants to stop participating in the call
 		function stopPublishing() {
-			if (publisher != null) {
-				// Stop the stream
+			if (publisher) {
 				session.unpublish(publisher);
-				publisher = null;
 			}
+			publisher = null;
 
-			document.getElementById("status").innerHTML = "Leaving the call...";
-			document.getElementById("action").innerHTML = "&nbsp;";
+			show('publishLink');
+			hide('unpublishLink');
 		}
 
-		// Called to subscribe to a new stream
-		function subscribeToStream(session, stream) {
-			// Create a div for the subscriber to replace
-			// Assumes that streamIds are integers; true for basic streams
-			var parentDiv = document.getElementById("stream_" + (stream.streamId % 4 + 1));
-			var stubDiv = document.createElement("div");
-			stubDiv.id = "opentok_subscriber_" + stream.streamId;
-			parentDiv.appendChild(stubDiv);
+		//--------------------------------------
+		//  OPENTOK EVENT HANDLERS
+		//--------------------------------------
 
-			session.subscribe(stream, stubDiv.id, {width: SUBSCRIBER_WIDTH, height: SUBSCRIBER_HEIGHT});
-			participants++;
+		function sessionConnectedHandler(event) {
+			// Subscribe to all streams currently in the Session
+			for (var i = 0; i < event.streams.length; i++) {
+				addStream(event.streams[i]);
+			}
+			show('disconnectLink');
+			show('publishLink');
+			hide('connectLink');
 		}
 
-		// Called to unsubscribe from an existing stream
-		function unsubscribeFromStream(session, stream) {
-			var subscribers = session.getSubscribersForStream(stream);
-
-			for (var i=0; i<subscribers.length; i++) {
-				session.unsubscribe(subscribers[i]);
-				participants--;
+		function streamCreatedHandler(event) {
+			// Subscribe to the newly created streams
+			for (var i = 0; i < event.streams.length; i++) {
+				addStream(event.streams[i]);
 			}
 		}
 
-		// Called to update watcher / participant counts on screen
-		function updateCountDisplays() {
-			document.getElementById("count-header").innerHTML = "Users connected to this page:";
-			document.getElementById("watchers").innerHTML = ((watchers == 0) ? "No" : watchers) + " watcher" + ((watchers != 1) ? "s" : "");
-			document.getElementById("participants").innerHTML = ((participants == 0) ? "No" : participants) + " participant" + ((participants != 1) ? "s" : "");
+		function streamDestroyedHandler(event) {
+			// This signals that a stream was destroyed. Any Subscribers will automatically be removed.
+			// This default behaviour can be prevented using event.preventDefault()
 		}
 
+		function sessionDisconnectedHandler(event) {
+			// This signals that the user was disconnected from the Session. Any subscribers and publishers
+			// will automatically be removed. This default behaviour can be prevented using event.preventDefault()
+			publisher = null;
 
-		// Event listener functions
-
-		function exceptionHandler(e) {
-			// Dont try to handle anything; just pump exception
-			// messages to a Javascript alert box for now
-			alert("Exception: "+e.code+"::"+e.message);
+			show('connectLink');
+			hide('disconnectLink');
+			hide('publishLink');
+			hide('unpublishLink');
 		}
 
-		function sessionConnectedHandler(e) {
-			// Note that we are included in e.connections
-			// We can know which one is us by comparing to e.target.connection.connectionId
-
-			var streamConnectionIds = {};
-			var streamConnections = 0; // Number of connections with a stream
-
-			if (learn) {
-				alert("sessionConnected event");
-				dumpConnections(e.connections, "");
-				dumpStreams(e.streams, "");
-			}
-
-			// Now possible to join a call - update status and controls
-			document.getElementById("status").innerHTML = "You are watching the call";
-			document.getElementById("action").innerHTML = '<a href="javascript:startPublishing()">Join call</a>';
-
-			// Display any existing streams on screen
-			for (var i=0; i<e.streams.length; i++) {
-				subscribeToStream(e.target, e.streams[i]);
-
-				// Count unique connectionIds as we go
-				if (!streamConnectionIds.hasOwnProperty(e.streams[i].connection.connectionId)) {
-					streamConnectionIds[e.streams[i].connection.connectionId] = true;
-					streamConnections++;
-				}
-			}
-
-			// Assume each connection represents a different
-			// user connected to the session
-			watchers = e.connections.length - streamConnections;
-
-			updateCountDisplays();
+		function connectionDestroyedHandler(event) {
+			// This signals that connections were destroyed
 		}
 
-		function connectionCreatedHandler(e) {
-			// Note that we will do not get a connectionCreated
-			// event for ourselves when we connect - that case
-			// is handled by the sessionConnected event
-
-			if (learn) {
-				alert("connectionCreated event");
-				dumpConnections(e.connections, "");
-			}
-
-			// Assume each connection represents a different
-			// user connected to the session
-			watchers += e.connections.length;
-
-			updateCountDisplays();
+		function connectionCreatedHandler(event) {
+			// This signals new connections have been created.
 		}
 
-
-		function connectionDestroyedHandler(e) {
-			if (learn) {
-				alert("connectionDestroyed event");
-				dumpConnections(e.connections, e.reason);
-			}
-
-			// Assume each connection represents a different
-			// user that was connected to the session
-			watchers -= e.connections.length;
-
-			updateCountDisplays();
+		/*
+		If you un-comment the call to TB.addEventListener("exception", exceptionHandler) above, OpenTok calls the
+		exceptionHandler() method when exception events occur. You can modify this method to further process exception events.
+		If you un-comment the call to TB.setLogLevel(), above, OpenTok automatically displays exception event messages.
+		*/
+		function exceptionHandler(event) {
+			alert("Exception: " + event.code + "::" + event.message);
 		}
 
+		//--------------------------------------
+		//  HELPER METHODS
+		//--------------------------------------
 
-		function streamCreatedHandler(e) {
-			// Note that we will get a streamCreated event for 
-			// ourselves when we successfully start publishing
-
-			if (learn) {
-				alert("streamCreated event");
-				dumpStreams(e.streams, "");
+		function addStream(stream) {
+			// Check if this is the stream that I am publishing, and if so do not publish.
+			if (stream.connection.connectionId == session.connection.connectionId) {
+				return;
 			}
-
-			// Display streams on screen, except for our own stream
-
-			for (var i=0; i<e.streams.length; i++) {
-				if (e.streams[i].connection.connectionId != e.target.connection.connectionId) {
-					subscribeToStream(e.target, e.streams[i]);
-					watchers--;
-				} else {
-					// Our publisher just started streaming
-
-					// Update status, controls and counts
-					document.getElementById("status").innerHTML = "You are participating in the call";
-					document.getElementById("action").innerHTML = '<a href="javascript:stopPublishing()">Leave call</a>';
-
-					participants++;
-					watchers--;
-				}
-			}
-
-			updateCountDisplays();
+			var subscriberDiv = document.createElement('div'); // Create a div for the subscriber to replace
+			subscriberDiv.setAttribute('id', stream.streamId); // Give the replacement div the id of the stream as its id.
+			document.getElementById("subscribers").appendChild(subscriberDiv);
+			subscribers[stream.streamId] = session.subscribe(stream, subscriberDiv.id);
 		}
 
+		function show(id) {
+			document.getElementById(id).style.display = 'block';
+		}
 
-		function streamDestroyedHandler(e) {
-			// Note that we will get a streamDestroyed event for 
-			// ourselves when we successfully stop publishing
-
-			if (learn) {
-				alert("streamDestroyed event");
-				dumpStreams(e.streams, e.reason);
-			}
-
-			// Remove streams from screen, except for our own stream
-
-			for (var i=0; i<e.streams.length; i++) {
-				if (e.streams[i].connection.connectionId != e.target.connection.connectionId) {
-					unsubscribeFromStream(e.target, e.streams[i]);
-					watchers++;
-				} else {
-					// Our publisher just stopped streaming
-
-					// Update status, controls and counts
-					document.getElementById("status").innerHTML = "You are watching the call";
-					document.getElementById("action").innerHTML = '<a href="javascript:startPublishing()">Join call</a>';
-
-					participants--;
-					watchers++;
-				}
-			}
-
-			updateCountDisplays();
+		function hide(id) {
+			document.getElementById(id).style.display = 'none';
 		}
 
 	</script>
 </head>
 <body>
-	<h1>TokBox OpenTok API Extended Demo</h1>
-	<div id="localview">
-		<div id="myCamera" class="publisherContainer"></div>
+	<div id="streaming_video"><object classid="clsid:d27cdb6e-ae6d-11cf-96b8-444553540000" width="480" height="296" id="utv839878"><param name="flashvars" value="autoplay=false&amp;brand=embed&amp;cid=522594&amp;locale=ja_JP&amp;v3=1"/><param name="allowfullscreen" value="true"/><param name="allowscriptaccess" value="always"/><param name="movie" value="http://www.ustream.tv/flash/viewer.swf"/><embed flashvars="autoplay=false&amp;brand=embed&amp;cid=522594&amp;locale=ja_JP&amp;v3=1" width="480" height="296" allowfullscreen="true" allowscriptaccess="always" id="utv839878" name="utv_n_523512" src="http://www.ustream.tv/flash/viewer.swf" type="application/x-shockwave-flash" /></object><br /><a href="http://www.ustream.tv/" style="padding: 2px 0px 4px; width: 400px; background: #ffffff; display: block; color: #000000; font-weight: normal; font-size: 10px; text-decoration: underline; text-align: center;" target="_blank">Live Video streaming by Ustream</a></div>
+	<div id="opentok_console"></div>
+	<div id="links">
+       	<input type="button" value="Connect" id ="connectLink" onClick="javascript:connect()" />
+       	<input type="button" value="Leave" id ="disconnectLink" onClick="javascript:disconnect()" />
+       	<input type="button" value="Start Publishing" id ="publishLink" onClick="javascript:startPublishing()" />
+       	<input type="button" value="Stop Publishing" id ="unpublishLink" onClick="javascript:stopPublishing()" />
 	</div>
-	<div id="main">
-		<div class="description">
-		TokBox's OpenTok video chat platform delivers the
-		simplicity and customization that developers need
-		for building modern web applications.  This new
-		API lets you call the shots, including full
-		control over layout, who sees whom, and who just
-		watches.  Keep reading for more details.
-		</div>
-
-		<div class="section">
-		Complete layout control
-		</div>
-
-		<div id="stream_1" class="right-pic"></div>
-		<div class="description">
-		Video chat APIs aren't new to TokBox or indeed to
-		the web.  What's new is giving you
-		Javascript-level control over the sizing and
-		layout of each individual stream, allowing you to
-		decide which video streams to display and where on
-		your HTML page to display them.  If you know how
-		to position a &lt;div&gt; element on the page, you
-		already know everything you need to know to
-		control layout with our new platform.
-		</div>
-
-		<div class="section">
-		React and adapt as people join
-		</div>
-
-		<div id="stream_2" class="left-pic"></div>
-		<div class="description">
-		The new API lets you register Javascript callback
-		routines so that you can react to a simple set of
-		common events, such as users joining or leaving
-		the chat.  This gives you the power to create
-		dynamic, user-centred interfaces that react the
-		way you want them to.
-		</div>
-
-		<div class="section">
-		Just want to watch?
-		</div>
-
-		<div id="stream_3" class="right-pic"></div>
-		<div class="description">
-		Our new API lets you choose between participating
-		and watching.  Participants upstream audio and
-		video that others can share.  Watchers can see and
-		hear participants in the video chat, without
-		themselves having to participate.  You control
-		which role a user plays, and when they switch
-		between them.
-		</div>
-
-		<div class="section">
-		No distractions
-		</div>
-
-		<div id="stream_4" class="left-pic"></div>
-		<div class="description">
-		A common complaint from first-time video chat
-		users is that they find it distracting to see
-		their own video signal.  Our new API lets you
-		control whether you can see your own video image,
-		how big it is, and where you place it on the
-		screen.  Again, if you know how to use a
-		&lt;div&gt; tag, you know pretty much everything
-		you need to know.
-		</div>
-
-		<div class="section">
-		Increased scalability
-		</div>
-
-		<div id="stream_5" class="right-pic"></div>
-		
-		<div class="description">
-		Our newly simplified approach to managing chat
-		streams allows us to support even larger numbers
-		of participants.  Using our new API, you can
-		support thousands of AV stream subscriptions in a
-		single context  whether that's 1,000 users each
-		watching the same 2 participants, or 200 people
-		each seeing 10 different streams.  You can even
-		stream to multiple pages simultaneously.
-		</div>
-
-
-		<div class="section">
-		Hello, HTML5! Ready when you are
-		</div>
-
-		<div id="stream_6" class="left-pic"></div>
-		<div class="description">
-		The new API requires Flash today - but by breaking
-		apart the monolithic video chat window and giving
-		you Javascript control over the elements, we are
-		getting ready to support live video streaming
-		using the new HTML5 &lt;video&gt; tags.  As the
-		browser implementations mature to support
-		real-time video, switching from Flash-based video
-		display to HTML5-based video display should be
-		transparent to you, the developer.
-		</div>
-	</div>
-	<div class="controls">
-		<div id="status">You are connecting to the call</div>
-		<div id="action" style="padding-bottom: 6px">&nbsp;</div>
-		<div id="count-header">Not yet connected</div>
-		<div id="participants">&nbsp;</div>
-		<div id="watchers">&nbsp;</div>
-	</div>
-	<div class="learnmore">
-		<p>Want to learn more? We'd love to get you the down-low.</p>
-		<p>Email us at <a href="mailto:platform@tokbox.com">platform@tokbox.com</a></p>
-	</div>
-	<div id="footer">
-		<hr>
-		<p>&copy; Copyright 2010 TokBox, Inc.  All rights reserved.</p>
-	</div>
-	<script type="text/javascript">
-		// Set debugging level if wanted
-		// TB.setLogLevel(TB.DEBUG);
-
-		if (TB.checkSystemRequirements() != TB.HAS_REQUIREMENTS) {
-                        alert("Unable to run TokBox OpenTok in this browser.");
-                } else {
-                        // Register the exception handler and
-                        // create the local session object
-                        TB.addEventListener("exception", exceptionHandler);
-                        session = TB.initSession(sessionId);
-
-                        // Register all the listeners that route events to
-                        // Javascript functions
-			session.addEventListener("sessionConnected", sessionConnectedHandler);
-			session.addEventListener("connectionCreated", connectionCreatedHandler);
-			session.addEventListener("connectionDestroyed", connectionDestroyedHandler);
-			session.addEventListener("streamCreated", streamCreatedHandler);
-			session.addEventListener("streamDestroyed", streamDestroyedHandler);
-
-			// Connect to the session
-			session.connect(apiKey, token);
-		}
-	</script>
+	<div id="myCamera" class="publisherContainer"></div>
+	<div id="subscribers"></div>
 </body>
+	<script>
+		show('connectLink');
+	</script>
 </html>
