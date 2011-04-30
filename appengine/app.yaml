@@ -1,0 +1,34 @@
+application: yo80710a06
+version: 1
+runtime: python
+api_version: 1
+
+handlers:
+- url: /images
+  static_dir: images
+  
+- url: /styles
+  static_dir: styles
+
+- url: /scripts
+  static_dir: scripts
+
+#- url: /favicon.ico
+#  static_files: images/favicon.ico
+#  upload: images/favicon.ico
+  
+#- url: /apple-touch-icon.png
+#  static_files: images/iphoneicon.png
+#  upload: images/iphoneicon.png
+
+#- url: /robots.txt
+#  static_files: files/robots.txt
+#  upload: files/robots.txt
+
+# Note: /admin is unrestricted - this allows me to define admins who aren't App Engine admins by having my own list of admins
+#- url: /admin.*
+#  script: main.py
+
+- url: /.*
+  script: main.py
+

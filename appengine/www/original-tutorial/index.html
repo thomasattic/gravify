@@ -1,0 +1,504 @@
+<html lang="en">
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+	<title>TokBox OpenTok API Extended Demo</title>
+	<style type="text/css">
+	html {
+		font-family: Helvetica;
+		margin: 0;
+		padding: 0;
+		color: #000;
+	}
+	body {
+		width: 900px;
+		padding: 0;
+		font-family: Helvetica;
+		color: #000;
+	}
+	h1 {
+		padding: 5px 0px 5px 180px;
+		margin: 0;
+	}
+	#localview {
+		float: left;
+		width: 150px;
+		padding: 10px;
+	}
+	#main {
+		float: left;
+		width: 480px;
+		padding: 10px;
+	}
+	div.section {
+		font-weight: bold;
+		font-size: 18px;
+		padding: 15 0 8 0;
+	}
+	div.left-pic {
+		float: left;
+		padding-right: 10;
+	}
+	div.right-pic {
+		float: right;
+		padding-left: 10;
+	}
+	div.controls {
+		float: right;
+		width: 220px;
+		padding: 10 0 10 0;
+		font-size: 14px;
+	}
+	div.learnmore {
+		float: right;
+		width: 200px;
+		padding: 10 10 10 10;
+		font-size: 12px;
+		background: #dddddd;
+	}
+	a.settingsClose:link,
+	a.settingsClose:visited,
+	a.settingsClose:hover {
+		text-decoration: none;
+		color: black;
+		cursor: auto;
+	}
+	#footer {
+		clear: both;
+		padding: 15px 10px;
+		font-size: 12px;
+	}
+	#footer p {
+		margin: 0;
+        }
+	* html #footer {
+		height: 1px;
+	}
+	.publisherContainer {
+		position: absolute;
+	}
+	</style>
+
+	<script type="text/javascript" src="http://staging.tokbox.com/v0.91/js/TB.min.js"></script>
+
+	<script type="text/javascript">
+
+		// API compatibility:  0.90
+		//
+		// Updated November 7, 2010
+		// - Updated for 0.90 compatibility
+		// - Cleaned out unneeded CSS
+		// - Added device panel support
+		//
+		// Updated October 25, 2010
+		// - Restructured loops
+		//
+		// Updated October 20, 2010
+		// - Upgraded to 0.83 event model, using addEventListener()
+		//   and updated event handler function signatures
+		//
+		// Updated October 19, 2010
+		// - Removed "join call" and "leave call" buttons
+		//   immediately after use to avoid "double-click" problems
+		//
+		// Updated October 18, 2010
+		// - Added position:absolute to styling of publisher
+		//   container to fix Adobe camera allow dialog problems
+		//
+		// Updated October 17, 2010
+		// - Made UI controls more session- and publisher-aware
+		// - Join call only shows up once session is active
+		// - When you join/leave call, interface displays pending
+		//   status
+		// - Controls and counts only change once joining/leaving
+		//   is successful (ie. is confirmed via a StreamCreated
+		//   or StreamDestroyed event)
+
+		var apiKey = 1127;  // OpenTok sample code key
+		var sessionId = "1e6e7a51e55e1983c997cd32504147d5b763446e"; // should not be hardcoded
+		var token = "devtoken"; // should not be hardcoded
+		var session = null;
+		var publisher = null;
+
+		var PUBLISHER_WIDTH = 120;
+		var PUBLISHER_HEIGHT = 90;
+		var SUBSCRIBER_WIDTH = 160;
+		var SUBSCRIBER_HEIGHT = 120;
+
+		var participants = 0;
+		var watchers = 0;
+
+		var learn = false; // Set to true if you want detailed event listener alerting
+
+		// Generic function to dump streamEvents to the alert box
+		function dumpStreams(streams, reason) {
+			for (var i=0; i<streams.length; i++) {
+				alert("streamID: "+streams[i].streamId + "\n" +
+					"connectionId: "+streams[i].connection.connectionId +" \n" +
+					"type: "+streams[i].type +"\n" +
+					"name: "+streams[i].name +"\n" +
+					"reason: "+reason);
+			}
+		}
+
+		// Generic function to dump connectionEvents to the alert box
+		function dumpConnections(connections, reason) {
+			for (var i=0; i<connections.length; i++) {
+				alert("connectionId: "+connections[i].connectionId +" \n" +
+					"reason: "+reason);
+			}
+		}
+
+
+		// Action functions
+
+		// Called when user wants to start participating in the call
+		function startPublishing() {
+			// Starts publishing user local camera and mic
+			// as a stream into the session
+
+			// Create a div for the publisher to replace
+			var parentDiv = document.getElementById("myCamera");
+			var stubDiv = document.createElement("div");
+			stubDiv.id = "opentok_publisher";
+			parentDiv.appendChild(stubDiv);
+
+			publisher = session.publish(stubDiv.id, {width: PUBLISHER_WIDTH, height: PUBLISHER_HEIGHT});
+
+			document.getElementById("status").innerHTML = "Trying to join the call...";
+			document.getElementById("action").innerHTML = "&nbsp;";
+		}
+
+		// Called when user wants to stop participating in the call
+		function stopPublishing() {
+			if (publisher != null) {
+				// Stop the stream
+				session.unpublish(publisher);
+				publisher = null;
+			}
+
+			document.getElementById("status").innerHTML = "Leaving the call...";
+			document.getElementById("action").innerHTML = "&nbsp;";
+		}
+
+		// Called to subscribe to a new stream
+		function subscribeToStream(session, stream) {
+			// Create a div for the subscriber to replace
+			// Assumes that streamIds are integers; true for basic streams
+			var parentDiv = document.getElementById("stream_" + (stream.streamId % 4 + 1));
+			var stubDiv = document.createElement("div");
+			stubDiv.id = "opentok_subscriber_" + stream.streamId;
+			parentDiv.appendChild(stubDiv);
+
+			session.subscribe(stream, stubDiv.id, {width: SUBSCRIBER_WIDTH, height: SUBSCRIBER_HEIGHT});
+			participants++;
+		}
+
+		// Called to unsubscribe from an existing stream
+		function unsubscribeFromStream(session, stream) {
+			var subscribers = session.getSubscribersForStream(stream);
+
+			for (var i=0; i<subscribers.length; i++) {
+				session.unsubscribe(subscribers[i]);
+				participants--;
+			}
+		}
+
+		// Called to update watcher / participant counts on screen
+		function updateCountDisplays() {
+			document.getElementById("count-header").innerHTML = "Users connected to this page:";
+			document.getElementById("watchers").innerHTML = ((watchers == 0) ? "No" : watchers) + " watcher" + ((watchers != 1) ? "s" : "");
+			document.getElementById("participants").innerHTML = ((participants == 0) ? "No" : participants) + " participant" + ((participants != 1) ? "s" : "");
+		}
+
+
+		// Event listener functions
+
+		function exceptionHandler(e) {
+			// Dont try to handle anything; just pump exception
+			// messages to a Javascript alert box for now
+			alert("Exception: "+e.code+"::"+e.message);
+		}
+
+		function sessionConnectedHandler(e) {
+			// Note that we are included in e.connections
+			// We can know which one is us by comparing to e.target.connection.connectionId
+
+			var streamConnectionIds = {};
+			var streamConnections = 0; // Number of connections with a stream
+
+			if (learn) {
+				alert("sessionConnected event");
+				dumpConnections(e.connections, "");
+				dumpStreams(e.streams, "");
+			}
+
+			// Now possible to join a call - update status and controls
+			document.getElementById("status").innerHTML = "You are watching the call";
+			document.getElementById("action").innerHTML = '<a href="javascript:startPublishing()">Join call</a>';
+
+			// Display any existing streams on screen
+			for (var i=0; i<e.streams.length; i++) {
+				subscribeToStream(e.target, e.streams[i]);
+
+				// Count unique connectionIds as we go
+				if (!streamConnectionIds.hasOwnProperty(e.streams[i].connection.connectionId)) {
+					streamConnectionIds[e.streams[i].connection.connectionId] = true;
+					streamConnections++;
+				}
+			}
+
+			// Assume each connection represents a different
+			// user connected to the session
+			watchers = e.connections.length - streamConnections;
+
+			updateCountDisplays();
+		}
+
+		function connectionCreatedHandler(e) {
+			// Note that we will do not get a connectionCreated
+			// event for ourselves when we connect - that case
+			// is handled by the sessionConnected event
+
+			if (learn) {
+				alert("connectionCreated event");
+				dumpConnections(e.connections, "");
+			}
+
+			// Assume each connection represents a different
+			// user connected to the session
+			watchers += e.connections.length;
+
+			updateCountDisplays();
+		}
+
+
+		function connectionDestroyedHandler(e) {
+			if (learn) {
+				alert("connectionDestroyed event");
+				dumpConnections(e.connections, e.reason);
+			}
+
+			// Assume each connection represents a different
+			// user that was connected to the session
+			watchers -= e.connections.length;
+
+			updateCountDisplays();
+		}
+
+
+		function streamCreatedHandler(e) {
+			// Note that we will get a streamCreated event for 
+			// ourselves when we successfully start publishing
+
+			if (learn) {
+				alert("streamCreated event");
+				dumpStreams(e.streams, "");
+			}
+
+			// Display streams on screen, except for our own stream
+
+			for (var i=0; i<e.streams.length; i++) {
+				if (e.streams[i].connection.connectionId != e.target.connection.connectionId) {
+					subscribeToStream(e.target, e.streams[i]);
+					watchers--;
+				} else {
+					// Our publisher just started streaming
+
+					// Update status, controls and counts
+					document.getElementById("status").innerHTML = "You are participating in the call";
+					document.getElementById("action").innerHTML = '<a href="javascript:stopPublishing()">Leave call</a>';
+
+					participants++;
+					watchers--;
+				}
+			}
+
+			updateCountDisplays();
+		}
+
+
+		function streamDestroyedHandler(e) {
+			// Note that we will get a streamDestroyed event for 
+			// ourselves when we successfully stop publishing
+
+			if (learn) {
+				alert("streamDestroyed event");
+				dumpStreams(e.streams, e.reason);
+			}
+
+			// Remove streams from screen, except for our own stream
+
+			for (var i=0; i<e.streams.length; i++) {
+				if (e.streams[i].connection.connectionId != e.target.connection.connectionId) {
+					unsubscribeFromStream(e.target, e.streams[i]);
+					watchers++;
+				} else {
+					// Our publisher just stopped streaming
+
+					// Update status, controls and counts
+					document.getElementById("status").innerHTML = "You are watching the call";
+					document.getElementById("action").innerHTML = '<a href="javascript:startPublishing()">Join call</a>';
+
+					participants--;
+					watchers++;
+				}
+			}
+
+			updateCountDisplays();
+		}
+
+	</script>
+</head>
+<body>
+	<h1>TokBox OpenTok API Extended Demo</h1>
+	<div id="localview">
+		<div id="myCamera" class="publisherContainer"></div>
+	</div>
+	<div id="main">
+		<div class="description">
+		TokBox's OpenTok video chat platform delivers the
+		simplicity and customization that developers need
+		for building modern web applications.  This new
+		API lets you call the shots, including full
+		control over layout, who sees whom, and who just
+		watches.  Keep reading for more details.
+		</div>
+
+		<div class="section">
+		Complete layout control
+		</div>
+
+		<div id="stream_1" class="right-pic"></div>
+		<div class="description">
+		Video chat APIs aren't new to TokBox or indeed to
+		the web.  What's new is giving you
+		Javascript-level control over the sizing and
+		layout of each individual stream, allowing you to
+		decide which video streams to display and where on
+		your HTML page to display them.  If you know how
+		to position a &lt;div&gt; element on the page, you
+		already know everything you need to know to
+		control layout with our new platform.
+		</div>
+
+		<div class="section">
+		React and adapt as people join
+		</div>
+
+		<div id="stream_2" class="left-pic"></div>
+		<div class="description">
+		The new API lets you register Javascript callback
+		routines so that you can react to a simple set of
+		common events, such as users joining or leaving
+		the chat.  This gives you the power to create
+		dynamic, user-centred interfaces that react the
+		way you want them to.
+		</div>
+
+		<div class="section">
+		Just want to watch?
+		</div>
+
+		<div id="stream_3" class="right-pic"></div>
+		<div class="description">
+		Our new API lets you choose between participating
+		and watching.  Participants upstream audio and
+		video that others can share.  Watchers can see and
+		hear participants in the video chat, without
+		themselves having to participate.  You control
+		which role a user plays, and when they switch
+		between them.
+		</div>
+
+		<div class="section">
+		No distractions
+		</div>
+
+		<div id="stream_4" class="left-pic"></div>
+		<div class="description">
+		A common complaint from first-time video chat
+		users is that they find it distracting to see
+		their own video signal.  Our new API lets you
+		control whether you can see your own video image,
+		how big it is, and where you place it on the
+		screen.  Again, if you know how to use a
+		&lt;div&gt; tag, you know pretty much everything
+		you need to know.
+		</div>
+
+		<div class="section">
+		Increased scalability
+		</div>
+
+		<div id="stream_5" class="right-pic"></div>
+		
+		<div class="description">
+		Our newly simplified approach to managing chat
+		streams allows us to support even larger numbers
+		of participants.  Using our new API, you can
+		support thousands of AV stream subscriptions in a
+		single context  whether that's 1,000 users each
+		watching the same 2 participants, or 200 people
+		each seeing 10 different streams.  You can even
+		stream to multiple pages simultaneously.
+		</div>
+
+
+		<div class="section">
+		Hello, HTML5! Ready when you are
+		</div>
+
+		<div id="stream_6" class="left-pic"></div>
+		<div class="description">
+		The new API requires Flash today - but by breaking
+		apart the monolithic video chat window and giving
+		you Javascript control over the elements, we are
+		getting ready to support live video streaming
+		using the new HTML5 &lt;video&gt; tags.  As the
+		browser implementations mature to support
+		real-time video, switching from Flash-based video
+		display to HTML5-based video display should be
+		transparent to you, the developer.
+		</div>
+	</div>
+	<div class="controls">
+		<div id="status">You are connecting to the call</div>
+		<div id="action" style="padding-bottom: 6px">&nbsp;</div>
+		<div id="count-header">Not yet connected</div>
+		<div id="participants">&nbsp;</div>
+		<div id="watchers">&nbsp;</div>
+	</div>
+	<div class="learnmore">
+		<p>Want to learn more? We'd love to get you the down-low.</p>
+		<p>Email us at <a href="mailto:platform@tokbox.com">platform@tokbox.com</a></p>
+	</div>
+	<div id="footer">
+		<hr>
+		<p>&copy; Copyright 2010 TokBox, Inc.  All rights reserved.</p>
+	</div>
+	<script type="text/javascript">
+		// Set debugging level if wanted
+		// TB.setLogLevel(TB.DEBUG);
+
+		if (TB.checkSystemRequirements() != TB.HAS_REQUIREMENTS) {
+                        alert("Unable to run TokBox OpenTok in this browser.");
+                } else {
+                        // Register the exception handler and
+                        // create the local session object
+                        TB.addEventListener("exception", exceptionHandler);
+                        session = TB.initSession(sessionId);
+
+                        // Register all the listeners that route events to
+                        // Javascript functions
+			session.addEventListener("sessionConnected", sessionConnectedHandler);
+			session.addEventListener("connectionCreated", connectionCreatedHandler);
+			session.addEventListener("connectionDestroyed", connectionDestroyedHandler);
+			session.addEventListener("streamCreated", streamCreatedHandler);
+			session.addEventListener("streamDestroyed", streamDestroyedHandler);
+
+			// Connect to the session
+			session.connect(apiKey, token);
+		}
+	</script>
+</body>
+</html>

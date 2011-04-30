@@ -1,0 +1,232 @@
+<html lang="en">
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+	<title>OpenTok Sample &#151; Video Sizing</title>
+	<link rel="stylesheet" href="sizing.css" type="text/css" media="screen" title="no title" charset="utf-8">
+	<link rel="stylesheet" href="samples.css" type="text/css" media="screen" title="no title" charset="utf-8">
+	<script type="text/javascript" src="http://staging.tokbox.com/v0.91/js/TB.min.js"></script>
+	<script type="text/javascript">
+		var apiKey = 1127;  // OpenTok sample code key. Replace with your own API key.
+		var sessionId = "1sdemo00755f8290f8efa648d9347d718f7e06fd"; // Replace with your own session ID.
+		var token = "devtoken"; // Should not be hard-coded.
+								// Add to the page using the OpenTok server-side libraries.
+		var session;
+		var publisher;
+
+		var PUBLISHER_WIDTH = 220;
+		var PUBLISHER_HEIGHT = 165;
+		var subscriber_width = [120, 160, 220];
+		var subscriber_height = [90, 120, 165];
+
+		// Un-comment either of the following to set automatic logging and exception handling.
+		// See the exceptionHandler() method below.
+		// TB.setLogLevel(TB.DEBUG);
+		TB.addEventListener("exception", exceptionHandler);
+
+		if (TB.checkSystemRequirements() != TB.HAS_REQUIREMENTS) {
+			alert("You don't have the minimum requirements to run this application."
+				  + "Please upgrade to the latest version of Flash.");
+		} else {
+			// Register the exception handler and
+			// create the local session object
+			session = TB.initSession(sessionId);
+
+			// Add event listeners to the session
+			session.addEventListener("sessionConnected", sessionConnectedHandler);
+			session.addEventListener("streamCreated", streamCreatedHandler);
+			session.addEventListener("streamDestroyed", streamDestroyedHandler);
+
+			/*
+			If testing the app from the desktop, be sure to check the Flash Player Global Security setting
+			to allow the page from communicating with SWF content loaded from the web. For more information,
+			see http://www.tokbox.com/opentok/build/tutorials/helloworld.html#localTest
+			*/
+			session.connect(apiKey, token);
+		}
+
+		//--------------------------------------
+		//  OPENTOK EVENT HANDLERS
+		//--------------------------------------
+
+		function sessionConnectedHandler(event) {
+
+			// Now possible to start streaming
+			document.getElementById("status").innerHTML = 'You can start publishing.';
+			show("publishLink");
+		}
+
+		function streamCreatedHandler(event) {
+
+			// When we get a streamCreated event for the stream we publish,
+			// build the grid of subscribers at the appropriate sizes.
+
+			for (var i = 0; i < event.streams.length; i++) {
+				if (event.streams[i].connection.connectionId == event.target.connection.connectionId) {
+					// Our publisher just started streaming
+					// Create sized grid of subscribers
+
+					for (y = 0; y < 3; y++) {
+						for (x = 0; x < 3; x++) {
+
+							// Create a div for the subscriber to replace
+							var parentDiv = document.getElementById("cell_" + x + "_" + y);
+							var stubDiv = document.createElement("div");
+							stubDiv.id = "opentok_subscriber_" + x + "_" + y;
+							parentDiv.appendChild(stubDiv);
+
+							var subscriberProps = {width: subscriber_width[x],
+													height: subscriber_height[y],
+													audioEnabled: false};
+							event.target.subscribe(event.streams[i], stubDiv.id, subscriberProps);
+						}
+					}
+
+					// Update status and controls
+					document.getElementById('status').innerHTML = 'You are publishing.';
+					show("unpublishLink");
+				}
+			}
+		}
+
+		function streamDestroyedHandler(event) {
+			for (var i = 0; i < event.streams.length; i++) {
+				if (event.streams[i].connection.connectionId == event.target.connection.connectionId) {
+					// Our publisher just stopped streaming
+					// Update status and controls
+					document.getElementById("status").innerHTML = 'You can start publishing.';
+					show("publishLink");
+				}
+			}
+		}
+
+		/*
+		If you un-comment the call to TB.addEventListener("exception", exceptionHandler) above, OpenTok calls the
+		exceptionHandler() method when exception events occur. You can modify this method to further process exception events.
+		If you un-comment the call to TB.setLogLevel(), above, OpenTok automatically displays exception event messages.
+		*/
+		function exceptionHandler(event) {
+			alert("Exception: " + event.code + "::" + event.message);
+		}
+
+		//--------------------------------------
+		//  LINK CLICK HANDLERS
+		//--------------------------------------
+
+		// Called when user wants to start participating in the call
+		function startPublishing() {
+			// Starts publishing user local camera and mic
+			// as a stream into the session
+
+			// Create a div for the publisher to replace
+			var parentDiv = document.getElementById("myCamera");
+			var stubDiv = document.createElement("div");
+			stubDiv.id = "opentok_publisher";
+			parentDiv.appendChild(stubDiv);
+
+			var publisherProps = {width: PUBLISHER_WIDTH, height: PUBLISHER_HEIGHT, microphoneEnabled: false};
+			publisher = session.publish(stubDiv.id, publisherProps);
+
+			document.getElementById("status").innerHTML = "Initiating publishing...";
+			hide("publishLink");
+		}
+
+		// Called when user wants to stop participating in the call
+		function stopPublishing() {
+			if (publisher) {
+				// Stop the stream
+				session.unpublish(publisher);
+				publisher = null;
+			}
+
+			document.getElementById("status").innerHTML = "Ceasing publishing...";
+			hide("unpublishLink");
+		}
+
+		//--------------------------------------
+		//  HELPER METHODS
+		//--------------------------------------
+
+		function show(id) {
+			document.getElementById(id).style.display = 'block';
+		}
+
+		function hide(id) {
+			document.getElementById(id).style.display = 'none';
+		}
+
+		// Insert table formatting rules into the stylesheet
+		for (i = 0; i < 3; i++) {
+			if(navigator.appName == 'Microsoft Internet Explorer') {
+				document.styleSheets[0].addRule('th.column_' + i, 'width: ' + subscriber_width[i] + 'px;');
+				document.styleSheets[0].addRule('tr.row_' + i, 'height: ' + subscriber_height[i] + 'px;');
+			}
+			else {
+				document.styleSheets[0].insertRule('th.column_' + i + ' { width: ' + subscriber_width[i] + ' px; }',0);
+				document.styleSheets[0].insertRule('tr.row_' + i + ' { height: ' + subscriber_height[i] + ' px; }',0);
+			}
+		}
+
+	</script>
+
+</head>
+<body>
+	<div id="videobar" class="videobar">
+		<div id="localview">
+			<div id="status" class="smalltype">Connecting</div>
+			<div id="action" class="smalltype">
+		       	<input type="button" value="Start Publishing" id ="publishLink" onClick="javascript:startPublishing()" />
+		       	<input type="button" value="Stop Publishing" id ="unpublishLink" onClick="javascript:stopPublishing()" />
+			</div>
+			<div id="myCamera" class="publisherContainer"></div>
+		</div>
+		<div id="subscribers">
+			<table>
+				<tr class="column-title">
+					<th class="row-title">
+					<th class="column_0">
+						<script>document.write(subscriber_width[0])</script> px
+					</th>
+					<th class="column-spacer"></th>
+					<th class="column_1">
+						<script>document.write(subscriber_width[1])</script> px
+					</th>
+					<th class="column-spacer"></th>
+					<th class="column_2">
+						<script>document.write(subscriber_width[2])</script> px
+					</th>
+				</tr>
+				<tr class="row_0">
+					<td class="row-title"><script>document.write(subscriber_height[0])</script> px</td>
+					<td id="cell_0_0" class="subscriber"></td>
+					<td class="column-spacer"></td>
+					<td id="cell_1_0" class="subscriber"></td>
+					<td class="column-spacer"></td>
+					<td id="cell_2_0" class="subscriber"></td>
+				</tr>
+				<tr class="row-spacer">
+					<td class="row-title"></td><td></td><td></td><td></td><td></td><td></td>
+				</tr>
+				<tr class="row_1">
+					<td class="row-title"><script>document.write(subscriber_height[1])</script> px</td>
+					<td id="cell_0_1" class="subscriber"></td>
+					<td class="column-spacer"></td>
+					<td id="cell_1_1" class="subscriber"></td>
+					<td class="column-spacer"></td>
+					<td id="cell_2_1" class="subscriber"></td>
+				</tr>
+				<tr class="row-spacer">
+					<td class="row-title"></td><td></td><td></td><td></td><td></td><td></td>
+				</tr>
+				<tr class="row_2">
+					<td class="row-title"><script>document.write(subscriber_height[2])</script> px</td>
+					<td id="cell_0_2" class="subscriber"></td>
+					<td class="column-spacer"></td>
+					<td id="cell_1_2" class="subscriber"></td>
+					<td class="column-spacer"></td>
+					<td id="cell_2_2" class="subscriber"></td>
+				</tr>
+			</table>
+		</div>
+	</div>
+	</body>
+</html>

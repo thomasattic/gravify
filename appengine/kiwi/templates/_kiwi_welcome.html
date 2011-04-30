@@ -1,0 +1,16 @@
+{# Part of the Kiwi Framework - Copyright (c) 2011 by Puzzazz, Inc. See kiwilicense.py for license notice. #}
+{# You may create your own modified version of this file without restriction. #}
+{# If you do this, you MUST remove the copyright and notice above #}
+
+{# Welcome block with buttons that take you to the signin page #}
+{% if MEMBER_DISPLAY_NAME %}
+	<form action="{{ kiwioptions.AUTH_BASE_URL }}_signout" method="get">
+		<b>Welcome, {{ MEMBER_DISPLAY_NAME }}</b> &nbsp; <input type=Submit name=signout value="Sign Out">
+		<input type=Hidden name=redirect_url value="{% if signout_redirect_url %}{{ signout_redirect_url }}{% else %}{{ request.build_absolute_uri }}{% endif %}">
+	</form>
+{% else %}
+	<form action="{{ kiwioptions.AUTH_BASE_URL }}{{ AUTH_PAGE }}" method="get">
+		<input type=Hidden name=redirect_url value="{{request.build_absolute_uri}}">
+		<input type=Submit name=signin value="Sign In">
+	</form>
+{% endif %}
