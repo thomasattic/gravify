@@ -158,6 +158,60 @@
 			document.getElementById(id).style.display = 'none';
 		}
 
+	    var URL = "/jput/";
+	    var session = "test_abc";
+	    var items = {
+	      read: function(id, fn, err) {
+	        var url = URL + id;
+	        $.ajax({
+	          type: 'GET',
+	          url: url,
+	          dataType: 'json',
+	          beforeSend: function(xhr) {},
+	          success: fn,
+	          error: function(request, textStatus, errorThrown) {
+	            // err
+	            var exception = {datasetname: 'madswvideo', status: request.status, message: request.statusText, url: url, method: "read", kind: textStatus};
+	            err(exception);
+	          }
+	        });
+	      },
+	      update: function(id, json, fn, err) {
+	        var url = URL + id;
+	        $.ajax({
+	          type: 'PUT',
+	          url: url,
+	          dataType: 'json',
+	          beforeSend: function(xhr) {},
+	          success: fn,
+	          error: function(request, textStatus, errorThrown) {
+	            // err
+	            var exception = {datasetname: 'madswvideo', status: request.status, message: request.statusText, url: url, method: "update", kind: textStatus};
+	            err(exception);
+	          }
+	        });
+	      }
+	    }
+	    function read() {
+	       items.read(session, function(data) {
+	          // fn
+	          if (!data) {
+	             items.update(session, {}, fn, err);
+	          }
+	          console.warn(JSON.stringify(data));
+	       }, function(exception) {
+	          console.warn(JSON.stringify(exception));
+	       });
+	    }
+	    $(document).ready(function() {
+	      read();
+	      setTimeout(function() {
+	         read();
+	      },
+	      10000);
+	    });
+
+
 	</script>
 </head>
 <body>
