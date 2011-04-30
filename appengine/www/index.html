@@ -160,12 +160,9 @@
 	</script>
 </head>
 <body>
+<div id="page">
 	<div id="header">
-	<h1>Yo Couch!</h2>
-	<h2>Watch with your friends</h2>
-	</div>
-	<div id="instructions">
-		<div id="links">
+		<div id="instructions">
 			<ol>
 				<li>Enter to the room: 
 	       	<input type="button" value="Hi Everyone!" id ="connectLink" style="display: foo" onClick="javascript:connect()" />
@@ -177,15 +174,17 @@
 				</li>
 			</ol>
 		</div>
+		<div id="heading">
+			<h1>Yo Couch!</h2>
+			<h2>Watch with your friends</h2>
+		</div>
 	</div>
+	<div id="body">
+		
+	<div id="video">
 	<object width="512" height="288"><param name="movie" value="http://www.hulu.com/embed/edUW6BWWZ4wAvYJZRgRRVA"></param><param name="allowFullScreen" value="true"></param><embed src="http://www.hulu.com/embed/edUW6BWWZ4wAvYJZRgRRVA" type="application/x-shockwave-flash"  width="512" height="288" allowFullScreen="true"></embed></object>
-	<div id="opentok_console"></div>
-	<div id="links">
-       	<input type="button" value="Connect" id ="connectLink" onClick="javascript:connect()" />
-       	<input type="button" value="Leave" id ="disconnectLink" onClick="javascript:disconnect()" />
-       	<input type="button" value="Start Publishing" id ="publishLink" onClick="javascript:startPublishing()" />
-       	<input type="button" value="Stop Publishing" id ="unpublishLink" onClick="javascript:stopPublishing()" />
 	</div>
+	<div id="opentok_console"></div>
 	<div id="juitterContainer"></div>
 	<div id="myCamera" class="publisherContainer"></div>
 	<div id="subscribers"></div>
@@ -223,6 +222,7 @@
 	<script>
 		show('connectLink');
 	</script>
-    
+	</div>
+</div>  
 </body>
 </html>
