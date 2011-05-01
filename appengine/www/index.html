@@ -1,7 +1,7 @@
 <html lang="en">
 <head>
 	<meta http-equiv="Content-type" content="text/html; charset=utf-8">
-	<title>Yo Couch! - Watch with your friends!</title>
+	<title>Shubz.TV - Watch with your friends!</title>
 	<link href="../styles/samples.css" type="text/css" rel="stylesheet">
 	<script type="text/javascript" src="https://www.google.com/jsapi"></script>
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.4.2/jquery.min.js"></script>
@@ -240,20 +240,22 @@
 
 <div id="body">
 	<table><tr><td>
-		<h1>Shubz.TV</h1>
-		<div id="instructions">
-			Hey, what should I do?
-			<ol>
-				<li>Enter to the room: 
-	       	<input type="button" value="Hi Everyone!" id ="connectLink" style="display: foo" onClick="javascript:connect()" />
-	       	<input type="button" value="I'm outta here!" id ="disconnectLink" onClick="javascript:disconnect()" />
-				</li>
-				<li>Activate your camera:
-	       	<input type="button" value="Lights, Camera, Action!" id ="publishLink" onClick="javascript:startPublishing()" />
-	       	<input type="button" value="That's a wrap!" id ="unpublishLink" onClick="javascript:stopPublishing()" />
-				</li>
-				<li>Watch with friends!</li>
-			</ol>
+		<div id="header">
+			<h1>Shubz.TV</h1>
+			<div id="instructions">
+				Hey, what should I do?
+				<ol>
+					<li>Enter to the room: 
+		       	<input type="button" value="Yo!" id ="connectLink" style="display: foo" onClick="javascript:connect()" />
+		       	<input type="button" value="I'm out!" id ="disconnectLink" onClick="javascript:disconnect()" />
+					</li>
+					<li>Activate your camera:
+		       	<input type="button" value="Action!" id ="publishLink" onClick="javascript:startPublishing()" />
+		       	<input type="button" value="That's a wrap!" id ="unpublishLink" onClick="javascript:stopPublishing()" />
+					</li>
+					<li>Watch with friends!</li>
+				</ol>
+			</div>
 		</div>
 		<div id="chat">
 	   	   <div id="myCamera" class="publisherContainer"></div>
