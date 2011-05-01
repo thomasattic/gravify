@@ -1,5 +1,6 @@
 import settings
 import logging
+import re
 
 from restitem import *
 from django.http import HttpResponse
@@ -7,7 +8,7 @@ from google.appengine.api import urlfetch
 
 import simplejson
 
-def handler(req, **params):
+def jdata(req, **params):
     token = params["token"]
     
     try:
@@ -58,6 +59,42 @@ def handler(req, **params):
             RestItem.add_data(token=token, data=data)
             
             response = HttpResponse()
+            return response
+    
+    except Exception, ex:
+        return HttpResponse('{"exception": "%s"}' % (str(ex)))
+    
+    return HttpResponse()
+
+def newsession(req, **params):
+    try:
+        if (req.method == "GET"):
+            url = "https://staging.tokbox.com/hl/session/create"
+            #params = "undefined=undefined&=127.0.0.1&undefined=undefined&echo_sup_radio=true&echo_sup_radio=false&mult_radio=true&mult_radio=false&=0&mult_switch_type_radio=0&mult_switch_type_radio=1"
+            params = "=127.0.0.1&echo_sup_radio=true&echo_sup_radio=false&mult_radio=true&mult_radio=false&=0&mult_switch_type_radio=0&mult_switch_type_radio=1"
+            headers = {
+                       "Referer": "https://staging.tokbox.com/hl/session/create",
+                       "X-TB-PARTNER-AUTH": "devsecret",
+                       "Content-Type": "application/x-www-form-urlencoded"
+                       }
+
+            fr = urlfetch.fetch(method="POST", url=url, payload=params, headers=headers)
+
+            if fr.status_code == 200:
+                content = fr.content.replace("\r", "").replace("\n", "")
+                matches = re.search(r"session_id\>(?P<session_id>.*)\<\/session_id", content)
+                session_id = matches.group("session_id")
+                
+                data = {"session_id": session_id}
+                
+                jsonstring = simplejson.JSONEncoder().encode(data)
+                
+                return HttpResponse(jsonstring)
+
+            response = HttpResponse("{}")
+                    
+        if (req.method == "PUT" or req.method == "POST"):
+            response = HttpResponse("{}")
             return response
     
     except Exception, ex:
