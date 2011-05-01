@@ -7,7 +7,7 @@ from google.appengine.api import urlfetch
 
 import simplejson
 
-def handler(req, **params):
+def jdata(req, **params):
     token = params["token"]
     
     try:
