@@ -5,8 +5,12 @@
  *
  */
 
-#header {
-	
+#video {
+	width:100%;
+	width:640px;
+	height:400px;
+	text-align:center;
+	display:block;
 }
 #heading {
 	width: 50%;
