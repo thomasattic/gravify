@@ -261,6 +261,13 @@
       return this;
     };
 
+    function removeArray(array, from, to) {
+      //Array Remove - By John Resig (MIT Licensed)
+      var rest = array.slice((to || from) + 1 || array.length);
+      array.length = from < 0 ? array.length + from : from;
+      return array.push.apply(array, rest);
+    };
+
     function parseSearch(q) {
       // Andy E and community @ http://stackoverflow.com/posts/2880929/revisions
       var results = {};
@@ -339,6 +346,27 @@
        }, function(exception) {
           console.warn(JSON.stringify(exception));
        });
+    }
+    function delete_item(video_id) {
+      var new_list = playlist.slice(0);
+      var index = onair;
+      if (video_id < playlist.length) {
+        removeArray(new_list, video_id);
+        if (index !== onair) {
+          index = Math.min(video_id + 1, new_list.length - 1);
+          if (index !== onair) {
+            video_control.switch_video(index);
+          }
+        }
+
+        items.update(sessionId, JSON.stringify({items: new_list, current: index}), function() {
+          playlist = new_list;
+          console.warn("updated list: " + playlist.length);
+          video_control.update_list(playlist);
+        }, function(exception) {
+          console.warn(JSON.stringify(exception));
+        });
+      }
     }
     function add_item(video_id) {
       var new_list = playlist.slice(0);

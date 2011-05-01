@@ -68,12 +68,16 @@ var video_control = new function() {
       items = new_items;
       $("#videolist").html('');
       $.each(items, function(i, item) {
-        $("#videolist").append('<li><div class="videoitem" videonumber="'+i+'" place="0">' + item.title + '</div></li>');
+        $("#videolist").append('<li><div class="videoitem" videonumber="'+i+'" place="0">' + item.title + '</div><div class="videodelete">X</div></li>');
       });
       $(".videoitem").bind('click', function() {
         var video_number = $(this).attr('videonumber');
         switch_video(video_number);
         change_cursor(video_number);
+      });
+      $(".videodelete").bind('click', function() {
+        var video_number = $(this).prev().attr('videonumber');
+        delete_item(video_number);
       });
     });
   }
