@@ -156,3 +156,30 @@ object {
 	line-height: 24px
 	
 }
+
+input[type="button"] {
+    padding: 10px 8px 9px 8px;
+    font-weight: 700;
+    margin: 0 10px 10px 3px;
+    font-size: 16px;
+    letter-spacing: 1px;
+    line-height: 10px;
+    color: #444;
+    border: none;
+    cursor: pointer;
+	background-image: -webkit-gradient(
+	    linear,
+	    left bottom,
+	    left top,
+	    color-stop(0.35, rgb(237,160,59)),
+	    color-stop(0.68, rgb(243,189,71))
+	);
+	background-image: -moz-linear-gradient(
+	    center bottom,
+	    rgb(237,160,59) 35%,
+	    rgb(243,189,71) 68%
+	);
+    -webkit-border-radius: 3px;
+    -moz-border-radius: 3px;
+    border-radius: 3px;
+    }
