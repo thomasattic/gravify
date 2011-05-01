@@ -96,7 +96,6 @@ object {
 	background: #2c2d2d;
 	padding: 50px 0;
 	position: relative;
-	z-index: 1000;
 }
 
 .player-container-outer:after {
@@ -134,7 +133,6 @@ object {
 	-webkit-border-radius: 8px;
 	-moz-border-radius: 8px;
 	border-radius: 8px;
-	z-index: -999;
 }
 
 #shubs_player {
