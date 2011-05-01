@@ -21,6 +21,7 @@ var video_control = new function() {
   }
 
   function switch_video(video_number) {
+    console.warn("switching to: " + video_number);
     if (ytplayer) {
       if (!video_number) {
         video_number = 0;

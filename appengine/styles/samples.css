@@ -59,7 +59,7 @@ a:hover {
 }
 
 #links a, input {
-	display: none;
+	/* display: none; */
 }
 
 #sessionControls {
