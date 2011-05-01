@@ -2,7 +2,6 @@ from django.conf.urls.defaults import *
 
 
 urlpatterns = patterns('',
-    (r'^xyz$', "restapi.handler"),
     (r'^jdata/(?P<token>.*)$', "restapi.handler"),
 )
 
