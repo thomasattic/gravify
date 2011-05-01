@@ -316,7 +316,7 @@
           // fn
           if (!list || !list.current) {
              list = DEFAULT_LIST;
-             items.update(sessionId, JSON.stringify(list), function() {
+             items.update(sessionId, JSON.stringify({current: onair, items: playlist}), function() {
                 console.warn("updated");
              }, function(exception) {
                 console.warn(JSON.stringify(exception));
