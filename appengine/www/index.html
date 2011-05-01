@@ -237,8 +237,10 @@
 	</script>
 </head>
 <body>
-<div id="page">
-	<div id="header">
+
+<div id="body">
+	<table><tr><td>
+		<h1>Shubz.TV</h1>
 		<div id="instructions">
 			Hey, what should I do?
 			<ol>
@@ -250,31 +252,31 @@
 	       	<input type="button" value="Lights, Camera, Action!" id ="publishLink" onClick="javascript:startPublishing()" />
 	       	<input type="button" value="That's a wrap!" id ="unpublishLink" onClick="javascript:stopPublishing()" />
 				</li>
+				<li>Watch with friends!</li>
 			</ol>
 		</div>
-		<div id="heading">
-			<h1>Yo Couch!</h2>
-			<h2>Watch with your friends</h2>
+		<div id="chat">
+	   	   <div id="myCamera" class="publisherContainer"></div>
+		   <div id="subscribers"></div>
+			<div id="opentok_console"></div>
 		</div>
-        </div>
-
-	<div id="body">
+	</td><td>
 		<div id="video">
 			<iframe width="640" height="385" src="http://www.youtube.com/v/V7D9J8lTFGs&autoplay=1" frameborder="0" allowfullscreen></iframe>
 		</div>
-                <table width='1024px'><tr><td>
-                <div> 
-	   	   <div id="myCamera" class="publisherContainer"></div>
-		   <div id="subscribers"></div>
-                </div>
-                </td><tr></table>
-		<div id="opentok_console"></div>
-		<div id="juitterContainer"></div>	
 		<div id="videochooser">
 			<ol id="videolist">
 				<li>Loading Videos...</li>
 			</ol>
-		</div>
+		</div>	
+		<div id="juitterContainer"></div>
+	</tr>
+	</table>
+</div>
+<script>
+	// this is what triggers the video chat service to start
+	show('connectLink');
+</script>
 		
 <!--
       <div id="fb-root"></div>
@@ -301,13 +303,8 @@
       <fb:login-button>Login with Facebook</fb:login-button>
 	</div>
 -->
-	<script>
-		show('connectLink');
-	</script>
-</div>
 
 <script type="text/javascript">
-
   var _gaq = _gaq || [];
   _gaq.push(['_setAccount', 'UA-23056696-1']);
   _gaq.push(['_trackPageview']);
@@ -317,7 +314,6 @@
     ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
     var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
   })();
-
 </script>
 
 </body>
