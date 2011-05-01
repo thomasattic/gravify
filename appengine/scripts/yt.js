@@ -98,6 +98,7 @@ var video_control = new function() {
       if (video_id) {
         add_item(video_id);
         event.preventDefault();
+        $("#youtube-url").val("")
       }
     });
   });
