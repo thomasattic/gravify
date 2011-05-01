@@ -7,6 +7,9 @@ html, body, div, span, applet, object, iframe, h1, h2, h3, h4, h5, h6, p, blockq
     border: 0;
     outline: 0;
     background: transparent;
+    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+    color: #eeeeee;
+    font-size: 100%;
 	}
     
 body {
@@ -31,21 +34,16 @@ table {
     }
    
     
-
-
 /* style */
 
 .friend img {
-	margin: 0 0 15px 0;
+	margin: 0 0 0 0;
+	padding: 0;
     -webkit-transition: opacity .25s linear;
     -moz-transition: opacity .25s linear;
     -o-transition: opacity .25s linear;
     transition: opacity .25s linear;
     
-	-webkit-border-radius: 6px;
-	-moz-border-radius: 6px;
-	border-radius: 6px;
-	
 	-webkit-box-shadow: inset 0px -1px 3px rgba(0,0,0,.8);
 	-moz-box-shadow: inset 0px -1px 3px rgba(0,0,0,.8);
 	box-shadow: inset 0px -1px 3px rgba(0,0,0,.8);
@@ -62,7 +60,12 @@ table {
 
 
 header {
-	background: 
+	height: 52px;
+	background: url(images/header.png) repeat-x;
+}
+
+.logo {
+	margin-left: 20px;
 }
 
 #main {
@@ -86,14 +89,33 @@ object {
 	text-align:center;
 	overflow: hidden;
 	resize: vertical;
-	height: 320px;
+	height: 120px;
 	min-height: 10px;
 	width: 100%;
 	max-height: 100%;
 	background: #2c2d2d;
 	padding: 50px 0;
+	position: relative;
+	z-index: 1000;
 }
 
+.player-container-outer:after {
+	content: "";
+	position: absolute;
+	height: 17px;
+	bottom: 0
+	left:0;
+	background: url(images/bar.png) repeat-x;
+}
+
+.drag-bar {
+	position: absolute;
+	top:0;
+	left:0;
+	width: inherit;
+	height: 47px;
+	background: url(images/bar.png) repeat-x;
+}
 
 .player-container-inner {
 	width: 80%;
@@ -103,17 +125,36 @@ object {
 .friends {
 	width: 80%;
 	margin: 20px auto;
-	
 }
 
 .player {
 	float: left;
-	max-width: 500px;
-	background: #888888;
+	background: #1c1d1e;
+	border: 20px solid #1c1d1e;
+	-webkit-border-radius: 8px;
+	-moz-border-radius: 8px;
+	border-radius: 8px;
+	z-index: -999;
+}
+
+#shubs_player {
+	border: 6px solid #1c1d1e;
 }
 
 .playlist {
-	float: right
-	width: 30%;
-	background: #999999;
+	float: left;
+	margin-left: 40px;
+	width: 200px;
+	background: #1c1d1e;
+	color: #eeeeee;
+	-webkit-border-radius: 8px;
+	-moz-border-radius: 8px;
+	border-radius: 8px;
+	text-align: left;
+	padding: 20px;
+}
+
+.playlist li {
+	line-height: 24px
+	
 }

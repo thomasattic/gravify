@@ -5,7 +5,7 @@ $(window).load(function(){
 		singleMode: true,
 		animate: true,
 	  itemSelector: '.friend',
-	  columnWidth: 240,
+	  columnWidth: 224,
 	});
 	
 	//$('.player-container').resize(function() {
