@@ -1,7 +1,7 @@
 $(window).load(function(){
 	
 	
-  $('#friends').masonry({
+  $('#subscribers').masonry({
 		singleMode: true,
 		animate: true,
 	  itemSelector: '.friend',
