@@ -259,7 +259,19 @@
 
 	<div id="body">
 		<div id="video">
-			<iframe width="640" height="385" src="http://www.youtube.com/v/V7D9J8lTFGs&autoplay=1" frameborder="0" allowfullscreen></iframe>
+		  <script type="text/javascript" src="../scripts/swfobject.js"></script>    
+		  <div id="ytapiplayer">
+		    You need Flash player 8+ and JavaScript enabled to view this video.
+		  </div>
+
+		  <script type="text/javascript">
+
+		    var params = { allowScriptAccess: "always" };
+		    var atts = { id: "myytplayer" };
+		    swfobject.embedSWF("http://www.youtube.com/apiplayer?enablejsapi=1&playerapiid=ytplayer",
+		                       "ytapiplayer", "640", "385", "8", null, null, params, atts);
+
+		  </script>
 		</div>
 		<div id="myCamera" class="publisherContainer"></div>
 		<div id="subscribers"></div>
