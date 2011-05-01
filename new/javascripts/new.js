@@ -7,10 +7,10 @@ $(window).load(function(){
 	  itemSelector: '.friend',
 	});
 	
-	$('.player-container').resize(function() {
-	  console.log($(this).height);
-		$('#shubz_player').attr('height', $(this).height());
-	});
+	//$('.player-container').resize(function() {
+	//  console.log($(this).height);
+	//	$('#shubz_player').attr('height', $(this).height());
+	//});
 	
 });
 
