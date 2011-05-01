@@ -13,7 +13,7 @@ function onYouTubePlayerReady(playerId) {
 }
 
 function onytplayerStateChange(newState) {
-   alert("Player's new state: " + newState);
+   //alert("Player's new state: " + newState);
 }
 
 function switch_video()
@@ -26,9 +26,7 @@ function switch_video()
 
 	var final="<div id='title'>"+video_title+"</div>";
 
-    ytplayer.loadVideoById(data.id);
-
-	$("#video").html(final); // Result
+  ytplayer.loadVideoById(data.id);
 }
 
 function next_video()
