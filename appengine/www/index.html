@@ -28,13 +28,14 @@
 		<header>
 			<div class="logo">
 				<img src="../images/logo.png">
+				<input type="button" value="enter the room" id ="connectLink" onClick="javascript:connect()" />
+	     	<input type="button" value="leave the room" id ="disconnectLink" onClick="javascript:disconnect()" />
+
+				<input type="button" value="activate your camera" id ="publishLink" onClick="javascript:startPublishing()" />
+	     	<input type="button" value="turn off your camera" id ="unpublishLink" onClick="javascript:stopPublishing()" />
 			</div>
 			<div class="facebook"></div>
-			<input type="button" value="enter the room" id ="connectLink" onClick="javascript:connect()" />
-     	<input type="button" value="leave the room" id ="disconnectLink" onClick="javascript:disconnect()" />
-
-			<input type="button" value="activate your camera" id ="publishLink" onClick="javascript:startPublishing()" />
-     	<input type="button" value="turn off your camera" id ="unpublishLink" onClick="javascript:stopPublishing()" />
+			
 		</header>
 
 		<!-- Main Content -->
