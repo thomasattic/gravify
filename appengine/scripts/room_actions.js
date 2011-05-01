@@ -14,6 +14,8 @@ function room_loads() {
 	hide('unpublishLink');
 }
 
+$(document).ready(room_loads);
+
 function room_entered() {
 	hide('connectLink');
 	show_and_enable('disconnectLink');

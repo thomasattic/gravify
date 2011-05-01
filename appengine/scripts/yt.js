@@ -95,9 +95,11 @@ var video_control = new function() {
   
   var regexFull = /http\:\/\/www\.youtube\.com\/watch\?v=(\w{11})/;
   var regexBit = /http\:\/\/.youtu\.be\/(\w{11})/;
+  var regexWord = /\w/;
   $(document).ready(function() {
     $("#add-url-form").submit(function(event) {
       console.warn("submit ....");
+      event.preventDefault();
       var val = $("#youtube-url").val();
       var video_id = window.location.search.split('v=')[1];
 
@@ -105,11 +107,10 @@ var video_control = new function() {
         video_id = val.match(regexFull)[1];
       } else if (val.toLowerCase().indexOf("youtu.be") >= 0) {
         video_id = val.match(regexBit)[1];
-      }
+      } 
       if (video_id) {
         add_item(video_id);
-        event.preventDefault();
-        $("#youtube-url").val("")
+        $("#youtube-url").val("");
       }
     });
   });
