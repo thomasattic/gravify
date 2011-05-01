@@ -25,9 +25,8 @@
 	display:block;
 }
 
-/* all the css below is from the original sample */
 body, html {
-	font-family:'Lucida Grande', 'Trebuchet MS', sans-serif;
+	font-family: Georgia, serif;
 	color: #4c4c4c;
 	text-align:left;
 	
@@ -58,8 +57,8 @@ a:hover {
 	float: top;
 }
 
-#links a, input {
-	/* display: none; */
+#instructions input {
+	display: none;
 }
 
 #sessionControls {
