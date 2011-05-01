@@ -27,46 +27,65 @@
 
   <div id="container">
 	
-    <header class="row player-container">
-				<div class="column grid_12"><object width="640" height="390" id='shubz_player'><param name="movie" value="http://www.youtube.com/v/0_UTgoPUTLQ?fs=1&hl=en_US&rel=0"></param><param name="allowFullScreen" value="true"></param><param name="allowscriptaccess" value="always"></param><embed src="http://www.youtube.com/v/0_UTgoPUTLQ?fs=1&hl=en_US&rel=0" type="application/x-shockwave-flash" width="640" height="390" allowscriptaccess="always" allowfullscreen="true"></embed></object></div>
-    </header>
+		<!-- Header -->
+		<header>
+			<div class="logo"></div>
+			<div class="facebook"></div>
+		</header>
 
-    <div id="main" role="main">
-	
-			<div class='row'>
-				<div class="column grid_12">
-					<p>First Content</p>
-				</div>
-			</div>
-			
-			<div class='row'>
-				<div class="column grid_12">
-					<p>Second Content</p>
-				</div>
+		<!-- Main Content -->
+    	<div id="main" role="main">
+		
+			<!-- Video -->
+		    <div class="player-container">
+				<div class="video-player"><object width="640" height="390" id='shubz_player'><param name="movie" value="http://www.youtube.com/v/0_UTgoPUTLQ?fs=1&hl=en_US&rel=0"></param><param name="allowFullScreen" value="true"></param><param name="allowscriptaccess" value="always"></param><embed src="http://www.youtube.com/v/0_UTgoPUTLQ?fs=1&hl=en_US&rel=0" type="application/x-shockwave-flash" width="640" height="390" allowscriptaccess="always" allowfullscreen="true"></embed></object></div>
+		    </div>
+				
+			<!-- Playlist -->
+			<div class="playlist">
+				<ul>
+					<li>
+						Title
+						<span class="button close">x</span>
+					</li>
+					<li>
+						Title
+						<span class="button close">x</span>
+					</li>
+					<li>
+						Title
+						<span class="button close">x</span>
+					</li>
+					<li>
+						<input type="url" placeholder="Add a URL">
+					</li>
+
+				</ul>
 			</div>
 				
-		  <div id='friends' class=''>
-		  	<div class='friend'><img src='images/youtube.png' height='112' width='143'/></div>
-		  	<div class='friend'><img src='images/youtube.png' height='112' width='143'/></div>
-		  	<div class='friend'><img src='images/youtube.png' height='112' width='143'/></div>
-		  	<div class='friend'><img src='images/youtube.png' height='112' width='143'/></div>
-		  	<div class='friend'><img src='images/youtube.png' height='112' width='143'/></div>
-		  	<div class='friend'><img src='images/youtube.png' height='112' width='143'/></div>
-		  	<div class='friend'><img src='images/youtube.png' height='112' width='143'/></div>
-		  	<div class='friend'><img src='images/youtube.png' height='112' width='143'/></div>
-		  	<div class='friend'><img src='images/youtube.png' height='112' width='143'/></div>
-		  	<div class='friend'><img src='images/youtube.png' height='112' width='143'/></div>
-		  </div>
+			<!-- Friends list -->
+			<div id='friends' class=''>
+				<div class='friend'><img src='images/youtube.png' height='112' width='143'/></div>
+				<div class='friend'><img src='images/youtube.png' height='112' width='143'/></div>
+				<div class='friend'><img src='images/youtube.png' height='112' width='143'/></div>
+				<div class='friend'><img src='images/youtube.png' height='112' width='143'/></div>
+				<div class='friend'><img src='images/youtube.png' height='112' width='143'/></div>
+				<div class='friend'><img src='images/youtube.png' height='112' width='143'/></div>
+				<div class='friend'><img src='images/youtube.png' height='112' width='143'/></div>
+				<div class='friend'><img src='images/youtube.png' height='112' width='143'/></div>
+				<div class='friend'><img src='images/youtube.png' height='112' width='143'/></div>
+				<div class='friend'><img src='images/youtube.png' height='112' width='143'/></div>
+			</div>
 			
     </div>
 
-    <footer class="row">
-			<div class="column grid_12">
-				&copy;2011
-			</div>
-    </footer>
+	<!-- Footer -->
+	<footer>
+		
+		<span class="copyright">&copy;2011</span>
+	</footer>
 
-  </div> <!--! end of #container -->
+  </div><!--! end of #container -->
 
 
   <!-- JavaScript at the bottom for fast page loading -->
@@ -77,7 +96,7 @@
 	
 	<!-- Masonry.js and custom new.js -->
 	<script type="text/javascript" src="https://github.com/desandro/masonry/raw/master/jquery.masonry.min.js"></script>
-	<script type="text/javascript" src="new.js"></script>
+	<script type="text/javascript" src="javascripts/new.js"></script>
 
 </body>
 </html>
