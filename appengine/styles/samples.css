@@ -5,20 +5,24 @@
  *
  */
 
+#header {
+	background-color: orange;
+	-moz-border-radius: 15px;
+	border-radius: 15px;
+	padding-top: 1px;
+	padding-left: 50px;
+	padding-right: 50px;
+	padding-bottom: 1px;
+	margin-bottom: 5px;
+
+}
+
 #video {
 	width:100%;
 	width:640px;
 	height:400px;
 	text-align:center;
 	display:block;
-}
-#heading {
-	width: 50%;
-}
-#instructions {
-	width: 500px;
-	float: right;
-	clear: all;
 }
 
 /* all the css below is from the original sample */
