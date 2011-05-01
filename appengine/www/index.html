@@ -42,16 +42,6 @@
 		if (TB.checkSystemRequirements() != TB.HAS_REQUIREMENTS) {
 			alert("You don't have the minimum requirements to run this application."
 				  + "Please upgrade to the latest version of Flash.");
-		} else {
-			session = TB.initSession(sessionId);	// Initialize session
-
-			// Add event listeners to the session
-			session.addEventListener('sessionConnected', sessionConnectedHandler);
-			session.addEventListener('sessionDisconnected', sessionDisconnectedHandler);
-			session.addEventListener('connectionCreated', connectionCreatedHandler);
-			session.addEventListener('connectionDestroyed', connectionDestroyedHandler);
-			session.addEventListener('streamCreated', streamCreatedHandler);
-			session.addEventListener('streamDestroyed', streamDestroyedHandler);
 		}
 
 		//--------------------------------------
@@ -64,11 +54,33 @@
 		see http://www.tokbox.com/opentok/build/tutorials/helloworld.html#localTest
 		*/
 		function connect() {
+			session = TB.initSession(sessionId);	// Initialize session
+
+			// Add event listeners to the session
+			session.addEventListener('sessionConnected', sessionConnectedHandler);
+			session.addEventListener('sessionDisconnected', sessionDisconnectedHandler);
+			session.addEventListener('connectionCreated', connectionCreatedHandler);
+			session.addEventListener('connectionDestroyed', connectionDestroyedHandler);
+			session.addEventListener('streamCreated', streamCreatedHandler);
+			session.addEventListener('streamDestroyed', streamDestroyedHandler);
+
 			session.connect(apiKey, token);
 		}
 
 		function disconnect() {
 			session.disconnect();
+
+			// Add event listeners to the session
+			session.removeEventListener('sessionConnected', sessionConnectedHandler);
+			session.removeEventListener('sessionDisconnected', sessionDisconnectedHandler);
+			session.removeEventListener('connectionCreated', connectionCreatedHandler);
+			session.removeEventListener('connectionDestroyed', connectionDestroyedHandler);
+			session.removeEventListener('streamCreated', streamCreatedHandler);
+			session.removeEventListener('streamDestroyed', streamDestroyedHandler);
+
+			hide('disconnectLink');
+			hide('publishLink');
+			hide('unpublishLink');
 		}
 
 		// Called when user wants to start publishing to the session
@@ -292,6 +304,17 @@
       return results;
     };
 
+    function getSearchString(search) {
+      var result = '';
+      for (var item in search) {
+          if (result.length !== 0) {
+              result += '&';
+          }
+          result += item + '=' + encodeURIComponent(search[item]);
+      }
+      return result;
+    };
+
     var items = {
       read: function(id, fn, err) {
         var url = DOC_URL + "/" + id;
@@ -391,6 +414,23 @@
         console.warn(JSON.stringify(exception));
       });
     }
+    function createSession(fn) {
+      var url = '/newsession';
+      $.ajax({
+        type: 'POST',
+        url: url,
+        dataType: 'xml',
+        beforeSend: function(xhr) {},
+        success: function(data) {
+          fn(data);
+        },
+        error: function(request, textStatus, errorThrown) {
+          // err
+          var exception = {datasetname: 'madswvideo', status: request.status, message: request.statusText, url: url, method: "read", kind: textStatus};
+          err(exception);
+        }
+      });
+    };
     function change_cursor(index) {
       items.update(sessionId, JSON.stringify({items: playlist, current: index}), function() {
         onair = index;
@@ -405,7 +445,16 @@
       if (search.session) {
         sessionId = search.session;
       }
-	  room_loads();
+      createSession(function(data) {
+        var go = false;
+        if (go) {
+          console.error("token: " + data.session_id);
+          if (data.session_id) {
+            sessionId = data.session_id;
+            window.location = window.location + '#' + getSearchString({session: data.session_id}); 
+          }
+        }
+      });
       read();
       setInterval(function() {
          read();
