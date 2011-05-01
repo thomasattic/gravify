@@ -30,9 +30,16 @@ var Threads = new function() {
   };
 };
 
+function onytplayerStateChange(newState) {
+	if (newState == 0) {
+		video_control.next_video();
+	}
+	console.log("player new state: " + newState);
+}
+
 var video_control = new function() {
-  var current_video = 0;
   var ytplayer;
+  var current_video = 0;
   var items;
 
   var playerReady = Threads.latchbinder();
@@ -44,16 +51,20 @@ var video_control = new function() {
     playerReady.latch();
   }
 
-  function onytplayerStateChange(newState) {
-     //alert("Player's new state: " + newState);
+  function next_video() {
+	switch_video(current_video + 1);
   }
 
   function switch_video(video_number) {
     playerReady.exec(function() {
+      video_number = parseInt(video_number);
+
       console.warn("switching to: " + video_number);
-      if (!video_number) {
+
+	  if (!video_number) {
         video_number = 0;
       }
+	  current_video = video_number;
       var data = items[video_number];
       var video_id=data.id;
       var video_title=data.title;
@@ -106,6 +117,7 @@ var video_control = new function() {
   return {
     switch_video: switch_video,
     update_list: update_list,
+	next_video: next_video,
     init: init
   };
 };
