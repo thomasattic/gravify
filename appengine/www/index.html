@@ -1,6 +1,9 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:fb="https://www.facebook.com/2008/fbml">
 <head>
 	<meta http-equiv="Content-type" content="text/html; charset=utf-8">
+	<meta property="og:title" content="Shubz.TV"/> 
+	<meta property="og:type" content="video"/>
+    <meta property="og:site_name" content="Shubz.TV"/>
 	<title>Shubz.TV - Watch with your friends!</title>
 	<link href="../styles/samples.css" type="text/css" rel="stylesheet">
 	<script type="text/javascript" src="https://www.google.com/jsapi"></script>
@@ -293,15 +296,19 @@
         </div>
 
         <div id="fbInviteDiv" style="display:none">
-        <a href="javascript:InviteFriends()">Invite friends</a>
+        <!-- 
+        <fb:send ref="shubz.tv" href=></fb:send>
+        -->
+        <a href="javascript:InviteFriends()">Invite friends</a> 
         </div>
+
 
 
 
 
       <script>
          FB.init({ 
-            appId:'176941975674666', cookie:true, 
+            appId:'8796512710', cookie:true, 
             status:true, xfbml:true 
          });
          
@@ -324,7 +331,7 @@
         function InviteFriends()
         {
         
-            FB.ui({method: 'apprequests', message: 'Come watch this awesome video with me:' + document.URL});
+            FB.ui({method: 'send', message: 'Come watch this awesome video with me:' + document.URL + "#session="+ sessionId});
 
         }
         
