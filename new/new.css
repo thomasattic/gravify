@@ -1,11 +1,75 @@
-.friend {
-  width: 219px;
-  }
+/* Reset */
+html, body, div, span, applet, object, iframe, h1, h2, h3, h4, h5, h6, p, blockquote, pre, a, abbr, acronym, address, big, cite, code, del, dfn, em, font, img, ins, kbd, q, s, samp, small, strike, strong, sub, sup, tt, var, b, u, i, center, dl, dt, dd, ol, ul, li, fieldset, form, label, legend, table, caption, tbody, tfoot, thead, tr, th, td {
+    margin: 0;
+    padding: 0;
+    font-size: 100%;
+    vertical-align: baseline;
+    border: 0;
+    outline: 0;
+    background: transparent;
+	}
+    
+body {
+	overflow-y: scroll;    
+
+}
+ol, ul {
+    list-style: none;
+    }
+
+blockquote, q {
+    quotes: none;
+    }
+
+:focus {
+    outline: 0;
+    }
+
+table {
+    border-collapse: collapse;
+    border-spacing: 0;
+    }
+   
+    
+
+
+/* style */
+
+.friend img {
+	margin: 0 0 15px 0;
+    -webkit-transition: opacity .25s linear;
+    -moz-transition: opacity .25s linear;
+    -o-transition: opacity .25s linear;
+    transition: opacity .25s linear;
+    
+	-webkit-border-radius: 6px;
+	-moz-border-radius: 6px;
+	border-radius: 6px;
+	
+	-webkit-box-shadow: inset 0px -1px 3px rgba(0,0,0,.8);
+	-moz-box-shadow: inset 0px -1px 3px rgba(0,0,0,.8);
+	box-shadow: inset 0px -1px 3px rgba(0,0,0,.8);
+}
+
+.friend-img:hover {
+	-webkit-box-shadow: 0px 1px 1px rgba(255,255,255,.5);
+	-moz-box-shadow: 0px 1px 1px rgba(255,255,255,.5);
+	box-shadow: 0px 1px 1px rgba(255,255,255,.5);
+}
+
+.friend img {
+}
+
+
+header {
+	background: 
+}
 
 #main {
-	width: 80%;
-	margin: 0 auto;
+	background: #414345;
 }
+
+
 
 footer {
 	width: 80%;
@@ -18,11 +82,38 @@ object {
 	height: 100%;
 }
 
-header.row {
+.player-container-outer {
 	text-align:center;
 	overflow: hidden;
 	resize: vertical;
-	height: 120px;
+	height: 320px;
+	min-height: 10px;
+	width: 100%;
 	max-height: 100%;
-	padding:10px;
+	background: #2c2d2d;
+	padding: 50px 0;
+}
+
+
+.player-container-inner {
+	width: 80%;
+	margin: 0 auto;
+}
+
+.friends {
+	width: 80%;
+	margin: 20px auto;
+	
+}
+
+.player {
+	float: left;
+	max-width: 500px;
+	background: #888888;
+}
+
+.playlist {
+	float: right
+	width: 30%;
+	background: #999999;
 }
