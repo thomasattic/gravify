@@ -311,14 +311,13 @@
     function read() {
        items.read(sessionId, function(list) {
           // fn
-          if (!list) {
+          if (!list || !list.current) {
              list = DEFAULT_LIST;
-             /*
              items.update(sessionId, JSON.stringify(list), function() {
                 console.warn("updated");
              }, function(exception) {
                 console.warn(JSON.stringify(exception));
-             });*/
+             });
            }
            if (!Hashs.isEquals(playlist, list.items)) {
               video_control.update_list(list.items);
