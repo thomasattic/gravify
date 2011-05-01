@@ -172,6 +172,14 @@
 		function hide(id) {
 			document.getElementById(id).style.display = 'none';
 		}
+		
+		function enable(id) {
+			document.getElementById(id).disabled = false;
+		}
+		
+		function disable() {
+			document.getElementById(id).disabled = true;
+		}
 
     var Hashs = new function() {
       // <isEquals>
@@ -390,18 +398,19 @@
 		<div id="header">
 			<h1>Shubz.TV</h1>
 			<div id="instructions">
-				Hey, what should I do?
-				<ol>
-					<li>Enter to the room:
-		       	<input type="button" value="Yo!" id ="connectLink" onClick="javascript:connect()" />
-		       	<input type="button" value="I'm out!" id ="disconnectLink" onClick="javascript:disconnect()" />
-					</li>
-					<li>Activate your camera:
-		       	<input type="button" value="Action!" id ="publishLink" onClick="javascript:startPublishing()" />
-		       	<input type="button" value="That's a wrap!" id ="unpublishLink" onClick="javascript:stopPublishing()" />
-					</li>
-					<li>Watch with friends!</li>
-				</ol>
+				<strong>Hey, what should I do?</strong>
+				<p>Start by clicking here to 
+		       	<input type="button" value="enter the room" id ="connectLink" onClick="javascript:connect()" />
+		       	<input type="button" value="leave the room" id ="disconnectLink" onClick="javascript:disconnect()" />
+				</p>
+				<p>
+				Then, click here to
+		       	<input type="button" value="activate your camera" id ="publishLink" onClick="javascript:startPublishing()" />
+		       	<input type="button" value="turn off your camera" id ="unpublishLink" onClick="javascript:stopPublishing()" />
+				</p>
+				<p>
+				Finally, watch with friends!
+				</p>
 			</div>
 		</div>
 		<div id="chat">

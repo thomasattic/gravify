@@ -61,6 +61,10 @@ a:hover {
 	display: none;
 }
 
+#instructions p {
+	line-height: 0.7;
+}
+
 #sessionControls {
 	float: top;
 }
