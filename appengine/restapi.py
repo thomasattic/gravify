@@ -34,7 +34,9 @@ def handler(req, **params):
                         logging.info(str(item))
                         
                         # title for new items is "newly added...", so check for description instead
-                        if not item.get("description"):
+                        if not item.get("source"):
+                            item["source"] = "youtube"      # Hard coded
+
                             fr = urlfetch.fetch("http://gdata.youtube.com/feeds/api/videos/%s?v=2&alt=json" % item.get("id"))
                             if fr.status_code == 200:
                                 vdata = simplejson.loads(fr.content)
