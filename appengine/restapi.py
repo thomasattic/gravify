@@ -4,10 +4,10 @@ from restitem import *
 from django.http import HttpResponse
 
 def handler(req, **params):
-    id = params["id"]
+    token = params["token"]
     
     if (req.method == "GET"):
-        obj = RestItem.get_from_id(id)
+        obj = RestItem.get_from_token(token)
         
         if obj:
             response = HttpResponse(obj.data)
@@ -15,8 +15,14 @@ def handler(req, **params):
             response = HttpResponse("{}")
         return response
     
-    if (req.method == "POST"):
-        RestItem.add_item(id=id, data=req.body)
+    if (req.method == "PUT" or req.method == "POST"):
+        try:
+            body = req.raw_post_data
+        except Exception, ex:
+            body = '{"error": true}'
+        logging.info("body=" + str(body))
+            
+        RestItem.add_data(token=token, data=body)
         
         response = HttpResponse()
         return response

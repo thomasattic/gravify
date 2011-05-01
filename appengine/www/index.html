@@ -307,7 +307,7 @@
        items.read(sessionId, function(data) {
           // fn
           if (!data || !data.foo) {
-             items.update(sessionId, {"foo": "bar"}, function() {
+             items.update(sessionId, JSON.stringify({"foo": "bar"}), function() {
                 console.warn("updated");
              }, function(exception) {
                 console.warn(JSON.stringify(exception));

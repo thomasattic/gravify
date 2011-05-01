@@ -8,27 +8,27 @@ from google.appengine.ext import db
 from kiwi import kiwioptions
 
 class RestItem(db.Model):
-    id = db.StringProperty()
+    token = db.StringProperty()
     data = db.TextProperty()
     lastchanged = db.DateTimeProperty(auto_now=True)
 
     @classmethod
-    def get_from_id(cls, id):
+    def get_from_token(cls, token):
         try:
-            q = db.GqlQuery("SELECT * FROM RestItem WHERE id = :i", i=id)
+            q = db.GqlQuery("SELECT * FROM RestItem WHERE token = :t", t=token)
             results = q.fetch(1)
             if len(results) >= 1:
                 return results[0]
             
             return None
-        except:
+        except Exception, ex:
             return None
         
     @classmethod
     def add_data(cls, **params):
         try:
-            id = params["id"]
-            obj = cls.get_from_id(id)
+            token = params["token"]
+            obj = cls.get_from_token(token)
             
             if obj:
                 obj.data = params["data"]
@@ -45,15 +45,15 @@ class RestItem(db.Model):
             return None
     
     @classmethod
-    def remove_entry(cls, id):
-        obj = cls.get_from_id(id)
+    def remove_entry(cls, token):
+        obj = cls.get_from_token(token)
         if obj:
             db.delete(obj)
         
     @classmethod
     def all_records(cls, con):
         try:
-            q = db.GqlQuery("SELECT * FROM RestItem ORDER BY id")
+            q = db.GqlQuery("SELECT * FROM RestItem ORDER BY token")
             results = q.fetch(1000)
             return results
         except Exception, ex:
