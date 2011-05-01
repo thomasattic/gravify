@@ -284,7 +284,7 @@
           dataType: 'json',
           beforeSend: function(xhr) {},
           success: function(data) {
-            console.log("read succeded: " + JSON.stringify(data));
+            // console.log("read succeded: " + JSON.stringify(data));
             fn(data);
           },
           error: function(request, textStatus, errorThrown) {
@@ -314,19 +314,26 @@
     function read() {
        items.read(sessionId, function(list) {
           // fn
-          if (!list || !list.current) {
+          if (!list || list.current===undefined || list.current===null || list.items.length === 0) {
              list = DEFAULT_LIST;
-             items.update(sessionId, JSON.stringify({current: onair, items: playlist}), function() {
+             items.update(sessionId, JSON.stringify(list), function() {
                 console.warn("updated");
              }, function(exception) {
                 console.warn(JSON.stringify(exception));
              });
            }
+           //console.warn("=== poll (pos): " + list.current + " (length): " + list.items.length + " ===");
            if (!Hashs.isEquals(playlist, list.items)) {
+              //console.warn("=== playlist updated from the server ===");
               video_control.update_list(list.items);
               video_control.switch_video(list.current);
-           } else if (!Hashs.isEquals(onair, list.current)) {
+              playlist = list.items;
+           } else if (onair !== list.current) {
+              //console.warn("=== current song is updated ===");
               video_control.switch_video(list.current);
+              onair = list.current;
+           } else {
+             //console.warn("=== no change ===");
            }
 
        }, function(exception) {
@@ -335,10 +342,13 @@
     }
     function add_item(video_id) {
       var new_list = playlist.slice(0);
+      //console.warn("before list: " + JSON.stringify(playlist));
       new_list.push({id: video_id, title: "newly added: " + video_id});
+      //console.warn("after list: " + JSON.stringify(playlist));
       items.update(sessionId, JSON.stringify({items: new_list, current: onair}), function() {
         playlist = new_list;
-        console.warn("updated list: " + list.length);
+        console.warn("updated list: " + playlist.length);
+        video_control.update_list(playlist);
       }, function(exception) {
         console.warn(JSON.stringify(exception));
       });
@@ -359,10 +369,17 @@
       }
 
       read();
-      setTimeout(function() {
+      setInterval(function() {
          read();
       },
-      10000);
+      1000);
+
+      $("#add-url-form").submit(function(event) {
+        console.warn("submit ....");
+        var val = $("#youtube-url").val();
+        add_item(val);
+        event.preventDefault();
+      });
     });
 	</script>
 </head>
@@ -413,6 +430,10 @@
 				<li>Loading Videos...</li>
 			</ol>
 		</div>
+        <form id="add-url-form">
+           <label>Paste a URL:</label><input id="youtube-url" type="text" name="url" placeholder="YouTube URL" size="40"/>
+        </form>
+        
 		<div id="juitterContainer"></div>
 	</tr>
 	</table>
