@@ -148,6 +148,7 @@
 			}
 			var subscriberDiv = document.createElement('div'); // Create a div for the subscriber to replace
 			subscriberDiv.setAttribute('id', stream.streamId); // Give the replacement div the id of the stream as its id.
+			subscriberDiv.setAttribute('class', 'friend'); // Give the replacement div the id of the stream as its id.
 			document.getElementById("subscribers").appendChild(subscriberDiv);
 			subscribers[stream.streamId] = session.subscribe(stream, subscriberDiv.id);
 		}
