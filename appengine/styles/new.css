@@ -88,14 +88,18 @@ footer {
 	text-align:center;
 	overflow: hidden;
 	resize: vertical;
-	height: 120px;
+	height: 20px;
 	min-height: 10px;
 	width: 100%;
 	max-height: 100%;
 	background: #2c2d2d;
 	padding: 50px 0;
 	position: relative;
-}
+	-webkit-box-shadow: inset 0px -5px 10px rgba(0,0,0,.35);
+	-moz-box-shadow: inset 0px -5px 10px rgba(0,0,0,.35);
+	box-shadow: inset 0px -5px 10px rgba(0,0,0,.35);
+	border-bottom: 1px solid rgba(255,255,255,.05);
+	}
 
 .player-container-outer:after {
 	content: "";
@@ -185,4 +189,12 @@ input[type="button"] {
     
     .youtube {
 	width: 100%;
+}
+
+input[type="text"] {
+	background: #999999;
+	outline: none;
+	border: none;
+	color: #222222;
+	padding: 4px 8px;	
 }
