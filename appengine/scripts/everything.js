@@ -12,10 +12,10 @@
         var DEFAULT_LIST = {
          "current": 0,
          "items":[
-            {"id":"qPr-xsQvhgw"},
-            {"id":"OuSdU8tbcHY"},
-            {"id":"vxuZuXPouqM"},
-            {"id":"1eYlMCNHKn4"}
+            {"id":"qPr-xsQvhgw", "title": "what did the five fingers say to the face?"},
+            {"id":"OuSdU8tbcHY", "title": "titanic in 5 seconds"},
+            {"id":"vxuZuXPouqM", "title": "Lord of the Rings in 5 second"},
+            {"id":"1eYlMCNHKn4", "title": "BEST 4 SECONDS EVER!"}
           ]
         }
 
