@@ -97,17 +97,24 @@ var video_control = new function() {
   var regexFull = /http\:\/\/www\.youtube\.com\/watch\?v=(\w{11})/;
   var regexBit = /http\:\/\/.youtu\.be\/(\w{11})/;
   var regexWord = /\w/;
+  var shortPrefix = "youtu.be/"; 
   $(document).ready(function() {
     $("#add-url-form").submit(function(event) {
-      console.warn("submit ....");
       event.preventDefault();
-      var val = $("#youtube-url").val();
+      var val = $("#youtube-url").val().trim();
       var video_id = window.location.search.split('v=')[1];
 
+      console.warn("submit: " + val);
       if (val.toLowerCase().indexOf("youtube.com") >= 0) {
-        video_id = val.match(regexFull)[1];
-      } else if (val.toLowerCase().indexOf("youtu.be") >= 0) {
-        video_id = val.match(regexBit)[1];
+        var vid = val.split('v=')[1];
+        var ampersandPosition = vid.indexOf('&');
+        if(ampersandPosition != -1) {
+          video_id = vid.substring(0, ampersandPosition);
+        } else {
+          video_id = vid;
+        }
+      } else if (val.toLowerCase().indexOf("youtu.be/") >= 0) {
+        video_id = val.substring(val.toLowerCase().indexOf(shortPrefix) + shortPrefix.length);
       } 
       else if (val.indexOf("#") == 0) {
       	video_id = val.substr(1);

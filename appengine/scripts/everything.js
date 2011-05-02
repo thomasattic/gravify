@@ -12,21 +12,6 @@
         var DEFAULT_LIST = {
          "current": 0,
          items: []
-         /*
-         "items":[
-<<<<<<< HEAD
-            {"id":"qPr-xsQvhgw"},
-            {"id":"OuSdU8tbcHY"},
-            {"id":"vxuZuXPouqM"},
-            {"id":"1eYlMCNHKn4"}
-          ]*/
-=======
-            {"id":"qPr-xsQvhgw", "title": "what did the five fingers say to the face?"},
-            {"id":"OuSdU8tbcHY", "title": "titanic in 5 seconds"},
-            {"id":"vxuZuXPouqM", "title": "Lord of the Rings in 5 second"},
-            {"id":"1eYlMCNHKn4", "title": "BEST 4 SECONDS EVER!"}
-          ]
->>>>>>> 58d22fa0d569d6466d93e4235efa3ebe03d177e8
         }
 
 		// Un-comment either of the following to set automatic logging and exception handling.
@@ -352,11 +337,16 @@
           }
         });
       }
+    };
+    function poke_video_control() {
+      video_control.update_list([]);
+      video_control.switch_video(0);
     }
     function read() {
        items.read(sessionId, function(list) {
           // fn
-          if (!list || list.current===undefined || list.current===null || list.items.length === 0) {
+         /*
+          if (!list || list.current===undefined || list.current===null) {
              list = DEFAULT_LIST;
              items.update(sessionId, JSON.stringify(list), function() {
                 console.warn("updated");
@@ -364,6 +354,7 @@
                 console.warn(JSON.stringify(exception));
              });
            }
+           */
            //console.warn("=== poll (pos): " + list.current + " (length): " + list.items.length + " ===");
            if (!Hashs.isEquals(playlist, list.items)) {
               //console.warn("=== playlist updated from the server ===");
@@ -377,7 +368,6 @@
            } else {
              //console.warn("=== no change ===");
            }
-
        }, function(exception) {
           console.warn(JSON.stringify(exception));
        });
@@ -442,6 +432,7 @@
       });
     }
     function poll() {
+      poke_video_control();
       read();
       setInterval(function() {
          read();
