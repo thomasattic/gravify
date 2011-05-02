@@ -4,7 +4,7 @@ $(window).load(function(){
   $('#subscribers').masonry({
 		animate: true,
 	  itemSelector: '.friend',
-	  columnWidth: 224,
+	  columnWidth: 224
 	});
 	
 	//$('.player-container').resize(function() {
@@ -13,6 +13,7 @@ $(window).load(function(){
 	//});
 	
 	// youtube scaling magic
+  /*
 		var $origVideo = $(".youtube, .youtube embed");
 		var aspectRatio = $origVideo.attr("height") / $origVideo.attr("width");
 					
@@ -22,6 +23,6 @@ $(window).load(function(){
 				.width(wrapWidth)
 				.height(wrapWidth * aspectRatio);
 		}).trigger("resize");
-	
+	*/
 });
 
