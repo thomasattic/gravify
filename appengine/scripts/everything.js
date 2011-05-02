@@ -11,9 +11,10 @@
         var DEFAULT_LIST = {
          "current": 0,
          "items":[
-            {"id":"tl_BUk5P8RA"},
-            {"id":"3tI4CbCniBI"},
-            {"id":"Af1OxkFOK18"}
+            {"id":"qPr-xsQvhgw"},
+            {"id":"OuSdU8tbcHY"},
+            {"id":"vxuZuXPouqM"},
+            {"id":"1eYlMCNHKn4"}
           ]
         }
 
