@@ -1,3 +1,4 @@
+
 function onYouTubePlayerReady(playerId) {
   video_control.init(playerId);
 }
@@ -30,13 +31,6 @@ var Threads = new function() {
   };
 };
 
-function onytplayerStateChange(newState) {
-	if (newState == 0) {
-		video_control.next_video();
-	}
-	console.log("player new state: " + newState);
-}
-
 var video_control = new function() {
   var ytplayer;
   var current_video = 0;
@@ -46,9 +40,16 @@ var video_control = new function() {
 
   function init(playerId) {
     ytplayer = document.getElementById("myytplayer");
-    ytplayer.addEventListener("onStateChange", "onytplayerStateChange");
+    ytplayer.addEventListener("onStateChange", onytplayerStateChange);
 
     playerReady.latch();
+  }
+
+  function onytplayerStateChange(newState) {
+    if (newState == 0) {
+      video_control.next_video();
+    }
+    console.log("player new state: " + newState);
   }
 
   function next_video() {
@@ -79,7 +80,7 @@ var video_control = new function() {
       items = new_items;
       $("#videolist").html('');
       $.each(items, function(i, item) {
-        $("#videolist").append('<li><div class="videoitem" videonumber="'+i+'" place="0">' + item.title + '</div><div class="videodelete" style="float: right; margin-left: 10px; z-index: 1;">X</div></li>');
+        $("#videolist").append('<li><div class="videoitem" style="display: inline-block; width: 80%;" videonumber="'+i+'" place="0">' + item.title + '</div><div class="videodelete" style="display: inline-block; width: 20%;">X</div></li>');
       });
       $(".videoitem").bind('click', function() {
         var video_number = $(this).attr('videonumber');

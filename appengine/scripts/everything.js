@@ -11,12 +11,14 @@
         var onair = 0;
         var DEFAULT_LIST = {
          "current": 0,
+         items: []
+         /*
          "items":[
             {"id":"qPr-xsQvhgw"},
             {"id":"OuSdU8tbcHY"},
             {"id":"vxuZuXPouqM"},
             {"id":"1eYlMCNHKn4"}
-          ]
+          ]*/
         }
 
 		// Un-comment either of the following to set automatic logging and exception handling.
@@ -406,12 +408,12 @@
         console.warn(JSON.stringify(exception));
       });
     }
-    function createSession(fn) {
+    function createSession(fn, err) {
       var url = '/newsession';
       $.ajax({
-        type: 'POST',
+        type: 'GET',
         url: url,
-        dataType: 'xml',
+        dataType: 'JSON',
         beforeSend: function(xhr) {},
         success: function(data) {
           fn(data);
@@ -431,25 +433,32 @@
         console.warn(JSON.stringify(exception));
       });
     }
-    $(document).ready(function() {
-      var loc = window.location;
-      var search = parseSearch(loc.hash.substring(1));
-      if (search.session) {
-        sessionId = search.session;
-      }
-      createSession(function(data) {
-        var go = false;
-        if (go) {
-          console.error("token: " + data.session_id);
-          if (data.session_id) {
-            sessionId = data.session_id;
-            window.location = window.location + '#' + getSearchString({session: data.session_id}); 
-          }
-        }
-      });
+    function poll() {
       read();
       setInterval(function() {
          read();
       },
       1000);
+    }
+    $(document).ready(function() {
+      var loc = window.location;
+      var search = parseSearch(loc.hash.substring(1));
+      if (search.session) {
+        sessionId = search.session;
+        poll();
+      } else {
+        createSession(function(data) {
+          var go = true;
+          if (go) {
+            console.error("token: " + data.session_id);
+            if (data.session_id) {
+              sessionId = data.session_id;
+              window.location = window.location + '#' + getSearchString({session: data.session_id});
+              poll();
+            }
+          }
+        }, function(exception) {
+          console.error(JSON.stringify(exception));
+        });
+      }
     });
