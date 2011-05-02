@@ -21,6 +21,8 @@ def is_invalid(obj):
         return True
     if obj.get("description") == "":
         return True
+    if obj.get("title") == "undefined":
+        return True
     
     return False
 
