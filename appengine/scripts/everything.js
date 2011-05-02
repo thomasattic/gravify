@@ -1,5 +1,6 @@
 		var apiKey = 589411; // OpenTok sample API key. Replace with your own API key.
-		var sessionId = '153975e9d3ecce1d11baddd2c9d8d3c9d147df18'; // Replace with your session ID.
+		#var sessionId = '153975e9d3ecce1d11baddd2c9d8d3c9d147df18'; // Replace with your session ID.
+		var sessionId = '17d88c9b1a3a78aa09b1f3e1e72324a14f8f61be'; // Replace with your session ID.
 		var token = 'devtoken'; // Should not be hard-coded.
 								// Add to the page using the OpenTok server-side libraries.
 		var session;
@@ -11,9 +12,10 @@
         var DEFAULT_LIST = {
          "current": 0,
          "items":[
-            {"id":"tl_BUk5P8RA","title":"Sesame Street: Smell Like A Monster","description":"Grover talks about the word \"on.\" Visit Grover on Facebook: on.fb.me If you're watching videos with your preschooler and would like to do so in a safe, child-friendly environment, please join us at www.sesamestreet.org Sesame Street is a production of Sesame Workshop, a nonprofit educational organization which also produces Pinky Dinky Doo, The Electric Company, and other programs for children around the world."},
-            {"id":"3tI4CbCniBI","title":"Old Spice | Flex :30","description":"Welcome to the wildly powerful world of Odor Blocker Body Wash. I hope you're into explosions. Directed by Tim and Eric from the Awesome Show."},
-            {"id":"Af1OxkFOK18","title":"Old Spice Commercial ft Bruce Campbell","description":"Old Spice commercial starring Bruce Campbell"}
+            {"id":"qPr-xsQvhgw"},
+            {"id":"OuSdU8tbcHY"},
+            {"id":"vxuZuXPouqM"},
+            {"id":"1eYlMCNHKn4"}
           ]
         }
 

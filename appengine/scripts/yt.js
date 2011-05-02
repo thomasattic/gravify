@@ -108,6 +108,9 @@ var video_control = new function() {
       } else if (val.toLowerCase().indexOf("youtu.be") >= 0) {
         video_id = val.match(regexBit)[1];
       } 
+      else if (val.indexOf("#") == 0) {
+      	video_id = val.substr(1);
+      }
       if (video_id) {
         add_item(video_id);
         $("#youtube-url").val("");
