@@ -148,11 +148,17 @@
 			if (stream.connection.connectionId == session.connection.connectionId) {
 				return;
 			}
+			var containerDiv = document.createElement('div');
+			containerDiv.setAttribute('class', 'friend');
+			document.getElementById("subscribers").appendChild(containerDiv);
+			
 			var subscriberDiv = document.createElement('div'); // Create a div for the subscriber to replace
 			subscriberDiv.setAttribute('id', stream.streamId); // Give the replacement div the id of the stream as its id.
 			subscriberDiv.setAttribute('class', 'friend'); // Give the replacement div the id of the stream as its id.
-			document.getElementById("subscribers").appendChild(subscriberDiv);
+			containerDiv.appendChild(subscriberDiv);
+			console.warn("before: " + subscriberDiv.tagName + " id: " + subscriberDiv.id);
 			subscribers[stream.streamId] = session.subscribe(stream, subscriberDiv.id);
+			console.warn("after : " + subscriberDiv.tagName + " id: " + subscriberDiv.id);
 		}
 
 		function show(id) {
