@@ -3,7 +3,6 @@ $(window).load(function(){
 	
   $('#subscribers').masonry({
 		animate: true,
-	  itemSelector: '.friend',
 	  columnWidth: 224
 	});
 	

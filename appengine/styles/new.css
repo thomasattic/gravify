@@ -153,10 +153,16 @@ footer {
 	border-radius: 8px;
 	text-align: left;
 	padding: 20px;
+	font-size: 14px;
+	color: #eeeeee;
 }
 
 .playlist li {
-	line-height: 24px
+	width: 200px
+	display: block;
+	line-height: 24px;
+	font-size: 14px;
+	color: #eeeeee;
 	
 }
 
@@ -192,7 +198,8 @@ input[type="button"] {
 }
 
 input[type="text"] {
-	background: #999999;
+	background: #777777;
+	
 	outline: none;
 	border: none;
 	color: #222222;
