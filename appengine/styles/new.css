@@ -6,7 +6,7 @@ html, body, div, span, applet, object, iframe, h1, h2, h3, h4, h5, h6, p, blockq
     vertical-align: baseline;
     border: 0;
     outline: 0;
-    background: transparent;
+	background: #1c1d1e;
     font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
     color: #eeeeee;
     font-size: 100%;
@@ -183,3 +183,7 @@ input[type="button"] {
     -moz-border-radius: 3px;
     border-radius: 3px;
     }
+    
+    .youtube {
+	width: 100%;
+}
