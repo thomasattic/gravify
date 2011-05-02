@@ -145,7 +145,7 @@ footer {
 .playlist {
 	float: left;
 	margin-left: 40px;
-	width: 200px;
+	width: 300px;
 	background: #1c1d1e;
 	color: #eeeeee;
 	-webkit-border-radius: 8px;
@@ -158,12 +158,21 @@ footer {
 }
 
 .playlist li {
-	width: 200px
+	width: 300px
 	display: block;
 	line-height: 24px;
 	font-size: 14px;
 	color: #eeeeee;
 	
+}
+
+.playlist h3 {
+	font-size: 2.0em;
+	font-weight: 600;
+	line-height: 1.3em;
+	border-bottom: 1px solid #eeeeee;
+	padding: 0 0 10px 0;
+	margin-bottom: 5px;
 }
 
 input[type="button"] {
