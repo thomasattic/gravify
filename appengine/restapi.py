@@ -8,6 +8,24 @@ from google.appengine.api import urlfetch
 
 import simplejson
 
+def is_invalid(obj):
+    if not obj.get("source"):
+        return True
+    if not obj.get("title"):
+        return True
+    if not obj.get("description"):
+        return True
+    if obj.get("source") == "":
+        return True
+    if obj.get("title") == "":
+        return True
+    if obj.get("description") == "":
+        return True
+    if obj.get("title") == "undefined":
+        return True
+    
+    return False
+
 def jdata(req, **params):
     token = params["token"]
     
@@ -35,7 +53,7 @@ def jdata(req, **params):
                         logging.info(str(item))
                         
                         # title for new items is "newly added...", so check for description instead
-                        if not item.get("source"):
+                        if is_invalid(item):
                             item["source"] = "youtube"      # Hard coded
 
                             fr = urlfetch.fetch("http://gdata.youtube.com/feeds/api/videos/%s?v=2&alt=json" % item.get("id"))
