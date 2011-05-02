@@ -1,6 +1,6 @@
 		var apiKey = 589411; // OpenTok sample API key. Replace with your own API key.
-		#var sessionId = '153975e9d3ecce1d11baddd2c9d8d3c9d147df18'; // Replace with your session ID.
-		var sessionId = '17d88c9b1a3a78aa09b1f3e1e72324a14f8f61be'; // Replace with your session ID.
+		var sessionId = '153975e9d3ecce1d11baddd2c9d8d3c9d147df18'; // Replace with your session ID.
+		//var sessionId = '17d88c9b1a3a78aa09b1f3e1e72324a14f8f61be'; // Replace with your session ID.
 		var token = 'devtoken'; // Should not be hard-coded.
 								// Add to the page using the OpenTok server-side libraries.
 		var session;
@@ -148,11 +148,17 @@
 			if (stream.connection.connectionId == session.connection.connectionId) {
 				return;
 			}
+			var containerDiv = document.createElement('div');
+			containerDiv.setAttribute('class', 'friend');
+			document.getElementById("subscribers").appendChild(containerDiv);
+			
 			var subscriberDiv = document.createElement('div'); // Create a div for the subscriber to replace
 			subscriberDiv.setAttribute('id', stream.streamId); // Give the replacement div the id of the stream as its id.
 			subscriberDiv.setAttribute('class', 'friend'); // Give the replacement div the id of the stream as its id.
-			document.getElementById("subscribers").appendChild(subscriberDiv);
+			containerDiv.appendChild(subscriberDiv);
+			console.warn("before: " + subscriberDiv.tagName + " id: " + subscriberDiv.id);
 			subscribers[stream.streamId] = session.subscribe(stream, subscriberDiv.id);
+			console.warn("after : " + subscriberDiv.tagName + " id: " + subscriberDiv.id);
 		}
 
 		function show(id) {
