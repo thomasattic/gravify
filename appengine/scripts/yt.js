@@ -79,7 +79,7 @@ var video_control = new function() {
       items = new_items;
       $("#videolist").html('');
       $.each(items, function(i, item) {
-        $("#videolist").append('<li><div class="videoitem" videonumber="'+i+'" place="0">' + item.title + '</div><div class="videodelete">X</div></li>');
+        $("#videolist").append('<li><span class="videodelete" style="float: right; margin-left: 10px;">X</span><div class="videoitem" videonumber="'+i+'" place="0">' + item.title + '</div></li>');
       });
       $(".videoitem").bind('click', function() {
         var video_number = $(this).attr('videonumber');
