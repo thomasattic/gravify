@@ -1,6 +1,6 @@
 		var apiKey = 589411; // OpenTok sample API key. Replace with your own API key.
-		#var sessionId = '153975e9d3ecce1d11baddd2c9d8d3c9d147df18'; // Replace with your session ID.
-		var sessionId = '17d88c9b1a3a78aa09b1f3e1e72324a14f8f61be'; // Replace with your session ID.
+		var sessionId = '153975e9d3ecce1d11baddd2c9d8d3c9d147df18'; // Replace with your session ID.
+		//var sessionId = '17d88c9b1a3a78aa09b1f3e1e72324a14f8f61be'; // Replace with your session ID.
 		var token = 'devtoken'; // Should not be hard-coded.
 								// Add to the page using the OpenTok server-side libraries.
 		var session;
