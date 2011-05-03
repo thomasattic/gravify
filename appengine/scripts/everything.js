@@ -12,7 +12,7 @@
         var DEFAULT_LIST = {
          "current": 0,
          items: []
-        }
+        };
 
 		// Un-comment either of the following to set automatic logging and exception handling.
 		// See the exceptionHandler() method below.
@@ -151,9 +151,7 @@
 			subscriberDiv.setAttribute('id', stream.streamId); // Give the replacement div the id of the stream as its id.
 			subscriberDiv.setAttribute('class', 'friend'); // Give the replacement div the id of the stream as its id.
 			containerDiv.appendChild(subscriberDiv);
-			console.warn("before: " + subscriberDiv.tagName + " id: " + subscriberDiv.id);
 			subscribers[stream.streamId] = session.subscribe(stream, subscriberDiv.id);
-			console.warn("after : " + subscriberDiv.tagName + " id: " + subscriberDiv.id);
 		}
 
 		function show(id) {
@@ -344,6 +342,7 @@
     }
     function read() {
        items.read(sessionId, function(list) {
+         //console.warn("read: " + list.items.length);
           // fn
          /*
           if (!list || list.current===undefined || list.current===null) {
@@ -355,12 +354,12 @@
              });
            }
            */
-           //console.warn("=== poll (pos): " + list.current + " (length): " + list.items.length + " ===");
+           //console.warn("=== poll (pos): " + list.current + " (playlist): " + playlist.length + " (length): " + list.items.length + " ===");
            if (!Hashs.isEquals(playlist, list.items)) {
               //console.warn("=== playlist updated from the server ===");
               video_control.update_list(list.items);
               video_control.switch_video(list.current);
-              playlist = list.items;
+              playlist = list.items? list.items: [];
            } else if (onair !== list.current) {
               //console.warn("=== current song is updated ===");
               video_control.switch_video(list.current);
@@ -385,7 +384,7 @@
         }
 
         items.update(sessionId, JSON.stringify({items: new_list, current: index}), function() {
-          playlist = new_list;
+          playlist = new_list? new_list: [];
           console.warn("updated list: " + playlist.length);
           video_control.update_list(playlist);
         }, function(exception) {
@@ -393,13 +392,13 @@
         });
       }
     }
-    function add_item(video_id) {
+    function add_item(item) {
       var new_list = playlist.slice(0);
       //console.warn("before list: " + JSON.stringify(playlist));
-      new_list.push({id: video_id, title: "newly added: " + video_id});
+      new_list.push(item);
       //console.warn("after list: " + JSON.stringify(playlist));
       items.update(sessionId, JSON.stringify({items: new_list, current: onair}), function() {
-        playlist = new_list;
+        playlist = new_list? new_list: [];
         console.warn("updated list: " + playlist.length);
         video_control.update_list(playlist);
       }, function(exception) {
@@ -426,18 +425,19 @@
     function change_cursor(index) {
       items.update(sessionId, JSON.stringify({items: playlist, current: index}), function() {
         onair = index;
-        console.warn("updated index: " + onair);
       }, function(exception) {
         console.warn(JSON.stringify(exception));
       });
     }
     function poll() {
-      poke_video_control();
-      read();
-      setInterval(function() {
-         read();
-      },
-      1000);
+      setTimeout(function() {
+        poke_video_control();
+        read();
+        setInterval(function() {
+           read();
+        },
+        1000);
+      }, 0);
     }
     $(document).ready(function() {
       var loc = window.location;
@@ -446,6 +446,7 @@
         sessionId = search.session;
         poll();
       } else {
+        /*
         createSession(function(data) {
           var go = true;
           if (go) {
@@ -459,5 +460,7 @@
         }, function(exception) {
           console.error(JSON.stringify(exception));
         });
+        */
+        poll();
       }
     });

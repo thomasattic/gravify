@@ -1,5 +1,6 @@
 
 function onYouTubePlayerReady(playerId) {
+  console.warn("player ready");
   video_control.init(playerId);
 }
 
@@ -62,15 +63,20 @@ var video_control = new function() {
 
       console.warn("switching to: " + video_number);
 
-	  if (!video_number) {
+	    if (!video_number) {
         video_number = 0;
       }
-	  current_video = video_number;
-      var data = items[video_number];
-      var video_id=data.id;
-      var video_title=data.title;
+	    current_video = video_number;
+	    if (items.length > 0) {
+        var data = items[video_number];
+        if (!data) {
+          console.error("data not found: " + video_number);
+        }
+        var video_id=data.id;
+        var video_title=data.title;
 
-      ytplayer.loadVideoById(data.id);
+        ytplayer.loadVideoById(data.id);
+	    }
     });
   }
 
@@ -93,18 +99,36 @@ var video_control = new function() {
       });
     });
   }
-  
+
+  function get_youtube(video_id, fn, err) {
+    var url = "http://gdata.youtube.com/feeds/api/videos/" + video_id + "?v=2&alt=json";
+    $.ajax({
+      type: 'GET',
+      url: url,
+      dataType: 'json',
+      beforeSend: function(xhr) {},
+      success: function(data) {
+        fn(data);
+      },
+      error: function(request, textStatus, errorThrown) {
+        // err
+        var exception = {datasetname: 'madswvideo', status: request.status, message: request.statusText, url: url, method: "read", kind: textStatus};
+        err(exception);
+      }
+    });
+  }
+
   var regexFull = /http\:\/\/www\.youtube\.com\/watch\?v=(\w{11})/;
   var regexBit = /http\:\/\/.youtu\.be\/(\w{11})/;
   var regexWord = /\w/;
-  var shortPrefix = "youtu.be/"; 
+  var shortPrefix = "youtu.be/";
   $(document).ready(function() {
     $("#add-url-form").submit(function(event) {
       event.preventDefault();
       var val = $("#youtube-url").val().trim();
       var video_id = window.location.search.split('v=')[1];
 
-      console.warn("submit: " + val);
+      console.warn("submit: " + val + " :" + video_id);
       if (val.toLowerCase().indexOf("youtube.com") >= 0) {
         var vid = val.split('v=')[1];
         var ampersandPosition = vid.indexOf('&');
@@ -115,13 +139,17 @@ var video_control = new function() {
         }
       } else if (val.toLowerCase().indexOf("youtu.be/") >= 0) {
         video_id = val.substring(val.toLowerCase().indexOf(shortPrefix) + shortPrefix.length);
-      } 
-      else if (val.indexOf("#") == 0) {
+      } else if (val.indexOf("#") == 0) {
       	video_id = val.substr(1);
       }
       if (video_id) {
-        add_item(video_id);
-        $("#youtube-url").val("");
+        get_youtube(video_id, function(data) {
+          //console.warn("got it: " + video_id + " title: " + JSON.stringify(data.entry.title.$t));
+          add_item({id: video_id, title: data.entry.title.$t});
+          $("#youtube-url").val("");
+        }, function(exception) {
+          alert("Cannot find the specified movie");
+        });
       }
     });
   });
