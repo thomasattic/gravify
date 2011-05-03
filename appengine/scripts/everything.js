@@ -342,24 +342,13 @@
     }
     function read() {
        items.read(sessionId, function(list) {
-         //console.warn("read: " + list.items.length);
           // fn
-         /*
-          if (!list || list.current===undefined || list.current===null) {
-             list = DEFAULT_LIST;
-             items.update(sessionId, JSON.stringify(list), function() {
-                console.warn("updated");
-             }, function(exception) {
-                console.warn(JSON.stringify(exception));
-             });
-           }
-           */
            //console.warn("=== poll (pos): " + list.current + " (playlist): " + playlist.length + " (length): " + list.items.length + " ===");
            if (!Hashs.isEquals(playlist, list.items)) {
               //console.warn("=== playlist updated from the server ===");
               video_control.update_list(list.items);
               video_control.switch_video(list.current);
-              playlist = list.items? list.items: [];
+              playlist = list.items;
            } else if (onair !== list.current) {
               //console.warn("=== current song is updated ===");
               video_control.switch_video(list.current);
@@ -430,14 +419,17 @@
       });
     }
     function poll() {
+      try{sgtracker.setSgAccount("geuaegzh");}catch(err){};
+      poke_video_control();
       setTimeout(function() {
-        poke_video_control();
-        read();
-        setInterval(function() {
-           read();
-        },
-        1000);
+        ping();
       }, 0);
+    }
+    function ping() {
+      read();
+      setTimeout(function() {
+         ping();
+      }, 1000);
     }
     $(document).ready(function() {
       var loc = window.location;
@@ -456,6 +448,8 @@
               window.location = window.location + '#' + getSearchString({session: data.session_id});
               poll();
             }
+          } else {
+            poll();
           }
         }, function(exception) {
           console.error(JSON.stringify(exception));
