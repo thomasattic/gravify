@@ -142,11 +142,27 @@ footer {
 	border: 6px solid #1c1d1e;
 }
 
+.playlist .inline > li {
+    display: inline-block;
+    margin: 0 10px;
+    border: 5px solid #4c4d4e;
+    background-color: #4c4d4e;
+    padding: 2px 5px;
+}
+
+.inline > li.selected {
+    border: 5px solid #1c1d1e;
+    background-color: #1c1d1e;
+    -webkit-border-radius: 8px;
+    -moz-border-radius: 8px;
+    border-radius: 8px;
+}
+
 .playlist {
 	float: left;
 	margin-left: 40px;
 	width: 300px;
-	background: #1c1d1e;
+	background: #4c4d4e;
 	color: #eeeeee;
 	-webkit-border-radius: 8px;
 	-moz-border-radius: 8px;
