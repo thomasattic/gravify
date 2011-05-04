@@ -461,7 +461,6 @@
         poll();
       }
       $("#publicroom").bind("click", function() {
-        console.warn("clicked");
         var $target = $(this);
         if (!$target.hasClass("selected")) {
           if (confirm("Are you sure?")) {
@@ -474,22 +473,17 @@
         }
       });
       $("#enterroom").bind("click", function() {
-        console.warn("clicked");
-        var $target = $(this);
-        if (!$target.hasClass("selected")) {
-          var hash, loc;
-          var room = prompt("Please enter your room number:");
-          if (room) {
-            $("body").addClass("block");
-            hash = optPrefix("#", getSearchString({session: room}));
-            loc =  replaceHrefPart(window.location, {hash: hash});
-            window.location = loc;
-            window.location.reload();
-          }
+        var hash, loc;
+        var room = prompt("Please enter your room number:", search.session);
+        if (room && room !== search.session) {
+          $("body").addClass("block");
+          hash = optPrefix("#", getSearchString({session: room}));
+          loc =  replaceHrefPart(window.location, {hash: hash});
+          window.location = loc;
+          window.location.reload();
         }
       });
       $("#createroom").bind("click", function() {
-        console.warn("clicked");
         var $target = $(this);
         if (!$target.hasClass("selected")) {
           $(".selected").removeClass("selected");
