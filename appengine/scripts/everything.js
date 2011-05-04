@@ -267,14 +267,12 @@
 
       return this;
     };
-
     function removeArray(array, from, to) {
       //Array Remove - By John Resig (MIT Licensed)
       var rest = array.slice((to || from) + 1 || array.length);
       array.length = from < 0 ? array.length + from : from;
       return array.push.apply(array, rest);
     };
-
     function parseSearch(q) {
       // Andy E and community @ http://stackoverflow.com/posts/2880929/revisions
       var results = {};
@@ -288,7 +286,6 @@
       }
       return results;
     };
-
     function getSearchString(search) {
       var result = '';
       for (var item in search) {
@@ -297,6 +294,26 @@
           }
           result += item + '=' + encodeURIComponent(search[item]);
       }
+      return result;
+    };
+    function optPrefix(leading, string) {
+      if (!string) {
+        return string;
+      }
+      return leading + string;
+    };
+    function replaceHrefPart(loc, parts) {
+      var href = {protocol: loc.protocol, host: loc.host, port: loc.port,
+          pathname: loc.pathname, hash: loc.hash, search: loc.search};
+      var h = $.extend(href, parts);
+      var result = "";
+      result += h.protocol;
+      result += "//";
+      result += h.host;
+      result += h.pathname;
+      result += h.search;
+      result += h.hash;
+
       return result;
     };
 
@@ -348,7 +365,7 @@
               //console.warn("=== playlist updated from the server ===");
               video_control.update_list(list.items);
               video_control.switch_video(list.current);
-              playlist = list.items;
+              playlist = list.items? list.items: [];
            } else if (onair !== list.current) {
               //console.warn("=== current song is updated ===");
               video_control.switch_video(list.current);
@@ -435,26 +452,61 @@
       var loc = window.location;
       var search = parseSearch(loc.hash.substring(1));
       if (search.session) {
+        $(".playlist .inline .selected").removeClass("selected");
+        $("#enterroom").addClass("selected");
+
         sessionId = search.session;
         poll();
       } else {
-        /*
-        createSession(function(data) {
-          var go = true;
-          if (go) {
-            console.error("token: " + data.session_id);
-            if (data.session_id) {
-              sessionId = data.session_id;
-              window.location = window.location + '#' + getSearchString({session: data.session_id});
-              poll();
-            }
-          } else {
-            poll();
-          }
-        }, function(exception) {
-          console.error(JSON.stringify(exception));
-        });
-        */
         poll();
       }
+      $("#publicroom").bind("click", function() {
+        console.warn("clicked");
+        var $target = $(this);
+        if (!$target.hasClass("selected")) {
+          if (confirm("Are you sure?")) {
+            $("body").addClass("block");
+            $(".playlist .inline .selected").removeClass("selected");
+            $target.addClass("selected");
+            window.location.hash = "";
+            window.location.reload();
+          }
+        }
+      });
+      $("#enterroom").bind("click", function() {
+        console.warn("clicked");
+        var $target = $(this);
+        if (!$target.hasClass("selected")) {
+          var hash, loc;
+          var room = prompt("Please enter your room number:");
+          if (room) {
+            $("body").addClass("block");
+            hash = optPrefix("#", getSearchString({session: room}));
+            loc =  replaceHrefPart(window.location, {hash: hash});
+            window.location = loc;
+            window.location.reload();
+          }
+        }
+      });
+      $("#createroom").bind("click", function() {
+        console.warn("clicked");
+        var $target = $(this);
+        if (!$target.hasClass("selected")) {
+          $(".selected").removeClass("selected");
+          $target.addClass("selected");
+          $("body").addClass("block");
+          createSession(function(data) {
+            var hash, loc;
+            if (data.session_id) {
+              sessionId = data.session_id;
+              hash = optPrefix("#", getSearchString({session: data.session_id}));
+              loc =  replaceHrefPart(window.location, {hash: hash});
+              window.location = loc;
+              window.location.reload();
+            }
+          }, function(exception) {
+            console.error(JSON.stringify(exception));
+          });
+        }
+      });
     });
