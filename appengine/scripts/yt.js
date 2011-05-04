@@ -1,6 +1,5 @@
 
 function onYouTubePlayerReady(playerId) {
-  console.warn("player ready");
   video_control.init(playerId);
 }
 
@@ -63,11 +62,11 @@ var video_control = new function() {
 
       console.warn("switching to: " + video_number);
 
-	    if (!video_number) {
+      if (!video_number) {
         video_number = 0;
       }
-	    current_video = video_number;
-	    if (items.length > 0) {
+      current_video = video_number;
+      if (items.length > 0) {
         var data = items[video_number];
         if (!data) {
           console.error("data not found: " + video_number);
@@ -76,7 +75,7 @@ var video_control = new function() {
         var video_title=data.title;
 
         ytplayer.loadVideoById(data.id);
-	    }
+      }
     });
   }
 
