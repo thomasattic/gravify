@@ -130,8 +130,10 @@ footer {
 }
 
 .player {
-	float: left;
-	background: #1c1d1e;
+    display: block;
+    margin-right: 350px;
+    min-height: 280px;
+  	background: #1c1d1e;
 	border: 20px solid #1c1d1e;
 	-webkit-border-radius: 8px;
 	-moz-border-radius: 8px;
@@ -143,8 +145,7 @@ footer {
 }
 
 .playlist {
-	float: left;
-	margin-left: 40px;
+	margin-left: 350px;
 	width: 300px;
 	background: #1c1d1e;
 	color: #eeeeee;
