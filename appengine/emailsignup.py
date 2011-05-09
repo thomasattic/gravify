@@ -98,6 +98,12 @@ class EmailSignup(db.Model):
             return None
 
 
+def status_response(obj):
+    if obj.count > 0:
+        return HttpResponse('{"status": "found", "count": "%d", "url": "http://madswvideo.appspot.com/alpha"}' % obj.count)
+    else:
+        return HttpResponse('{"status": "found", "count": "%d"}' % obj.count)
+
 def handler(req, **params):
     operator = params["operator"].lower()
     email = params["email"]
@@ -113,7 +119,7 @@ def handler(req, **params):
                 
         if (operator == "add"):
             if obj:
-                return HttpResponse('{"status": "duplicate"}')
+                return status_response(obj)
                 
             obj = EmailSignup.add_email(email=email)
             if obj:
@@ -131,9 +137,9 @@ def handler(req, **params):
         
         if (operator == "get"):
             if obj:
-                return HttpResponse('{"status": "found", "count": "%d"}' % obj.count)
+                return status_response(obj)
             
-            return HttpResponse('{"status": "error", "error": "Unable to get count for email"}')
+            return HttpResponse('{"status": "error", "error": "Email address not found"}')
         
         if (operator == "authorize"):
             newvalue = params["newvalue"] if ("newvalue" in params) else "3"
