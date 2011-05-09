@@ -5,6 +5,7 @@ import re
 from restitem import *
 from django.http import HttpResponse
 from google.appengine.api import urlfetch
+from google.appengine.api import memcache
 
 import simplejson
 
@@ -30,9 +31,13 @@ def jdata(req, **params):
     token = params["token"]
     
     try:
-        obj = RestItem.get_from_token(token)
-
-        if (req.method == "GET"):    
+        if (req.method == "GET"):
+            obj = memcache.get(token)
+            if not obj:
+                obj = RestItem.get_from_token(token)
+                if obj:
+                    memcache.set(token, obj)
+            
             if obj:
                 response = HttpResponse(obj.data)
             else:
@@ -40,6 +45,8 @@ def jdata(req, **params):
             return response
         
         if (req.method == "PUT" or req.method == "POST"):
+            obj = RestItem.get_from_token(token)
+
             try:
                 body = req.raw_post_data
                 
@@ -58,6 +65,7 @@ def jdata(req, **params):
             logging.info("body=" + str(body))
                 
             RestItem.add_data(token=token, data=data)
+            memcache.delete(token)
             
             response = HttpResponse()
             return response
