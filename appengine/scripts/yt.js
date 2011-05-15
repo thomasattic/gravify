@@ -61,6 +61,7 @@ var video_control = new function() {
 
   function unsuspend_video() {
     suspended = undefined;
+    ytplayer.playVideo();
   }
 
   function onytplayerStateChange(newState) {
