@@ -35,6 +35,7 @@ var video_control = new function() {
   var ytplayer;
   var current_video = 0;
   var items;
+  var suspended;
 
   var playerReady = Threads.latchbinder();
 
@@ -46,6 +47,20 @@ var video_control = new function() {
   }
 
   function mute_video() {
+    ytplayer.mute();
+  }
+
+  function unmute_video() {
+    ytplayer.unMute();
+  }
+
+  function suspend_video() {
+    suspended = true;
+    ytplayer.stopVideo();
+  }
+
+  function unsuspend_video() {
+    suspended = undefined;
   }
 
   function onytplayerStateChange(newState) {
@@ -77,7 +92,11 @@ var video_control = new function() {
         var video_id=data.id;
         var video_title=data.title;
 
-        ytplayer.loadVideoById(data.id);
+        if (!suspended) {
+          ytplayer.loadVideoById(data.id);
+        } else {
+          ytplayer.cueVideoById(data.id);
+        }
       }
     });
   }
@@ -161,6 +180,9 @@ var video_control = new function() {
     update_list: update_list,
     next_video: next_video,
     mute_video: mute_video,
+    unmute_video: unmute_video,
+    unsuspend_video: unsuspend_video,
+    suspend_video: suspend_video,
     init: init
   };
 };

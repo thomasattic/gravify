@@ -460,6 +460,32 @@
       } else {
         poll();
       }
+      $("#video-mute").bind("click", function() {
+        console.warn("mute... clicked");
+        var $target = $(this);
+        if (!$target.hasClass("selected")) {
+          $target.addClass("selected");
+          $target.text("Unmute");
+          video_control.mute_video();
+        } else {
+          $target.removeClass("selected");
+          $target.text("Mute");
+          video_control.unmute_video();
+        }
+      });
+      $("#video-suspend").bind("click", function() {
+        console.warn("take_break... clicked");
+        var $target = $(this);
+        if (!$target.hasClass("selected")) {
+          $target.addClass("selected");
+          $target.text("Resume");
+          video_control.suspend_video();
+        } else {
+          $target.removeClass("selected");
+          $target.text("Take a break");
+          video_control.unsuspend_video();
+        }
+      });
       $("#publicroom").bind("click", function() {
         var $target = $(this);
         if (!$target.hasClass("selected")) {
