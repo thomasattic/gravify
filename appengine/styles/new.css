@@ -1,5 +1,8 @@
 /* Reset */
-html, body, div, span, applet, object, iframe, h1, h2, h3, h4, h5, h6, p, blockquote, pre, a, abbr, acronym, address, big, cite, code, del, dfn, em, font, img, ins, kbd, q, s, samp, small, strike, strong, sub, sup, tt, var, b, u, i, center, dl, dt, dd, ol, ul, li, fieldset, form, label, legend, table, caption, tbody, tfoot, thead, tr, th, td {
+html, body, div, span, applet, object, iframe,
+h1, h2, h3, h4, h5, h6, p, blockquote, pre, a, abbr, acronym, address, big, cite, code, del, dfn, em, font, img, ins, kbd, q, s, samp, small, strike, strong, sub, sup, tt, var, b, u, i, center, dl, dt, dd,
+/* ol, ul, li, */
+fieldset, form, label, legend, table, caption, tbody, tfoot, thead, tr, th, td {
     margin: 0;
     padding: 0;
     font-size: 100%;
@@ -11,17 +14,17 @@ html, body, div, span, applet, object, iframe, h1, h2, h3, h4, h5, h6, p, blockq
     color: #eeeeee;
     font-size: 100%;
 	}
-    
-    
-   
+
+
+
 body {
-	overflow-y: scroll;    
+	overflow-y: scroll;
 		background: #1c1d1e;
 
 
 }
 ol, ul {
-    list-style: none;
+    /* list-style: none; */
     }
 
 blockquote, q {
@@ -36,8 +39,8 @@ table {
     border-collapse: collapse;
     border-spacing: 0;
     }
-   
-    
+
+
 /* style */
 
 .friend img {
@@ -47,7 +50,7 @@ table {
     -moz-transition: opacity .25s linear;
     -o-transition: opacity .25s linear;
     transition: opacity .25s linear;
-    
+
 	-webkit-box-shadow: inset 0px -1px 3px rgba(0,0,0,.8);
 	-moz-box-shadow: inset 0px -1px 3px rgba(0,0,0,.8);
 	box-shadow: inset 0px -1px 3px rgba(0,0,0,.8);
@@ -178,7 +181,7 @@ footer {
 	line-height: 24px;
 	font-size: 14px;
 	color: #eeeeee;
-	
+
 }
 
 .playlist h3 {
@@ -216,18 +219,18 @@ input[type="button"] {
     -moz-border-radius: 3px;
     border-radius: 3px;
     }
-    
+
     .youtube {
 	width: 100%;
 }
 
 input[type="text"] {
 	background: #777777;
-	
+
 	outline: none;
 	border: none;
 	color: #222222;
-	padding: 4px 8px;	
+	padding: 4px 8px;
 }
 
 /* @group Spinner */

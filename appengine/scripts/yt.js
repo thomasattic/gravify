@@ -45,6 +45,9 @@ var video_control = new function() {
     playerReady.latch();
   }
 
+  function mute_video() {
+  }
+
   function onytplayerStateChange(newState) {
     if (newState == 0) {
       video_control.next_video();
