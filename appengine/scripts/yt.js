@@ -53,7 +53,7 @@ var video_control = new function() {
   }
 
   function next_video() {
-	switch_video(current_video + 1);
+	  switch_video(current_video + 1);
   }
 
   function switch_video(video_number) {
@@ -156,7 +156,8 @@ var video_control = new function() {
   return {
     switch_video: switch_video,
     update_list: update_list,
-	next_video: next_video,
+    next_video: next_video,
+    mute_video: mute_video,
     init: init
   };
 };
