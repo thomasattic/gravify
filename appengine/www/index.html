@@ -15,6 +15,14 @@
            display: block; position: relative;
            margin-left: auto; margin-right: auto;
         }
+        
+        body {
+           background-size: cover; -moz-background-size: cover;
+           background-position: 50% 50%;
+           background-image: url(../images/blackslate.jpg);
+           background-repeat: no-repeat;
+           -webkit-background-origin: border-box; -moz-background-origin: border; background-origin: border-box;
+        }
     </style>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.5.1/jquery.min.js" type="text/javascript" charset="utf-8"></script>
     <link rel="stylesheet" href="http://launchrock.com/api/lr.api.0.2.css">
@@ -48,7 +56,7 @@ $(document).ready(function(){
     // Handles rendering the post submit content:
     LR.postSubmit = new PostSignupForm('pagesubmit',{
         twitterHandle: "shubztv",
-        twitterMessage: "My site is launching soon and I'm one of the first in line! Join me. #launch",
+        twitterMessage: "Shubz.tv is launching soon and I'm one of the first in line! Join me. #launch",
         newUserHeaderText: "Thanks! Want to get an early invitation?",
         newUserParagraphText: "Invite at least 3 friends using the link below. The more friends you invite, the sooner you'll get access!<br/><br/>To share with your friends, click 'Recommend', 'Tweet' and 'Invite by Email':",
         newUserParagraphText3: "Or copy and paste the following link to share wherever you want!",
