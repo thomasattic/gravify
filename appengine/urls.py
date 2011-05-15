@@ -4,6 +4,7 @@ from django.conf.urls.defaults import *
 urlpatterns = patterns('',
     (r'^jdata/(?P<token>.*)$', "restapi.jdata"),
     (r'^newsession$', "restapi.newsession"),
+    (r'^email/(?P<operator>authorize)/(?P<email>.*)/(?P<newvalue>\d*)$', "emailsignup.handler"),
     (r'^email/(?P<operator>.*)/(?P<email>.*)$', "emailsignup.handler"),
 )
 
