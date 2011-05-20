@@ -1,97 +1,208 @@
 <!doctype html>
-<html xmlns="http://www.w3.org/1999/xhtml">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:fb="https://www.facebook.com/2008/fbml">
 <head>
+	<meta http-equiv="Content-type" content="text/html; charset=utf-8">
+	<meta property="og:title" content="Shubz.TV"/>
+	<meta property="og:type" content="video"/>
+  <meta property="og:site_name" content="Shubz.TV"/>
 	<title>Shubz.TV - Watch with your friends!</title>
 	<link href="../styles/samples.css" type="text/css" rel="stylesheet">
 	<link href="../styles/new.css" type="text/css" rel="stylesheet">
-    <style rel="stylesheet">
-        .playlist {
-           display: inline-block;
-           position: absolute;
-           right: 50px;
-        }
-
-        #container, #wrapper, #lrcontent {
-           display: block; position: relative;
-           margin-left: auto; margin-right: auto;
-        }
-        
-        #lrcontent {
-           -webkit-box-shadow: rgba(0,0,0,0.9) 1px 1px 10px; -moz-box-shadow: rgba(0,0,0,0.9) 1px 1px 10px; box-shadow: rgba(0,0,0,0.9) 1px 1px 10px;
-        }
-
-        body {
-           background-size: cover; -moz-background-size: cover;
-           background-position: 50% 50%;
-           background-image: url(../images/blackslate.jpg);
-           background-repeat: no-repeat;
-           -webkit-background-origin: border-box; -moz-background-origin: border; background-origin: border-box;
-        }
-    </style>
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.5.1/jquery.min.js" type="text/javascript" charset="utf-8"></script>
-    <link rel="stylesheet" href="http://launchrock.com/api/lr.api.0.2.css">
-    <script src="http://launchrock.com/api/lr.api.0.5-min.js"></script>
-<script>
-$(document).ready(function(){
-    LR.lrInstance = new LrInstance('container',{
-
-        tagLine: " Watch with your friends",
-        description: "<p>... and <b>video chat</b> in 3 easy steps.\n "
-          + "<ol>"
-          + "<li>Add one or more YouTube video</li>"
-          + "<li>Set a time</li>"
-          + "<li>Invite your facebook friends</li>"
-          + "</ol>"
-          + "Watch with up to 20 friends. Your video is synchronized and played, paused and stopped on each computer."
-          + "</p>",
-        refCodeUrl: "http://shubz.tv/?ref=",
-        lrDomain: "shubz.tv",
-        apiKey: "6b09c7ac0d49b7c9f742a9d322084a92",
-        inviteList: "Launching soon. Enter your email to join our invite list:"
-    });
-
-    // Handles events related to signup form, form validations
-    // and submitting the form to the server:
-    LR.signupForm = new SignupForm({
-        secondaryPostLocation: ""
-    });
-
-
-    // Handles rendering the post submit content:
-    LR.postSubmit = new PostSignupForm('pagesubmit',{
-        twitterHandle: "shubztv",
-        twitterMessage: "Shubz.tv is launching soon and I'm one of the first in line! Join me. #launch",
-        newUserHeaderText: "Thanks! Want to get an early invitation?",
-        newUserParagraphText: "Invite at least 3 friends using the link below. The more friends you invite, the sooner you'll get access!<br/><br/>To share with your friends, click 'Recommend', 'Tweet' and 'Invite by Email':",
-        newUserParagraphText3: "Or copy and paste the following link to share wherever you want!",
-        returningUserHeaderText: "Welcome Back!",
-        returningUserParagraphText: "Invite at least 3 friends using the link below. The more friends you invite, the sooner you'll get access!<br/><br/>To share with your friends, click 'Recommend', 'Tweet' and 'Invite by Email':",
-        returningUserParagraphText3: "Or copy and paste the following link to share wherever you want!",
-        statsPreText: "Your live stats: ",
-        footerLinks: "<a href='http://twitter.com/shubztv'>Follow Us on Twitter</a>"
-      ,showDescription: true,
-      showTagLine: true,
-      showHeaderText: true,
-      showParagraphText: true,
-      showStats: true,
-      showShareButtons: true,
-      showFooterLinks: true    });
-
-
-});
-    </script>
+  <style rel="stylesheet">
+    .playlist {
+       display: inline-block;
+       position: absolute;
+       right: 50px;
+    }
+  </style>
+	<script src="https://www.google.com/jsapi" type="text/javascript" ></script>
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.5.1/jquery.min.js"></script>
+	<script src="../scripts/jquery.juitter.js" type="text/javascript" language="javascript" ></script>
+	<script src="../scripts/yt.js" type="text/javascript" anguage="javascript" ></script>
+	<script src="../scripts/room_actions.js" type="text/javascript" language="javascript" ></script>
+	<script src="http://staging.tokbox.com/v0.91/js/TB.min.js" type="text/javascript" charset="utf-8"></script>
+  <script src="http://connect.facebook.net/en_US/all.js"></script>
+	<script src="../scripts/everything.js" type="text/javascript" charset="utf-8">
+	</script>
+  <script type="text/javascript" charset="utf-8">
+      $(document).ready(function() {
+        $(".player-container-outer").css({height: "300px"});
+      });
+  </script>
 </head>
-<body id="">
-<div style="text-align:center" width=100%>
-	<br><br><br><br><br>
-    <img src="../images/logo.png">
-    <br><br><br>
-    <div id="wrapper">
-        <div id="container"></div>
-    </div>
-	<br><br>
-</div>
 
+<body>
+
+  <div id="container">
+
+		<!-- Header -->
+		<header>
+			<div class="logo">
+				<img src="../images/logo.png">
+				<input type="button" value="enter the room" id ="connectLink" onClick="javascript:connect()" />
+	     	<input type="button" value="leave the room" id ="disconnectLink" onClick="javascript:disconnect()" />
+
+				<input type="button" value="activate your camera" id ="publishLink" onClick="javascript:startPublishing()" />
+	     	<input type="button" value="turn off your camera" id ="unpublishLink" onClick="javascript:stopPublishing()" />
+			</div>
+			<div class="facebook"></div>
+
+		</header>
+
+		<!-- Main Content -->
+    	<div id="main" role="main">
+
+
+		<div class="player-container-outer">
+
+		<div class="player-container-inner">
+
+            <!-- Playlist -->
+            <div class="playlist">
+                <h3>Room</h3>
+                <ul class="inline">
+                   <li id="publicroom" class="selected">Public</li>
+                   <li id="enterroom">Room</li>
+                   <li id="createroom">New</li>
+                </ul>
+
+                <h3>Playlist</h3>
+                <ul id="videolist">
+                    <li>Loading Videos...</li>
+                </ul>
+
+                <ul>
+                <form id="add-url-form">
+                     <li><label>Paste a URL:</label><input id="youtube-url" type="text" name="url" placeholder="YouTube URL" /></li>
+                </form>
+                </ul>
+
+            </div>
+
+			<!-- Video -->
+		    <div class="player">
+				<div class="video-player">
+					<div id="video">
+					  <script type="text/javascript" src="../scripts/swfobject.js"></script>
+					  <div id="ytapiplayer">
+					    You need Flash player 8+ and JavaScript enabled to view this video.
+					  </div>
+
+					  <script type="text/javascript">
+
+					    var params = { allowScriptAccess: "always" };
+					    var atts = { id: "myytplayer", "class": "youtube" };
+					    swfobject.embedSWF("http://www.youtube.com/apiplayer?enablejsapi=1&playerapiid=ytplayer",
+					                       "ytapiplayer", "480", "280", "8", null, null, params, atts);
+
+					  </script>
+						</div>
+					</div>
+            <ul id="video-control" class="inline">
+              <li id="video-mute">Mute</li>
+              <li id="video-suspend">Take a break</li>
+            </ul>
+		    </div>
+		</div>
+		</div>
+			<!-- Friends list -->
+			<div id='friends' class='friends'>
+				<div id="myCamera" class="publisherContainer"></div>
+		   	<div id="subscribers"></div>
+				<div id="opentok_console"></div>
+			</div>
+
+    </div>
+
+	<!-- Footer -->
+	<footer>
+
+		<span class="copyright">&copy;2011</span>
+	</footer>
+
+	<div id="juitterContainer"></div>
+
+    <div class="spinnerfloat">
+      <div class="spinner animate">
+        <div class="bar1"></div><div class="bar2"></div><div class="bar3"></div><div class="bar4"></div>
+        <div class="bar5"></div><div class="bar6"></div><div class="bar7"></div><div class="bar8"></div>
+        <div class="bar9"></div><div class="bar10"></div><div class="bar11"></div><div class="bar12"></div>
+      </div>
+    </div>
+
+  </div><!--! end of #container -->
+
+
+  <!-- JavaScript at the bottom for fast page loading -->
+
+  <!-- Grab Google CDN's jQuery, with a protocol relative URL; fall back to local if necessary -->
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.5.1/jquery.js"></script>
+  <script>window.jQuery || document.write("<script src='javascripts/jquery-1.5.1.min.js'>\x3C/script>")</script>
+
+	<!-- Masonry.js and custom new.js -->
+	<script type="text/javascript" src="https://github.com/desandro/masonry/raw/master/jquery.masonry.min.js"></script>
+	<script type="text/javascript" src="../scripts/new.js"></script>
+
+
+	   <div id="fb-root"></div>
+
+   	 <div id="fbLoginDiv" >
+  <fb:login-button perms="user_videos, xmpp_login, publish_stream" autologoutlink="true" onlogin="OnToggleLogin()">
+    </fb:login-button>
+    </div>
+
+  <div id="fbLogoutDiv" style="display:none">
+    </div>
+
+    <div id="fbInviteDiv" style="display:none">
+    <!--
+    <fb:send id="fbSendLink" ref="shubz.tv" href=document.URL + "#session=" + sessionId></fb:send>
+    //-->
+    <a href="javascript:InviteFriends()">Invite friends</a>
+    </div>
+
+
+
+
+
+  <script>
+     FB.init({
+        appId:'8796512710', cookie:true,
+        status:true, xfbml:true
+     });
+
+    var loginDiv = document.getElementById("fbLoginDiv");
+    var logoutDiv = document.getElementById("fbLogoutDiv");
+    var inviteDiv = document.getElementById("fbInviteDiv");
+
+    FB.getLoginStatus(function(response) {
+        if (response.session) {
+    		loginDiv.style.display = "none";
+    		logoutDiv.style.display = "block";
+    		inviteDiv.style.display = "block";
+      }else {
+    		loginDiv.style.display = "block";
+    		logoutDiv.style.display = "none";
+    		inviteDiv.style.display = "none";
+    	}
+    });
+
+    function InviteFriends()
+    {
+
+        FB.ui({method: 'send', message: 'Come watch this awesome video with me:' + document.URL + "#session="+ sessionId});
+
+    }
+
+    function OnToggleLogin()
+    {
+
+        loginDiv.style.display = "none";
+    	logoutDiv.style.display = "block";
+    	inviteDiv.style.display = "block";
+    }
+
+  </script>
 
 <script type="text/javascript">
 var _gaq = _gaq || [];
