@@ -531,12 +531,13 @@
         }
       });
       $("#fbinvite").bind("click",
+        /*
         function() {
           var link = document.URL;
           console.warn("url: " + link);
 
           FB.ui({
-            method: 'feed',
+            method: 'apprequests',
             name: 'Facebook Dialogs',
             link: link,
             picture: 'http://fbrell.com/f8.jpg',
@@ -552,21 +553,41 @@
             }
           });
         });
-        //FB.ui({method: 'send', message: 'Come watch this awesome video with me:' + document.URL + "#session="+ sessionId});
-          /* {
-          method: 'send', message: 'Come watch this awesome video with me.' ,
-          name: 'Invite friend',
-          link: document.URL,
-          caption: 'Gravify: Watch with friends',
-          picture: 'http://www.gravify.com/images/logo_gravify.png'
-        },
-        function(response) {
-          if (response && response.post_id) {
-            alert('Post was published.');
-          } else {
-            alert('Post was not published.');
-          }
+        */
+        function() {
+          FB.ui({
+            method: 'apprequests',
+            message: 'Gravify - Watch it with friends.',
+            data: sessionId
+          },
+          function(response) {
+            alert('Request was published.');
+            /*
+            if (response && response.post_id) {
+              alert('Post was published.');
+            } else {
+              alert('Post was not published.');
+            }*/
+          });
         });
+
+        /*
+        function() {
+          FB.ui({
+            //{method: 'send', message: 'Come watch this awesome video with me:' + document.URL + "#session="+ sessionId});
+            method: 'send', message: 'Come watch this awesome video with me.' ,
+            name: 'Invite friend',
+            link: document.URL,
+            caption: 'Gravify: Watch with friends',
+            picture: 'http://www.gravify.com/images/logo_gravify.png'
+          },
+          function(response) {
+            if (response && response.post_id) {
+              alert('Post was published.');
+            } else {
+              alert('Post was not published.');
+            }
+          });
+      });
           */
-      //});
     });

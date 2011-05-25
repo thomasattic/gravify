@@ -60,24 +60,6 @@
             <!-- Playlist -->
             <div class="playlist">
                 <h3>Room <small id="fbinvite">Invite Friends</small></h3>
-                <div id="fb-root"></div>
-                <div id="fbLoginDiv" >
-
-                <fb:login-button perms="user_videos, xmpp_login, publish_stream" autologoutlink="true" onlogin="OnToggleLogin()">
-                </fb:login-button>
-                <fb:send id="fbSendLink" ref="homepage"></fb:send>
-
-            </div>
-            <div id="fbLogoutDiv" style="display:none">
-            </div>
-            <div id="fbInviteDiv" style="display:none">
-            <!--
-            <fb:send id="fbSendLink" ref="shubz.tv" href="document.URL + "#session=" + sessionId>
-            </fb:send>
-             -->
-
-            <a href="javascript:InviteFriends()">Invite friends</a>
-            </div>
 
                 <ul class="inline">
                    <li id="publicroom" class="selected">Public</li>
@@ -135,6 +117,21 @@
 
 	<!-- Footer -->
 	<footer>
+        <div id="fb-root"></div>
+        <div id="fbLoginDiv">
+          <fb:login-button perms="user_videos, xmpp_login, publish_stream" autologoutlink="true" onlogin="OnToggleLogin()">
+          </fb:login-button>
+          <fb:send id="fbSendLink" ref="homepage"></fb:send>
+        </div>
+        <div id="fbLogoutDiv" style="display:none">
+        </div>
+        <div id="fbInviteDiv" style="display:none">
+          <!--
+          <fb:send id="fbSendLink" ref="shubz.tv" href="document.URL + "#session=" + sessionId>
+          </fb:send>
+          <a href="javascript:InviteFriends()">Invite friends</a>
+           -->  
+        </div>
 
 		<span class="copyright">&copy;2011</span>
 	</footer>
