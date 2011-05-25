@@ -79,8 +79,6 @@ header {
 	background: #414345;
 }
 
-
-
 footer {
 	width: 80%;
 	margin: 0 auto;
@@ -153,9 +151,7 @@ footer {
     border: 5px solid #4c4d4e;
     background-color: transparent;
     padding: 2px 5px;
-    -webkit-border-radius: 8px;
-    -moz-border-radius: 8px;
-    border-radius: 8px;
+    -webkit-border-radius: 8px; -moz-border-radius: 8px; border-radius: 8px;
 }
 
 .inline > li.selected {
@@ -176,8 +172,7 @@ footer {
 }
 
 .playlist li {
-	width: 300px
-	display: block;
+	display: inline-block;
 	line-height: 24px;
 	font-size: 14px;
 	color: #eeeeee;
@@ -191,6 +186,14 @@ footer {
 	border-bottom: 1px solid #eeeeee;
 	padding: 0 0 10px 0;
 	margin-bottom: 5px;
+}
+
+.playlist h3 small, .playlist h3 a.small {
+    font-weight: normal;
+    font-size: 0.5em;
+    border: 5px solid #1c1d1e;
+    background-color: #1c1d1e;
+    -webkit-border-radius: 8px; -moz-border-radius: 8px; border-radius: 8px;
 }
 
 input[type="button"] {

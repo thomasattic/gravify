@@ -2,9 +2,9 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:fb="https://www.facebook.com/2008/fbml">
 <head>
 	<meta http-equiv="Content-type" content="text/html; charset=utf-8">
-	<meta property="og:title" content="Shubz.TV"/>
+	<meta property="og:title" content="Gravify"/>
 	<meta property="og:type" content="video"/>
-  <meta property="og:site_name" content="Shubz.TV"/>
+  <meta property="og:site_name" content="Gravify"/>
 	<title>Gravify - Watch with your friends!</title>
 	<link href="../styles/samples.css" type="text/css" rel="stylesheet">
 	<link href="../styles/new.css" type="text/css" rel="stylesheet">
@@ -59,7 +59,26 @@
 
             <!-- Playlist -->
             <div class="playlist">
-                <h3>Room</h3>
+                <h3>Room <small id="fbinvite">Invite Friends</small></h3>
+                <div id="fb-root"></div>
+                <div id="fbLoginDiv" >
+
+                <fb:login-button perms="user_videos, xmpp_login, publish_stream" autologoutlink="true" onlogin="OnToggleLogin()">
+                </fb:login-button>
+                <fb:send id="fbSendLink" ref="homepage"></fb:send>
+
+            </div>
+            <div id="fbLogoutDiv" style="display:none">
+            </div>
+            <div id="fbInviteDiv" style="display:none">
+            <!--
+            <fb:send id="fbSendLink" ref="shubz.tv" href="document.URL + "#session=" + sessionId>
+            </fb:send>
+             -->
+
+            <a href="javascript:InviteFriends()">Invite friends</a>
+            </div>
+
                 <ul class="inline">
                    <li id="publicroom" class="selected">Public</li>
                    <li id="enterroom">Room</li>
@@ -144,30 +163,10 @@
 	<script type="text/javascript" src="../scripts/new.js"></script>
 
 
-	   <div id="fb-root"></div>
-
-   	 <div id="fbLoginDiv" >
-  <fb:login-button perms="user_videos, xmpp_login, publish_stream" autologoutlink="true" onlogin="OnToggleLogin()">
-    </fb:login-button>
-    </div>
-
-  <div id="fbLogoutDiv" style="display:none">
-    </div>
-
-    <div id="fbInviteDiv" style="display:none">
-    <!--
-    <fb:send id="fbSendLink" ref="shubz.tv" href=document.URL + "#session=" + sessionId></fb:send>
-    //-->
-    <a href="javascript:InviteFriends()">Invite friends</a>
-    </div>
-
-
-
-
 
   <script>
      FB.init({
-        appId:'8796512710', cookie:true,
+        appId:'111989465554857', cookie:true,
         status:true, xfbml:true
      });
 
@@ -189,9 +188,7 @@
 
     function InviteFriends()
     {
-
         FB.ui({method: 'send', message: 'Come watch this awesome video with me:' + document.URL + "#session="+ sessionId});
-
     }
 
     function OnToggleLogin()

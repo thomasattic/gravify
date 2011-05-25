@@ -437,6 +437,7 @@
     }
     function poll() {
       try{sgtracker.setSgAccount("geuaegzh");}catch(err){};
+      $("#fbSendLink").attr("href", location);
       poke_video_control();
       setTimeout(function() {
         ping();
@@ -529,4 +530,43 @@
           });
         }
       });
+      $("#fbinvite").bind("click",
+        function() {
+          var link = document.URL;
+          console.warn("url: " + link);
+
+          FB.ui({
+            method: 'feed',
+            name: 'Facebook Dialogs',
+            link: link,
+            picture: 'http://fbrell.com/f8.jpg',
+            caption: 'Reference Documentation',
+            description: 'Dialogs provide a simple, consistent interface for applications to interface with users.',
+            message: 'Facebook Dialogs are easy!'
+          },
+          function(response) {
+            if (response && response.post_id) {
+              alert('Post was published.');
+            } else {
+              alert('Post was not published.');
+            }
+          });
+        });
+        //FB.ui({method: 'send', message: 'Come watch this awesome video with me:' + document.URL + "#session="+ sessionId});
+          /* {
+          method: 'send', message: 'Come watch this awesome video with me.' ,
+          name: 'Invite friend',
+          link: document.URL,
+          caption: 'Gravify: Watch with friends',
+          picture: 'http://www.gravify.com/images/logo_gravify.png'
+        },
+        function(response) {
+          if (response && response.post_id) {
+            alert('Post was published.');
+          } else {
+            alert('Post was not published.');
+          }
+        });
+          */
+      //});
     });
