@@ -13,6 +13,9 @@ handlers:
 - url: /scripts
   static_dir: scripts
 
+- url: /jslib
+  static_dir: jslib
+
 #- url: /favicon.ico
 #  static_files: images/favicon.ico
 #  upload: images/favicon.ico
