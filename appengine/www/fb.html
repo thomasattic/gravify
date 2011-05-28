@@ -1,0 +1,158 @@
+<!doctype html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+	<title>Gravify - Socialize around content!</title>
+    <style type="text/css" media="screen">@import "../jslib/jqtouch/jqtouch/jqtouch.css";</style>
+    <style type="text/css" media="screen">@import "../jslib/jqtouch/themes/apple/theme.css";</style>
+    <style rel="stylesheet">
+      body {
+        background-size: cover; -moz-background-size: cover;
+        background-position: 50% 50%;
+        background-image: url(../images/blackslate.jpg);
+        background-repeat: no-repeat;
+        -webkit-background-origin: border-box; -moz-background-origin: border; background-origin: border-box;
+      }
+      
+      #jqt #main {
+        background-image: none;
+        background-color: darkgrey;         
+      }
+      
+      #jqt #main .toolbar, #jqt #main .toolbar h1 {
+        -webkit-background-origin: border-box; -moz-background-origin: border; background-origin: border-box;
+        padding: 0; margin: 0;
+      }
+      
+      #jqt #main .toolbar h1 {
+        height: 44px;
+      }
+
+      #jqt #main > .bar {
+        padding-left: 60px;
+        padding-right: 60px;
+      }
+      
+      #jqt #main .tab:not(.on) {
+        display: none;
+      }
+      
+      #jqt #tab-browse {
+      }
+    </style>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.5.1/jquery.min.js" type="text/javascript" charset="utf-8"></script>
+    <script src="../jslib/lib/jquery.tmpl.min.js" type="application/x-javascript" charset="utf-8"></script>
+    <script src="../jslib/jqtouch/jqtouch/jqtouch.js" type="application/x-javascript" charset="utf-8"></script>
+    <script>
+      var jQT = new $.jQTouch({updatehash: false});
+
+      $(document).ready(function() {
+        var $container = $("#main"); 
+        $container.find("input[type='radio'][name='categories']").bind("click", function(event) {
+          var $target = $(this);
+          var val = $target.val();
+          if (val === "Create") {
+            if (!$container.find("#tab-create").hasClass("on")) {
+              $container.find(".tab").removeClass("on");
+              $container.find("#tab-create").addClass("on");
+            }
+          } else if (val === "Browse") {
+            if (!$container.find("#tab-browse").hasClass("on")) {
+              $container.find(".tab").removeClass("on");
+              $container.find("#tab-browse").addClass("on");
+            }
+          } else {
+            console.error("Unexpected radio button value: " + val);
+          }
+        });
+      });
+    </script>
+    <script id="eventitem-template" type="text/x-jquery-tmpl">
+      <li data-id="${appid}" class="arrow" draggable="false">
+        <a href="${next}"><div class="icon" style="background-image: url(${icon});"><div class="mask"></div></div>
+            ${title}
+            <small class="super">${owner}</small>
+            <small class="sub">${tag}</small>
+            <input type="hidden" data-sourcename="appid" name="appid" value="${appid}">
+        </a>
+      </li>
+    </script>
+    <script id="eventdetail-template" type="text/x-jquery-tmpl">
+      <div data-id="${appid}">
+        <ul class="detail">
+          <li class="header">
+            <div class="icon" style="background-image: url(${icon});"><div class="mask"></div></div>
+            ${title}
+            <small class="super">${owner}</small>
+            <small class="sub">${tag}</small>
+            <a href="${installurl}" target="_blank" class="end button bluegrey showonuser showonnotinstalled">Install</a>
+            <div class="end button bluegrey showonuser showoninstalled" disabled>INSTALLED</div>
+            <div class="end button bluegrey showonnouser nopad" disabled>Log in to Install</div>
+          </li>
+          <li class="description"><pre>${description}</pre></li>
+        </ul>
+        {{if screenshots[0]}}
+          <div class="carousel s-scrollwrapper drawer">
+            <ul class="scroller">
+                {{each screenshots}}
+                  <li><div class="screenshot" style="background-image: url(${$value.url});"></div></li>
+                {{/each}}
+            </ul>
+            <ul class="indicator">
+              {{each screenshots}}
+                <li class="{{if $index == 0}} on{{/if}}">o</li>
+              {{/each}}
+            </ul>
+          </div>
+        {{/if}}
+        <a href="${url}" target="_blank" class="pushbutton gray">Try it</a>
+        <br></br>
+      </div>
+    </script>
+</head>
+<body>
+  <div id="jqt" class="current">
+    <div id="main" class="form">
+      <div class="toolbar">
+        <h1 style="background-image: url(../images/logo_gravify1.png)"></h1>
+      </div>
+      <div class="bar">
+        <label class="radio"><input type="radio" name="categories" title="Browse" value="Browse" checked><span>Browse</span></label>
+        <label class="radio"><input type="radio" name="categories" title="Create" value="Create"><span>Create</span></label>
+      </div>
+      <div class="form tab on" id="tab-browse">
+        <h2>Browse Events</h2>
+        <ul class="plastic">
+          <li class="arrow"><div class="icon"></div>Cat Video Viewing<small class="super">Lewis Lin</small></li>
+          <li class="arrow"><div class="icon"></div>Item 2</li>
+          <li class="arrow"><div class="icon"></div>Item 3</li>
+        </ul>
+      </div>
+      <div class="tab" id="tab-create">
+         <h2>Create Room</h2>
+         <h3>Schedule</h3>
+      </div>
+    </div>
+  </div>
+
+  <script type="text/javascript">
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-23197568-1']);
+  _gaq.push(['_setDomainName', '.madswvideo.appspot.com']);
+  _gaq.push(['_trackPageview']);
+  
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
+  </script>
+  <!-- Start of SkyGlue Code -->
+  <script type="text/javascript">
+  var sgJsProtocol = (("https:" == document.location.protocol) ? "https://" : "http://");
+  document.write(unescape("%3Cscript src='" + sgJsProtocol + "dc.skyglue.com/sgtracker.js' type='text/javascript'%3E%3C/script%3E"));
+  </script>
+  <script type="text/javascript"></script>
+  <!-- End of SkyGlue Code -->
+
+</body>
+</html>
