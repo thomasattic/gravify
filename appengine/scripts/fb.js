@@ -5,6 +5,11 @@
     clearInitHash: false
   });
 
+  FB.init({
+    appId:'111989465554857', cookie:true,
+    status:true, xfbml:true
+  });
+
   // Items handler listens to CRUD events from model
   var binder = {
     added: function(event) {
@@ -21,7 +26,7 @@
   };
 
   $(document).ready(function() {
-    var $container = $("#main"); 
+    var $container = $("#main");
     $container.find("input[type='radio'][name='categories']").bind("click", function(event) {
       var $target = $(this);
       var val = $target.val();

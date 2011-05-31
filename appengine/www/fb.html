@@ -1,7 +1,12 @@
 <!doctype html>
-<html xmlns="http://www.w3.org/1999/xhtml">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:fb="https://www.facebook.com/2008/fbml">
 <head>
 	<title>Gravify - Socialize around content!</title>
+    <meta http-equiv="Content-type" content="text/html; charset=utf-8">
+    <meta property="og:title" content="Gravify"/>
+    <meta property="og:type" content="video"/>
+    <meta property="og:site_name" content="Gravify"/>
+
     <style type="text/css" media="screen">@import "../jslib/jqtouch/jqtouch/jqtouch.css";</style>
     <style type="text/css" media="screen">@import "../jslib/jqtouch/themes/apple/theme.css";</style>
     <style rel="stylesheet">
@@ -42,6 +47,7 @@
       }
     </style>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.5.1/jquery.min.js" type="text/javascript" charset="utf-8"></script>
+    <script src="http://connect.facebook.net/en_US/all.js"></script>
     <script src="../jslib/lib/jquery.tmpl.min.js" type="application/x-javascript" charset="utf-8"></script>
     <script src="../jslib/jqtouch/jqtouch/jqtouch.js" type="application/x-javascript" charset="utf-8"></script>
     <script src="../scripts/fb.js" type="application/x-javascript" charset="utf-8"></script>
@@ -101,15 +107,33 @@
       <div class="form tab on" id="tab-browse">
         <h2>Browse Events</h2>
         <ul class="mail">
-          <li class="arrow"><div class="icon"></div>Cat Video Viewing<small class="super">Lewis Lin</small></li>
-          <li class="arrow"><div class="icon"></div>Item 2</li>
-          <li class="arrow"><div class="icon"></div>Item 3</li>
+          <li class="arrow"><a href="#details"><div class="icon"></div>Cat Video Viewing<small class="super">Lewis Lin</small></a></li>
+          <li class="arrow"><a href="#details"><div class="icon"></div>Item 2</a></li>
+          <li class="arrow"><a href="#details"><div class="icon"></div>Item 3</a></li>
         </ul>
       </div>
       <div class="tab" id="tab-create">
-         <h2>Create Room</h2>
-         <h3>Schedule</h3>
+        <h2>Create Room</h2>
+        <h3>Schedule</h3>
       </div>
+      <div class="tab" id="">
+      </div>
+    </div>
+    <div id="details">
+      <div class="toolbar">
+        <h1>Event Details</h1>
+        <a class="back" href="#main">Back</a>
+      </div>
+      <div>
+         <div>Title: Cat Video Viewing</div>
+         <div>by: Lewis Lin | Share | Public Event</div>
+         <div>[invited]</div>
+         <div>Time: June | rom 8pm - 9pm</div>
+         <div>Hosted By: Lewis Lin</div>
+         <div>More Info: Every week I review the funniest cat videos. For those who showed up on-time, you will get free virtual popcorn. Everyone else will get a lump of virtual coal.</div>
+      </div>
+      <iframe height="150px" frameborder="0" scrolling="no" width="680px" class="comments" name="comments4de4875d72f291771655084" 
+          src="http://www.facebook.com/plugins/feedback.php?href=http%3A%2F%2Fwww.gravify.com%2Ffb%2F&amp;permalink=0&amp;limit=10" style="height: 2679px;"></iframe>
     </div>
   </div>
 
