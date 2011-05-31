@@ -6,11 +6,13 @@
     <style type="text/css" media="screen">@import "../jslib/jqtouch/themes/apple/theme.css";</style>
     <style rel="stylesheet">
       body {
+        /*
         background-size: cover; -moz-background-size: cover;
         background-position: 50% 50%;
         background-image: url(../images/blackslate.jpg);
         background-repeat: no-repeat;
         -webkit-background-origin: border-box; -moz-background-origin: border; background-origin: border-box;
+         */
       }
       
       #jqt #main {
@@ -42,30 +44,7 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.5.1/jquery.min.js" type="text/javascript" charset="utf-8"></script>
     <script src="../jslib/lib/jquery.tmpl.min.js" type="application/x-javascript" charset="utf-8"></script>
     <script src="../jslib/jqtouch/jqtouch/jqtouch.js" type="application/x-javascript" charset="utf-8"></script>
-    <script>
-      var jQT = new $.jQTouch({updatehash: false});
-
-      $(document).ready(function() {
-        var $container = $("#main"); 
-        $container.find("input[type='radio'][name='categories']").bind("click", function(event) {
-          var $target = $(this);
-          var val = $target.val();
-          if (val === "Create") {
-            if (!$container.find("#tab-create").hasClass("on")) {
-              $container.find(".tab").removeClass("on");
-              $container.find("#tab-create").addClass("on");
-            }
-          } else if (val === "Browse") {
-            if (!$container.find("#tab-browse").hasClass("on")) {
-              $container.find(".tab").removeClass("on");
-              $container.find("#tab-browse").addClass("on");
-            }
-          } else {
-            console.error("Unexpected radio button value: " + val);
-          }
-        });
-      });
-    </script>
+    <script src="../scripts/fb.js" type="application/x-javascript" charset="utf-8"></script>
     <script id="eventitem-template" type="text/x-jquery-tmpl">
       <li data-id="${appid}" class="arrow" draggable="false">
         <a href="${next}"><div class="icon" style="background-image: url(${icon});"><div class="mask"></div></div>
@@ -121,7 +100,7 @@
       </div>
       <div class="form tab on" id="tab-browse">
         <h2>Browse Events</h2>
-        <ul class="plastic">
+        <ul class="mail">
           <li class="arrow"><div class="icon"></div>Cat Video Viewing<small class="super">Lewis Lin</small></li>
           <li class="arrow"><div class="icon"></div>Item 2</li>
           <li class="arrow"><div class="icon"></div>Item 3</li>
