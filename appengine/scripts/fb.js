@@ -5,11 +5,6 @@
     clearInitHash: false
   });
 
-  FB.init({
-    appId:'111989465554857', cookie:true,
-    status:true, xfbml:true
-  });
-
   // Items handler listens to CRUD events from model
   var binder = {
     added: function(event) {
@@ -44,5 +39,11 @@
         console.error("Unexpected radio button value: " + val);
       }
     });
+  });
+
+  /* the init might kill the rest of the script. runs it last */
+  FB.init({
+    appId:'111989465554857', cookie:true,
+    status:true, xfbml:true
   });
 })();
