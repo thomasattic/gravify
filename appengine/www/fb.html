@@ -19,17 +19,17 @@
         -webkit-background-origin: border-box; -moz-background-origin: border; background-origin: border-box;
          */
       }
-      
+
       #jqt #main {
         background-image: none;
-        background-color: darkgrey;         
+        background-color: darkgrey;
       }
-      
+
       #jqt #main .toolbar, #jqt #main .toolbar h1 {
         -webkit-background-origin: border-box; -moz-background-origin: border; background-origin: border-box;
         padding: 0; margin: 0;
       }
-      
+
       #jqt #main .toolbar h1 {
         height: 44px;
       }
@@ -38,12 +38,30 @@
         padding-left: 60px;
         padding-right: 60px;
       }
-      
+
       #jqt #main .tab:not(.on) {
         display: none;
       }
-      
+
       #jqt #tab-browse {
+
+      }
+
+      #jqt #details {
+        background: white;
+      }
+
+      #jqt #details .content {
+        padding: 10px;
+      }
+
+      #jqt #details #fbcontainer {
+        display: block; position: relative;
+        margin-left: auto; margin-right: auto;
+      }
+      #jqt #details #fbcontainer iframe {
+        margin-left: auto;
+        margin-right: auto;
       }
     </style>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.5.1/jquery.min.js" type="text/javascript" charset="utf-8"></script>
@@ -106,7 +124,7 @@
       </div>
       <div class="form tab on" id="tab-browse">
         <h2>Browse Events</h2>
-        <ul class="mail">
+        <ul class="plastic">
           <li class="arrow"><a href="#details"><div class="icon"></div>Cat Video Viewing<small class="super">Lewis Lin</small></a></li>
           <li class="arrow"><a href="#details"><div class="icon"></div>Item 2</a></li>
           <li class="arrow"><a href="#details"><div class="icon"></div>Item 3</a></li>
@@ -124,16 +142,21 @@
         <h1>Event Details</h1>
         <a class="back" href="#main">Back</a>
       </div>
-      <div>
+      <div class="content">
          <div>Title: Cat Video Viewing</div>
          <div>by: Lewis Lin | Share | Public Event</div>
          <div>[invited]</div>
          <div>Time: June | rom 8pm - 9pm</div>
          <div>Hosted By: Lewis Lin</div>
          <div>More Info: Every week I review the funniest cat videos. For those who showed up on-time, you will get free virtual popcorn. Everyone else will get a lump of virtual coal.</div>
+         <br>
+         <div>
+            <div id="fbcontainer">
+              <iframe height="150px" frameborder="0" scrolling="no" width="680px" class="comments" name="comments4de4875d72f291771655084"
+                  src="http://www.facebook.com/plugins/feedback.php?href=http%3A%2F%2Fwww.gravify.com%2Ffb%2F&amp;permalink=0&amp;limit=10" style="height: 2679px;"></iframe>
+            </div>
+         </div>
       </div>
-      <iframe height="150px" frameborder="0" scrolling="no" width="680px" class="comments" name="comments4de4875d72f291771655084" 
-          src="http://www.facebook.com/plugins/feedback.php?href=http%3A%2F%2Fwww.gravify.com%2Ffb%2F&amp;permalink=0&amp;limit=10" style="height: 2679px;"></iframe>
     </div>
   </div>
 
@@ -142,7 +165,7 @@
   _gaq.push(['_setAccount', 'UA-23197568-1']);
   _gaq.push(['_setDomainName', '.madswvideo.appspot.com']);
   _gaq.push(['_trackPageview']);
-  
+
   (function() {
     var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
     ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';

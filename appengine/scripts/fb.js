@@ -9,7 +9,7 @@
   var binder = {
     added: function(event) {
       var $newitem, $container;
-        
+
       $newitem = $("#eventitem-template").tmpl(event.item);
       $container = $("#main ul#tab-browse");
       $container.append($newitem);
